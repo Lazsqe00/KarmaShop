@@ -1,0 +1,95 @@
+﻿@model KarmaShop.Models.ViewModels.RegViewModel
+
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- End Header Area -->
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1>Login/Register</h1>
+                <nav class="d-flex align-items-center">
+                    <a asp-action="Index" asp-controller="Home">Home<span class="lnr lnr-arrow-right"></span></a>
+                    <a>Register</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Banner Area -->
+<!--================Login Box Area =================-->
+<section class="login_box_area section_gap">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="login_box_img">
+                    <img class="img-fluid" src="~/karma-master/img/reg.jpg" alt="">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="login_form_inner">
+                    <h3>Register an account</h3>
+                    @using (Html.BeginForm("Register", "AccountController", FormMethod.Post, new { @class = "row login_form", id = "contactForm", novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="col-md-12 form-group">
+                            @Html.TextBoxFor(m => m.TenKhachHang, new { @class = "form-control", @required = "required", placeholder = "User Name", onfocus = "this.placeholder=''", onblur = "this.placeholder='User Name'" })
+                            @Html.ValidationMessageFor(m => m.TenKhachHang, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="col-md-12 form-group">
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @required = "required", placeholder = "Email", onfocus = "this.placeholder=''", onblur = "this.placeholder='Email'" })
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="col-md-12 form-group">
+                            @Html.PasswordFor(m => m.MatKhau, new { @class = "form-control", @required = "required", placeholder = "Password", onfocus = "this.placeholder=''", onblur = "this.placeholder='Password'" })
+                            @Html.ValidationMessageFor(m => m.MatKhau, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="col-md-12 form-group">
+                            @Html.TextBoxFor(m => m.SoDienThoai, new { @class = "form-control", @required = "required", placeholder = "Phone Number", onfocus = "this.placeholder=''", onblur = "this.placeholder='Phone Number'" })
+                            @Html.ValidationMessageFor(m => m.SoDienThoai, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="col-md-12 form-group">
+                            @Html.DropDownListFor(m => m.GioiTinh, new List<SelectListItem> {
+                            new SelectListItem { Text = "Male", Value = "Male" },
+                                                new SelectListItem { Text = "FeMale", Value = "FeMale" }
+                                                }, "Gender:", new { @class = "sorting" })
+                        @Html.ValidationMessageFor(m => m.GioiTinh, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-md-12 form-group">
+                        @Html.TextBoxFor(m => m.NgaySinh, "{0:yyyy-MM-dd}", new { @type = "date", @class = "form-control", @required = "required", placeholder = "Birth Date", onfocus = "this.placeholder=''", onblur = "this.placeholder='Birth Date'" })
+                        @Html.ValidationMessageFor(m => m.NgaySinh, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-md-12 form-group">
+                        <button type="submit" class="primary-btn">Register</button>
+                    </div>
+                   }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!--================End Login Box Area =================-->
+<!-- start footer Area -->
+<style>
+    .login_box_img {
+        height: 100%;
+    }
+
+        .login_box_img img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+</style>
