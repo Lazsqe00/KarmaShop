@@ -1,0 +1,51 @@
+@model KarmaShop.Models.NhanVien
+@{
+    ViewBag.Title = "Chi tiết nhân viên";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 mt-3">
+    <h3 class="fw-bold mb-0"><i class="fas fa-user me-2"></i>CHI TIẾT NHÂN VIÊN</h3>
+    <div>
+        <a asp-area="Admin" asp-controller="NhanVien" asp-action="Edit"
+           asp-route-id="@Model.MaNhanVien" class="btn btn-warning me-2">
+            <i class="fas fa-edit me-1"></i> Sửa
+        </a>
+        <a asp-area="Admin" asp-controller="NhanVien" asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-1"></i> Quay lại
+        </a>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0">ID: #@Model.MaNhanVien</h5>
+    </div>
+    <div class="card-body">
+        <table class="table table-borderless">
+            <tr>
+                <td class="fw-bold" style="width:25%">Tên nhân viên:</td>
+                <td>@Model.TenNhanVien</td>
+            </tr>
+            <tr>
+                <td class="fw-bold">Email:</td>
+                <td>@Model.Email</td>
+            </tr>
+            <tr>
+                <td class="fw-bold">Số điện thoại:</td>
+                <td>@(Model.SoDienThoai ?? "—")</td>
+            </tr>
+            <tr>
+                <td class="fw-bold">Địa chỉ:</td>
+                <td>@(Model.DiaChi ?? "—")</td>
+            </tr>
+            <tr>
+                <td class="fw-bold">Giới tính:</td>
+                <td>@(Model.GioiTinh ?? "—")</td>
+            </tr>
+            <tr>
+                <td class="fw-bold">Ngày sinh:</td>
+                <td>@(Model.NgaySinh?.ToString("dd/MM/yyyy") ?? "—")</td>
+            </tr>
+        </table>
+    </div>
+</div>

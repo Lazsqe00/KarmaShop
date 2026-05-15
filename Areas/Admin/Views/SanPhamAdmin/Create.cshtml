@@ -1,0 +1,188 @@
+@model KarmaShop.Models.SanPham
+@{
+    ViewBag.Title = "Thêm sản phẩm mới";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0"><i class="fas fa-plus-circle me-2 p-4"></i>Thêm sản phẩm mới</h4>
+    </div>
+    <div class="card-body">
+        <form asp-area="Admin" asp-controller="SanPhamAdmin" asp-action="Create"
+              method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="All" class="alert alert-danger" style="display:none;"></div>
+
+            <div class="row mb-3 align-items-center">
+                <label class="col-md-2 col-form-label fw-bold">Dòng sản phẩm</label>
+                <div class="col-md-10">
+                    <select asp-for="MaDongSanPham" asp-items="ViewBag.MaDongSanPham"
+                            class="form-select" required>
+                        <option value="">-- Chọn dòng sản phẩm --</option>
+                    </select>
+                    <span asp-validation-for="MaDongSanPham" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3 align-items-center">
+                <label class="col-md-2 col-form-label fw-bold">Tên sản phẩm</label>
+                <div class="col-md-10">
+                    <input asp-for="TenSanPham" class="form-control" required placeholder="Nhập tên sản phẩm" />
+                    <span asp-validation-for="TenSanPham" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3 align-items-center">
+                <label class="col-md-2 col-form-label fw-bold">Màu sắc</label>
+                <div class="col-md-10">
+                    <select asp-for="MaMau" asp-items="ViewBag.MaMau" class="form-select" required>
+                        <option value="">-- Chọn màu --</option>
+                    </select>
+                    <span asp-validation-for="MaMau" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3 align-items-center">
+                <label class="col-md-2 col-form-label fw-bold">Ảnh đại diện</label>
+                <div class="col-md-10">
+                    <input type="file" name="AnhDaiDienFile" accept="image/*" required />
+                </div>
+            </div>
+
+            <div class="row mb-3 align-items-center">
+                <label class="col-md-2 col-form-label fw-bold">Ảnh chi tiết</label>
+                <div class="col-md-10">
+                    <div id="anhChiTietContainer">
+                        <div class="anh-row mb-2 d-flex align-items-center">
+                            <input type="file" name="AnhChiTietFile" accept="image/*" class="file-input" />
+                            <span class="file-name ms-3 text-muted d-none"></span>
+                            <button type="button" class="btn btn-danger btn-sm ms-3 remove-anh d-none">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3 align-items-center">
+                <label class="col-md-2 col-form-label fw-bold">Trạng thái</label>
+                <div class="col-md-10">
+                    <div class="d-flex align-items-center gap-4 mt-2">
+                        <div class="form-check form-check-inline ml-4">
+                            <input class="form-check-input" type="radio" asp-for="TrangThai" value="true" id="trangthai_hot" />
+                            <label class="text-success fw-bold" for="trangthai_hot">
+                                <i class="fas fa-fire me-1"></i> HOT
+                            </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" asp-for="TrangThai" value="false" id="trangthai_normal" />
+                            <label class="text-muted" for="trangthai_normal">Bình thường</label>
+                        </div>
+                    </div>
+                    <span asp-validation-for="TrangThai" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <label class="col-md-2 col-form-label fw-bold">Size & Số lượng</label>
+                <div class="col-md-10">
+                    <div id="sizeContainer">
+                        <div class="row mb-2 size-row align-items-center">
+                            <div class="col-4">
+                                <select name="Sizes[0].MaSize" class="form-select" required>
+                                    <option value="">-- Chọn size --</option>
+                                    @if (ViewBag.Sizes != null)
+                                    {
+                                        foreach (var size in ViewBag.Sizes)
+                                        {
+                                            <option value="@size.Value">@size.Text</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <input type="number" name="Sizes[0].SoLuong" class="form-control"
+                                       placeholder="Số lượng tồn" min="0" required />
+                            </div>
+                            <div class="col-1">
+                                <button type="button" class="btn btn-danger btn-sm remove-size">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" id="addSize" class="btn btn-outline-primary btn-sm mt-2">
+                        <i class="fas fa-plus me-1"></i> Thêm size
+                    </button>
+                    <small class="text-muted d-block mt-1">Phải thêm ít nhất 1 size cho sản phẩm</small>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 offset-md-2">
+                    <button type="submit" class="btn btn-success me-2">
+                        <i class="fas fa-save me-1"></i> Lưu sản phẩm
+                    </button>
+                    <a asp-area="Admin" asp-controller="SanPhamAdmin" asp-action="Index"
+                       class="btn btn-secondary">Quay lại danh sách</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            let anhCount = 0;
+            $(document).on('change', '.file-input', function () {
+                const file = this.files[0];
+                const $row = $(this).closest('.anh-row');
+                if (file) {
+                    $row.find('.file-name').text(file.name).removeClass('d-none');
+                    $row.find('.remove-anh').removeClass('d-none');
+                    anhCount++;
+                    if ($('#anhChiTietContainer .anh-row').length < 20) {
+                        const newRow = $row.clone();
+                        newRow.find('input').val('');
+                        newRow.find('.file-name').text('').addClass('d-none');
+                        newRow.find('.remove-anh').addClass('d-none');
+                        $('#anhChiTietContainer').append(newRow);
+                    }
+                }
+            });
+
+            $(document).on('click', '.remove-anh', function () {
+                const $row = $(this).closest('.anh-row');
+                $row.find('input').val('');
+                $row.find('.file-name').text('').addClass('d-none');
+                $row.find('.remove-anh').addClass('d-none');
+                anhCount--;
+                if ($('#anhChiTietContainer .anh-row').length > 1) {
+                    $row.remove();
+                }
+            });
+
+            let index = 1;
+            $("#addSize").on("click", function () {
+                let newRow = $(".size-row").first().clone();
+                newRow.find("select").attr("name", "Sizes[" + index + "].MaSize");
+                newRow.find("input[type=number]").attr("name", "Sizes[" + index + "].SoLuong");
+                newRow.find("input").val("");
+                newRow.find("select").val("");
+                $("#sizeContainer").append(newRow);
+                index++;
+            });
+
+            $(document).on("click", ".remove-size", function () {
+                if ($(".size-row").length > 1) {
+                    $(this).closest(".size-row").remove();
+                } else {
+                    alert("Phải giữ ít nhất một size!");
+                }
+            });
+        });
+    </script>
+}

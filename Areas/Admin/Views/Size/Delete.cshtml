@@ -1,0 +1,43 @@
+@model KarmaShop.Models.Size
+@{
+    ViewBag.Title = "Xóa size";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 mt-3">
+    <h3 class="fw-bold mb-0 text-danger"><i class="fas fa-trash me-2"></i>XÓA SIZE</h3>
+    <a asp-area="Admin" asp-controller="Size" asp-action="Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-1"></i> Quay lại
+    </a>
+</div>
+
+<div class="card shadow-sm border-danger" style="max-width:500px">
+    <div class="card-header bg-danger text-white">
+        <h5 class="mb-0">Xác nhận xóa size: @Model.TenSize</h5>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            Bạn có chắc muốn xóa size <strong>@Model.TenSize</strong>?
+        </div>
+        <table class="table table-borderless">
+            <tr>
+                <td class="fw-bold" style="width:40%">Mã size:</td>
+                <td><code>@Model.MaSize</code></td>
+            </tr>
+            <tr>
+                <td class="fw-bold">Tên size:</td>
+                <td>@Model.TenSize</td>
+            </tr>
+        </table>
+        <form asp-area="Admin" asp-controller="Size" asp-action="Delete"
+              asp-route-id="@Model.MaSize" method="post">
+            @Html.AntiForgeryToken()
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash me-1"></i> Xác nhận xóa
+                </button>
+                <a asp-area="Admin" asp-controller="Size" asp-action="Index" class="btn btn-secondary">Hủy</a>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,74 @@
+@model IEnumerable<KarmaShop.Models.Voucher>
+@{
+    ViewBag.Title = "Quản lý Voucher";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 mt-3">
+    <h3 class="fw-bold mb-0"><i class="fas fa-ticket-alt me-2"></i>QUẢN LÝ VOUCHER</h3>
+    <a asp-area="Admin" asp-controller="Voucher" asp-action="Create" class="btn btn-success">
+        <i class="fas fa-plus me-1"></i> Tạo voucher mới
+    </a>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th class="text-center">STT</th>
+                <th>Mã Voucher</th>
+                <th class="text-center">Số lượng</th>
+                <th class="text-end">Giảm tối đa (%)</th>
+                <th class="text-center">Ngày tạo</th>
+                <th class="text-center">Ngày hết hạn</th>
+                <th class="text-center">Trạng thái</th>
+                <th class="text-center">Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int stt = 1;
+                var today = DateOnly.FromDateTime(DateTime.Today);
+            }
+            @foreach (var item in Model)
+            {
+                bool conHan = item.NgayHetHan == null || item.NgayHetHan >= today;
+                <tr>
+                    <td class="text-center">@stt</td>
+                    <td><strong class="text-primary">@item.MaVoucher</strong></td>
+                    <td class="text-center">@item.SoLuong</td>
+                    <td class="text-end">@item.GiamToiDa?.ToString("0.##")%</td>
+                    <td class="text-center">@item.NgayTao?.ToString("dd/MM/yyyy")</td>
+                    <td class="text-center">@(item.NgayHetHan?.ToString("dd/MM/yyyy") ?? "Không giới hạn")</td>
+                    <td class="text-center">
+                        @{
+                            string voucherBadge = conHan ? "bg-success" : "bg-secondary";
+                            string voucherText = conHan ? "Còn hạn" : "Hết hạn";
+                        }
+                        <span class="badge @voucherBadge">@voucherText</span>
+                    </td>
+                    <td class="text-center">
+                        <div class="d-flex justify-content-center gap-2">
+                            <a asp-area="Admin" asp-controller="Voucher" asp-action="Details"
+                               asp-route-id="@item.MaVoucher" class="btn btn-info btn-sm text-white">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a asp-area="Admin" asp-controller="Voucher" asp-action="Edit"
+                               asp-route-id="@item.MaVoucher" class="btn btn-warning btn-sm">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a asp-area="Admin" asp-controller="Voucher" asp-action="Delete"
+                               asp-route-id="@item.MaVoucher" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                stt++;
+            }
+            @if (!Model.Any())
+            {
+                <tr><td colspan="8" class="text-center text-muted py-4">Chưa có voucher nào.</td></tr>
+            }
+        </tbody>
+    </table>
+</div>

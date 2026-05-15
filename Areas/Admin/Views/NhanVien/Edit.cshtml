@@ -1,0 +1,89 @@
+@model KarmaShop.Models.NhanVien
+@{
+    ViewBag.Title = "Sửa thông tin nhân viên";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 mt-3">
+    <h3 class="fw-bold mb-0"><i class="fas fa-user-edit me-2"></i>SỬA THÔNG TIN NHÂN VIÊN</h3>
+    <a asp-area="Admin" asp-controller="NhanVien" asp-action="Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-1"></i> Quay lại
+    </a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header bg-warning">
+        <h5 class="mb-0">ID: #@Model.MaNhanVien — @Model.TenNhanVien</h5>
+    </div>
+    <div class="card-body">
+        <form asp-area="Admin" asp-controller="NhanVien" asp-action="Edit"
+              asp-route-id="@Model.MaNhanVien" method="post">
+            @Html.AntiForgeryToken()
+            <input asp-for="MaNhanVien" type="hidden" />
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+            <div class="row mb-3">
+                <label asp-for="TenNhanVien" class="col-md-3 col-form-label fw-bold">Tên nhân viên</label>
+                <div class="col-md-9">
+                    <input asp-for="TenNhanVien" class="form-control" />
+                    <span asp-validation-for="TenNhanVien" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label asp-for="Email" class="col-md-3 col-form-label fw-bold">Email</label>
+                <div class="col-md-9">
+                    <input asp-for="Email" type="email" class="form-control" readonly />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                    <small class="text-muted">Email không thể thay đổi</small>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label asp-for="SoDienThoai" class="col-md-3 col-form-label fw-bold">Số điện thoại</label>
+                <div class="col-md-9">
+                    <input asp-for="SoDienThoai" class="form-control" />
+                    <span asp-validation-for="SoDienThoai" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label asp-for="DiaChi" class="col-md-3 col-form-label fw-bold">Địa chỉ</label>
+                <div class="col-md-9">
+                    <input asp-for="DiaChi" class="form-control" />
+                    <span asp-validation-for="DiaChi" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label asp-for="GioiTinh" class="col-md-3 col-form-label fw-bold">Giới tính</label>
+                <div class="col-md-9">
+                    <select asp-for="GioiTinh" class="form-select">
+                        <option value="">-- Chọn --</option>
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
+                    </select>
+                    <span asp-validation-for="GioiTinh" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <label asp-for="NgaySinh" class="col-md-3 col-form-label fw-bold">Ngày sinh</label>
+                <div class="col-md-9">
+                    <input asp-for="NgaySinh" type="date" class="form-control" />
+                    <span asp-validation-for="NgaySinh" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="text-end">
+                <button type="submit" class="btn btn-warning me-2">
+                    <i class="fas fa-save me-1"></i> Lưu thay đổi
+                </button>
+                <a asp-area="Admin" asp-controller="NhanVien" asp-action="Index" class="btn btn-secondary">Hủy</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

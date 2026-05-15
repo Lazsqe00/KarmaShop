@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>KARMA Admin</title>
+
+    <!-- CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/LayoutAdmin/assets/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="~/LayoutAdmin/assets/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="~/LayoutAdmin/assets/css/style.css">
+    <link rel="shortcut icon" href="~/karma-master/img/logoAdmin.png" />
+
+    <!-- Scripts trước body -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tiny.cloud/1/qv970fd3gwmk30icx4rsvc8h545ufqnswp9uigzabqxyy8u8/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <style>
+        .nav-profile-text { margin-top: -85px; }
+        .dropdown-item { margin-top: -28px; }
+    </style>
+
+    @RenderSection("styles", required: false)
+
+    <script>
+        tinymce.init({
+            selector: 'textarea#Noidung',
+            height: 400,
+            plugins: [
+                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                'insertdatetime', 'media', 'table', 'help', 'wordcount'
+            ],
+            toolbar: 'undo redo | blocks | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | link image media | code | help'
+        });
+    </script>
+</head>
+<body>
+    <div class="container-scroller">
+        <!-- Navbar -->
+        <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+            <a class="navbar-brand logo_h" asp-area="Admin" asp-controller="HomeAdmin" asp-action="Index">
+                <img src="~/karma-master/img/logo.png" alt="Logo" />
+            </a>
+            <div class="navbar-menu-wrapper d-flex align-items-stretch">
+                <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+                    <span class="mdi mdi-menu"></span>
+                </button>
+
+                @RenderSection("searchArea", required: false)
+
+                <ul class="navbar-nav navbar-nav-right text-center">
+                    <li class="nav-item d-none d-lg-block full-screen-link">
+                        <a class="nav-link" href="javascript:void(0);">
+                            <i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link dropdown-item"
+                           asp-area="Admin" asp-controller="TaiKhoanAdmin" asp-action="Logout">
+                            <i class="mdi mdi-logout me-2 text-primary"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+
+                <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+                    <span class="mdi mdi-menu"></span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Panel -->
+        <div class="container-fluid page-body-wrapper">
+            <!-- Sidebar -->
+            <nav class="sidebar sidebar-offcanvas" id="sidebar">
+                <ul class="nav">
+                    <li class="nav-item nav-profile">
+                        <a href="#" class="nav-link">
+                            <div class="nav-profile-image">
+                                <img src="~/LayoutAdmin/assets/images/faces/face21.jpg" alt="profile">
+                                <span class="login-status online"></span>
+                            </div>
+                            <div class="nav-profile-text d-flex flex-column">
+                                <span class="font-weight-bold mb-2">@(Context.Session.GetString("Email") ?? "Admin")</span>
+                                <span class="text-secondary text-small">
+                                    @(Context.Session.GetString("LoaiTK") == "2" ? "Quản trị viên" : "Nhân viên")
+                                </span>
+                            </div>
+                            <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
+                        </a>
+                    </li>
+
+                    <!-- Dashboard -->
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="HomeAdmin" asp-action="Index">
+                            <span class="menu-title">Dashboard</span>
+                            <i class="mdi mdi-home menu-icon"></i>
+                        </a>
+                    </li>
+
+                    <!-- Quản lý Shoes -->
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="collapse" href="#ui-basic1" aria-expanded="false" aria-controls="ui-basic1">
+                            <span class="menu-title">Quản lý Shoes</span>
+                            <i class="menu-arrow"></i>
+                            <i class="mdi mdi-crosshairs-gps menu-icon"></i>
+                        </a>
+                        <div class="collapse" id="ui-basic1">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="Admin" asp-controller="DongSanPham" asp-action="Index">Dòng sản phẩm</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="Admin" asp-controller="Mau" asp-action="Index">Màu</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="Admin" asp-controller="Size" asp-action="Index">Size</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="Admin" asp-controller="Loai" asp-action="Index">Loại giày</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="SanPhamAdmin" asp-action="Index">
+                            <span class="menu-title">Shoes</span>
+                            <i class="mdi mdi-store menu-icon"></i>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="PhieuMuaAdmin" asp-action="Index">
+                            <span class="menu-title">Đơn đặt hàng</span>
+                            <i class="mdi mdi-cart menu-icon"></i>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Voucher" asp-action="Index">
+                            <span class="menu-title">Voucher</span>
+                            <i class="mdi mdi-ticket menu-icon"></i>
+                        </a>
+                    </li>
+
+                    @if (Context.Session.GetString("LoaiTK") == "2")
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Admin" asp-controller="NhanVien" asp-action="Index">
+                                <span class="menu-title">Nhân Viên</span>
+                                <i class="mdi mdi-account-multiple menu-icon"></i>
+                            </a>
+                        </li>
+                    }
+
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="ThongKe" asp-action="Index">
+                            <span class="menu-title">Thống Kê Doanh Thu</span>
+                            <i class="mdi mdi-chart-bar menu-icon"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Content -->
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    @RenderBody()
+                </div>
+
+                <footer class="footer">
+                    <div class="container-fluid d-flex justify-content-between">
+                        <span class="text-muted d-block text-center text-sm-start d-sm-inline-block">KARMA Admin Panel</span>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="~/LayoutAdmin/assets/vendors/js/vendor.bundle.base.js"></script>
+    <script src="~/LayoutAdmin/assets/js/off-canvas.js"></script>
+    <script src="~/LayoutAdmin/assets/js/hoverable-collapse.js"></script>
+    <script src="~/LayoutAdmin/assets/js/misc.js"></script>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

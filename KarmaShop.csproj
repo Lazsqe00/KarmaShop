@@ -9,32 +9,32 @@
   <ItemGroup>
     <Compile Remove="wwwroot\css\**" />
     <Compile Remove="wwwroot\images\**" />
-    <Compile Remove="wwwroot\img\**" />
     <Compile Remove="wwwroot\js\**" />
     <Compile Remove="wwwroot\Karma Shop-doc\**" />
     <Compile Remove="wwwroot\lib\**" />
     <Compile Remove="wwwroot\scss\**" />
+    <Compile Remove="Admin-Copy\**" />
     <Content Remove="wwwroot\css\**" />
     <Content Remove="wwwroot\images\**" />
-    <Content Remove="wwwroot\img\**" />
     <Content Remove="wwwroot\js\**" />
     <Content Remove="wwwroot\Karma Shop-doc\**" />
     <Content Remove="wwwroot\lib\**" />
     <Content Remove="wwwroot\scss\**" />
+    <Content Remove="Admin-Copy\**" />
     <EmbeddedResource Remove="wwwroot\css\**" />
     <EmbeddedResource Remove="wwwroot\images\**" />
-    <EmbeddedResource Remove="wwwroot\img\**" />
     <EmbeddedResource Remove="wwwroot\js\**" />
     <EmbeddedResource Remove="wwwroot\Karma Shop-doc\**" />
     <EmbeddedResource Remove="wwwroot\lib\**" />
     <EmbeddedResource Remove="wwwroot\scss\**" />
+    <EmbeddedResource Remove="Admin-Copy\**" />
     <None Remove="wwwroot\css\**" />
     <None Remove="wwwroot\images\**" />
-    <None Remove="wwwroot\img\**" />
     <None Remove="wwwroot\js\**" />
     <None Remove="wwwroot\Karma Shop-doc\**" />
     <None Remove="wwwroot\lib\**" />
     <None Remove="wwwroot\scss\**" />
+    <None Remove="Admin-Copy\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -48,10 +48,97 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
     <Folder Include="Data\" />
+    <Folder Include="wwwroot\img\Avatar\" />
+    <Folder Include="wwwroot\img\ChiTietAnh\" />
     <Folder Include="Models\" />
     <Folder Include="Views\Shared\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\img\11\Avatar\6857db27-d081-4e03-ba45-3a069ac8ac4b.png" />
+    <None Include="wwwroot\img\11\ChiTietAnh\529712c7-6ad4-4ed7-a3cb-67c615df021f.png" />
+    <None Include="wwwroot\img\11\ChiTietAnh\94c5633e-963a-4405-b325-6b8ec9a62974.png" />
+    <None Include="wwwroot\img\12\Avatar\0767ad11-fe09-4047-8b2e-5c2decbc340b.png" />
+    <None Include="wwwroot\img\12\Avatar\9ffe3f9b-ae73-4513-9db7-ab30b283819c.png" />
+    <None Include="wwwroot\img\12\ChiTietAnh\19bcd5f9-ef8e-4fd8-9474-7c14d4c130b7.png" />
+    <None Include="wwwroot\img\12\ChiTietAnh\1a763d6a-861c-400c-888b-9a8d9adecefb.png" />
+    <None Include="wwwroot\img\12\ChiTietAnh\5e17d2fe-14e6-4f70-9356-be140fdb4312.png" />
+    <None Include="wwwroot\img\12\ChiTietAnh\a81b289e-ee05-4ea4-96f7-2a8b537fb5ce.png" />
+    <None Include="wwwroot\img\13\Avatar\ca699d86-2f91-4d6e-81d2-159556649bbe.png" />
+    <None Include="wwwroot\img\13\ChiTietAnh\34dd8f16-6fce-4c4d-8baa-538ff96317e5.png" />
+    <None Include="wwwroot\img\13\ChiTietAnh\a7307524-91a6-4cd5-9466-7cca4c75dae2.png" />
+    <None Include="wwwroot\img\14\Avatar\18cc413a-0e87-41c7-a98e-cd2eb2f63b97.png" />
+    <None Include="wwwroot\img\14\Avatar\22077d46-4f70-4a66-a7d9-f489e432f53d.png" />
+    <None Include="wwwroot\img\14\ChiTietAnh\1d235cb5-0f4c-4c51-b8c8-c89396af4301.png" />
+    <None Include="wwwroot\img\14\ChiTietAnh\22963f5c-3c89-4d8f-9816-9e5fc75f4fa3.png" />
+    <None Include="wwwroot\img\14\ChiTietAnh\9c0a89d6-9521-43d6-b2d6-2f5a35d5de6c.png" />
+    <None Include="wwwroot\img\14\ChiTietAnh\a45cfcaf-520d-4a97-972f-8ffba5988655.png" />
+    <None Include="wwwroot\img\15\Avatar\a8d73abc-8ecb-4c04-ab07-37188320198a.png" />
+    <None Include="wwwroot\img\15\ChiTietAnh\4ac1f7df-6830-453a-a5e5-dbfe8578e6a4.png" />
+    <None Include="wwwroot\img\15\ChiTietAnh\84c3d2ce-3efb-4350-95c3-d03ac4d72464.png" />
+    <None Include="wwwroot\img\16\Avatar\e13b9e8c-e7a8-4f5b-b8a3-f9b462ac1f9c.png" />
+    <None Include="wwwroot\img\16\ChiTietAnh\6086666b-1cfc-4d86-b070-31e3968a1da4.png" />
+    <None Include="wwwroot\img\16\ChiTietAnh\ef0e82c4-836a-4d5f-9376-1ed54cfd403b.png" />
+    <None Include="wwwroot\img\17\Avatar\26ac6f0f-9cf8-410d-98b7-52601505485f.png" />
+    <None Include="wwwroot\img\17\Avatar\73ff7135-62f9-4361-929a-7b58ca0a8798.png" />
+    <None Include="wwwroot\img\17\Avatar\ad280bad-c640-4a5c-a0f1-3a590c1571ac.png" />
+    <None Include="wwwroot\img\17\ChiTietAnh\18dcb5ed-f2bd-494d-801b-7cdac1ba3fed.png" />
+    <None Include="wwwroot\img\17\ChiTietAnh\2c44a9e5-243c-4828-80f9-fd0590be39ac.png" />
+    <None Include="wwwroot\img\17\ChiTietAnh\457f796f-3bb4-4c85-a182-9aa49142ee6b.png" />
+    <None Include="wwwroot\img\17\ChiTietAnh\6c6b5e13-9af6-480c-b7ae-e6befb6f553a.png" />
+    <None Include="wwwroot\img\17\ChiTietAnh\dfabafe3-2a6c-4313-a027-c0e9ebb49ff2.png" />
+    <None Include="wwwroot\img\17\ChiTietAnh\e05ecf23-c778-4083-b3a7-d81495464645.png" />
+    <None Include="wwwroot\img\1\Avatar\60418bef-99a3-4a33-87e5-14a1d342f73b.png" />
+    <None Include="wwwroot\img\1\Avatar\9db17a18-2ced-4cac-a3db-5073cc803900.png" />
+    <None Include="wwwroot\img\1\Avatar\b75a43a9-319b-4ee9-9f36-2172f7a15437.png" />
+    <None Include="wwwroot\img\1\ChiTietAnh\64f13f6c-a06d-4e87-b8ce-512fd65f6262.png" />
+    <None Include="wwwroot\img\1\ChiTietAnh\65d17158-540f-46fc-8c60-da9b2cb2aa9a.png" />
+    <None Include="wwwroot\img\1\ChiTietAnh\6862850a-7426-4339-9cb8-eca48d282ba9.png" />
+    <None Include="wwwroot\img\1\ChiTietAnh\776516f7-39e0-431c-aae2-65a9e0104f19.png" />
+    <None Include="wwwroot\img\1\ChiTietAnh\e8014f4e-b52b-434a-8368-fb862a4bb374.png" />
+    <None Include="wwwroot\img\1\ChiTietAnh\ece90a42-1b83-4606-a0d7-2ec3305b7304.png" />
+    <None Include="wwwroot\img\2\Avatar\30dedbf5-6456-493d-a207-33ed9caea591.png" />
+    <None Include="wwwroot\img\2\Avatar\c37350a2-d015-469e-aa56-8129cf5cceaa.png" />
+    <None Include="wwwroot\img\2\Avatar\d92b463f-4c0d-4a7b-a25e-5ca14fb83af6.png" />
+    <None Include="wwwroot\img\2\ChiTietAnh\286f7a0f-ea52-4e83-8532-ad0be3fa4bf1.png" />
+    <None Include="wwwroot\img\2\ChiTietAnh\36ed787f-bda4-4f30-9a03-97d678646ff7.png" />
+    <None Include="wwwroot\img\2\ChiTietAnh\4b35b36a-8e22-45bf-8d84-65aba90eebf8.png" />
+    <None Include="wwwroot\img\2\ChiTietAnh\4d388f4a-bbee-40c8-a9be-e63132f2ab63.png" />
+    <None Include="wwwroot\img\2\ChiTietAnh\61da8b6f-1a78-4d15-8392-b4c6570de2a4.png" />
+    <None Include="wwwroot\img\2\ChiTietAnh\7bfe5da7-b859-46a2-add6-e4a9c6718362.png" />
+    <None Include="wwwroot\img\3\Avatar\cc5b5d2d-0346-4ded-9daa-9533cee20c6b.png" />
+    <None Include="wwwroot\img\3\ChiTietAnh\63885b76-ba63-4fa2-98ac-ad3243d45dc6.png" />
+    <None Include="wwwroot\img\3\ChiTietAnh\b6cd7d36-d050-4869-9762-f3ade81343cf.png" />
+    <None Include="wwwroot\img\4\Avatar\0095b6fb-a8d0-4daa-948a-e715986cd8a9.png" />
+    <None Include="wwwroot\img\4\Avatar\0b8e66ac-778f-4e21-89e2-5701b54d4995.png" />
+    <None Include="wwwroot\img\4\Avatar\340af11a-b2b0-4556-a82d-05f9b8342f45.png" />
+    <None Include="wwwroot\img\4\ChiTietAnh\0efdeeb5-2eda-4f54-ae6d-e5c142aae139.png" />
+    <None Include="wwwroot\img\4\ChiTietAnh\76f36f58-30a8-4bb9-8d17-8b47e059264a.png" />
+    <None Include="wwwroot\img\4\ChiTietAnh\9e1d7177-518a-4673-8b11-7e10a3fd36e4.png" />
+    <None Include="wwwroot\img\4\ChiTietAnh\b66e8ea5-e194-4589-bfa9-67aa9d4cc38d.png" />
+    <None Include="wwwroot\img\4\ChiTietAnh\bb02d49e-b171-496b-afee-5fbf9ba2ee75.png" />
+    <None Include="wwwroot\img\4\ChiTietAnh\bdc72fa8-e9fb-403f-9a9e-60e1f4840e82.png" />
+    <None Include="wwwroot\img\8\Avatar\e859687e-a6b7-4e01-89f0-25676c2e84e5.png" />
+    <None Include="wwwroot\img\8\ChiTietAnh\623aa23a-d507-47bd-af9c-370db2803d01.png" />
+    <None Include="wwwroot\img\8\ChiTietAnh\8b6968b7-f0c9-4498-82a0-92b23643b252.png" />
+    <None Include="wwwroot\img\9\Avatar\9586564a-18df-4015-8b72-fc2b9bdc7d6a.png" />
+    <None Include="wwwroot\img\9\Avatar\a7402fff-8f29-40b0-a172-3906577c7deb.png" />
+    <None Include="wwwroot\img\9\ChiTietAnh\07f5b87a-d5a6-4352-9783-d2fbece74aa7.png" />
+    <None Include="wwwroot\img\9\ChiTietAnh\3a9ca138-ce5d-4b22-b550-a6d2f52185d7.png" />
+    <None Include="wwwroot\img\9\ChiTietAnh\4fc87794-5b9c-4fb6-a3d2-815c430401e4.png" />
+    <None Include="wwwroot\img\9\ChiTietAnh\e06483ed-dd8a-4d82-87ab-8d80c243ccbd.png" />
+    <None Include="wwwroot\img\banner\banner1.png" />
+    <None Include="wwwroot\img\banner\banner2.png" />
+    <None Include="wwwroot\img\banner\banner3.png" />
+    <None Include="wwwroot\img\banner\next.png" />
+    <None Include="wwwroot\img\banner\prev.png" />
+    <None Include="wwwroot\img\category\c1.jpg" />
+    <None Include="wwwroot\img\category\c2.jpg" />
+    <None Include="wwwroot\img\category\c3.jpg" />
+    <None Include="wwwroot\img\category\c4.jpg" />
+    <None Include="wwwroot\img\category\c5.jpg" />
+    <None Include="wwwroot\img\QR\qrcode.jpg" />
   </ItemGroup>
 
 </Project>

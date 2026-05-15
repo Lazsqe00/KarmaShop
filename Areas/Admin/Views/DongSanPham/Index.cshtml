@@ -1,0 +1,38 @@
+@model IEnumerable<KarmaShop.Models.DongSanPham>
+@{ ViewBag.Title = "Dòng sản phẩm"; }
+
+<h1 class="text-center fw-bold mt-5 mb-4">DANH SÁCH DÒNG SẢN PHẨM</h1>
+<p>
+    <a asp-area="Admin" asp-controller="DongSanPham" asp-action="Create" class="btn btn-success btn-lg">
+        + Thêm mới
+    </a>
+</p>
+<div class="table-responsive">
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>STT</th><th>Tên dòng</th><th>Loại</th><th>Giá bán</th><th>Mô tả</th><th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ int stt = 1; }
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="text-center">@stt</td>
+                    <td>@item.TenDongSanPham</td>
+                    <td>@item.MaLoaiNavigation?.TenLoai</td>
+                    <td class="text-danger fw-bold">@(item.GiaBan.HasValue ? String.Format("{0:N0} ₫", item.GiaBan) : "-")</td>
+                    <td>@item.MoTa</td>
+                    <td class="text-center">
+                        <a asp-area="Admin" asp-controller="DongSanPham" asp-action="Details" asp-route-id="@item.MaDongSanPham" class="btn btn-info btn-sm">Chi tiết</a>
+                        <a asp-area="Admin" asp-controller="DongSanPham" asp-action="Edit" asp-route-id="@item.MaDongSanPham" class="btn btn-warning btn-sm">Sửa</a>
+                        <a asp-area="Admin" asp-controller="DongSanPham" asp-action="Delete" asp-route-id="@item.MaDongSanPham"
+                           onclick="return confirm('Xóa dòng sản phẩm này?');" class="btn btn-danger btn-sm">Xóa</a>
+                    </td>
+                </tr>
+                stt++;
+            }
+        </tbody>
+    </table>
+</div>

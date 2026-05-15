@@ -1,0 +1,74 @@
+@model IEnumerable<KarmaShop.Models.SanPham>
+@{
+    ViewBag.Title = "Danh sách sản phẩm";
+}
+
+<h1 class="text-center fw-bold mt-5 mb-4">DANH SÁCH SẢN PHẨM</h1>
+
+<p>
+    <a asp-area="Admin" asp-controller="SanPhamAdmin" asp-action="Create" class="btn btn-success btn-lg">
+        Thêm mới sản phẩm
+    </a>
+</p>
+
+<style>
+    .table th, .table td { text-align: center !important; vertical-align: middle !important; }
+    .action-links a { margin: 0 8px; font-weight: 500; padding: 4px 8px; border-radius: 4px; transition: all 0.2s; }
+    .action-links a.text-details { color: #17a2b8 !important; }
+    .action-links a.text-details:hover { color: #138496 !important; background-color: #bee5eb; text-decoration: none; }
+    .action-links a.text-delete { color: #dc3545 !important; }
+    .action-links a.text-delete:hover { color: #c82333 !important; background-color: #f1b0b7; text-decoration: none; }
+    .product-img { width: 80px; height: 80px; object-fit: cover; border-radius: 6px; }
+    .status-badge { padding: 6px 12px; border-radius: 20px; font-weight: 500; font-size: 0.9rem; }
+    .status-active { background-color: #d4edda; color: #155724; }
+    .status-inactive { background-color: #f8d7da; color: #721c24; }
+</style>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>STT</th>
+                <th>Tên sản phẩm</th>
+                <th>Trạng thái</th>
+                <th>Dòng sản phẩm</th>
+                <th>Màu sắc</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{int stt = 1;}
+            @foreach (var sp in Model)
+            {
+                <tr>
+                    <td>@stt</td>
+                    <td>@sp.TenSanPham</td>
+                    <td>
+                        @{
+                            string statusClass = sp.TrangThai == true ? "status-active" : "status-inactive";
+                            string statusText = sp.TrangThai == true ? "Mới ra mắt" : "Bình Thường";
+                        }
+                        <span class="status-badge @statusClass">@statusText</span>
+                    </td>
+                    <td>@sp.MaDongSanPhamNavigation?.TenDongSanPham</td>
+                    <td>@sp.MaMauNavigation?.TenMau</td>
+                    <td>
+                        <div class="action-links d-flex justify-content-center gap-3">
+                            <a asp-area="Admin" asp-controller="SanPhamAdmin" asp-action="Details"
+                               asp-route-id="@sp.MaSanPham" title="Xem chi tiết" class="text-details">
+                                <i class="fas fa-eye fs-4"></i>
+                            </a>
+                            <a asp-area="Admin" asp-controller="SanPhamAdmin" asp-action="Delete"
+                               asp-route-id="@sp.MaSanPham"
+                               onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này không?');"
+                               class="text-delete" title="Xóa sản phẩm">
+                                <i class="fas fa-trash-alt fs-4"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                stt++;
+            }
+        </tbody>
+    </table>
+</div>

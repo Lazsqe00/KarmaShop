@@ -1,0 +1,15 @@
+@model KarmaShop.Models.Loai
+@{ ViewBag.Title = "Xóa loại giày"; }
+<div class="card shadow-sm"><div class="card-header bg-danger text-white"><h4 class="mb-0">Xác nhận xóa loại giày</h4></div>
+<div class="card-body">
+    <div class="alert alert-warning"><strong>Cảnh báo:</strong> Xóa loại <strong>@Model.TenLoai</strong>?</div>
+    <dl class="row">
+        <dt class="col-sm-3">Mã loại</dt><dd class="col-sm-9">@Model.MaLoai</dd>
+        <dt class="col-sm-3">Tên loại</dt><dd class="col-sm-9">@Model.TenLoai</dd>
+    </dl>
+    <form asp-area="Admin" asp-controller="Loai" asp-action="Delete" asp-route-id="@Model.MaLoai" method="post">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-danger me-2">Xóa</button>
+        <a asp-area="Admin" asp-controller="Loai" asp-action="Index" class="btn btn-secondary">Hủy</a>
+    </form>
+</div></div>

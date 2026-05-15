@@ -1,0 +1,42 @@
+@model KarmaShop.Models.Mau
+@{
+    ViewBag.Title = "Sửa màu sắc";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 mt-3">
+    <h3 class="fw-bold mb-0"><i class="fas fa-edit me-2"></i>SỬA MÀU SẮC</h3>
+    <a asp-area="Admin" asp-controller="Mau" asp-action="Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-1"></i> Quay lại
+    </a>
+</div>
+
+<div class="card shadow-sm" style="max-width:500px">
+    <div class="card-header bg-warning">
+        <h5 class="mb-0">Mã màu: #@Model.MaMau</h5>
+    </div>
+    <div class="card-body">
+        <form asp-area="Admin" asp-controller="Mau" asp-action="Edit"
+              asp-route-id="@Model.MaMau" method="post">
+            @Html.AntiForgeryToken()
+            <input asp-for="MaMau" type="hidden" />
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="TenMau" class="form-label fw-bold">Tên màu</label>
+                <input asp-for="TenMau" class="form-control" />
+                <span asp-validation-for="TenMau" class="text-danger"></span>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-warning">
+                    <i class="fas fa-save me-1"></i> Lưu
+                </button>
+                <a asp-area="Admin" asp-controller="Mau" asp-action="Index" class="btn btn-secondary">Hủy</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

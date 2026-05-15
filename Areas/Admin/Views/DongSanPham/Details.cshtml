@@ -1,0 +1,20 @@
+@model KarmaShop.Models.DongSanPham
+@{ ViewBag.Title = "Chi tiết dòng sản phẩm"; }
+
+<div class="card shadow-sm">
+    <div class="card-header bg-info text-white"><h4 class="mb-0">Chi tiết dòng sản phẩm</h4></div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Mã</dt><dd class="col-sm-9">@Model.MaDongSanPham</dd>
+            <dt class="col-sm-3">Tên dòng SP</dt><dd class="col-sm-9">@Model.TenDongSanPham</dd>
+            <dt class="col-sm-3">Loại</dt><dd class="col-sm-9">@Model.MaLoaiNavigation?.TenLoai</dd>
+            <dt class="col-sm-3">Giá bán</dt>
+            <dd class="col-sm-9 text-danger fw-bold">
+                @(Model.GiaBan.HasValue ? String.Format("{0:N0} ₫", Model.GiaBan) : "Chưa thiết lập")
+            </dd>
+            <dt class="col-sm-3">Mô tả</dt><dd class="col-sm-9">@(Model.MoTa ?? "-")</dd>
+        </dl>
+        <a asp-area="Admin" asp-controller="DongSanPham" asp-action="Edit" asp-route-id="@Model.MaDongSanPham" class="btn btn-warning me-2">Sửa</a>
+        <a asp-area="Admin" asp-controller="DongSanPham" asp-action="Index" class="btn btn-secondary">Quay lại</a>
+    </div>
+</div>

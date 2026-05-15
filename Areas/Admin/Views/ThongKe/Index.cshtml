@@ -1,0 +1,235 @@
+@using KarmaShop.Areas.Admin.ViewModels
+@model ThongKeDoanhThu
+@{
+    ViewBag.Title = "Thống kê doanh thu";
+
+    var monthNames = new string[] {
+        "Tháng 1","Tháng 2","Tháng 3","Tháng 4",
+        "Tháng 5","Tháng 6","Tháng 7","Tháng 8",
+        "Tháng 9","Tháng 10","Tháng 11","Tháng 12"
+    };
+
+    var saleByMonths = Model.SaleByMonths
+        .OrderBy(x => x.Month)
+        .Select(m => new { MonthName = monthNames[m.Month - 1], m.Sale })
+        .ToList();
+
+    var saleByProducts = Model.SaleByProducts
+        .OrderByDescending(p => p.Sales)
+        .ToList();
+
+    var top5 = saleByProducts.Take(5).ToList();
+
+    decimal tongDoanhThu = Model.SaleByMonths.Sum(x => x.Sale);
+}
+
+<h2 class="fw-bold mt-3 mb-4 text-center">
+    <i class="fas fa-chart-bar me-2"></i>THỐNG KÊ DOANH THU
+</h2>
+
+<!-- Tổng doanh thu -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card shadow bg-primary text-white">
+            <div class="card-body text-center py-4">
+                <h4 class="mb-1">Tổng doanh thu (tất cả thời gian)</h4>
+                <h2 class="display-5 fw-bold mb-0">@tongDoanhThu.ToString("N0") ₫</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chart + Bảng -->
+<div class="row mb-4">
+    <!-- Biểu đồ doanh thu theo tháng -->
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow h-100">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Doanh Thu Theo Tháng</h5>
+            </div>
+            <div class="card-body">
+                @if (saleByMonths.Any())
+                {
+                    <canvas id="chartThang" height="200"></canvas>
+                }
+                else
+                {
+                    <div class="text-center text-muted py-5">
+                        <i class="fas fa-chart-bar fa-3x mb-3"></i>
+                        <p>Chưa có dữ liệu doanh thu</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Bảng doanh thu theo tháng -->
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow h-100">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-table me-2"></i>Chi tiết theo tháng</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive" style="max-height:380px;overflow-y:auto">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light sticky-top">
+                            <tr>
+                                <th>Tháng</th>
+                                <th class="text-end">Doanh thu</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (saleByMonths.Any())
+                            {
+                                @foreach (var item in saleByMonths)
+                                {
+                                    <tr>
+                                        <td class="fw-bold">@item.MonthName</td>
+                                        <td class="text-end text-success fw-bold">@item.Sale.ToString("N0") ₫</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr><td colspan="2" class="text-center text-muted py-4">Chưa có dữ liệu</td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Top sản phẩm -->
+<div class="row mb-4">
+    <!-- Biểu đồ top 5 sản phẩm -->
+    <div class="col-lg-7 mb-4">
+        <div class="card shadow h-100">
+            <div class="card-header bg-warning">
+                <h5 class="mb-0"><i class="fas fa-trophy me-2"></i>Top 5 Sản Phẩm Bán Chạy</h5>
+            </div>
+            <div class="card-body">
+                @if (top5.Any())
+                {
+                    <canvas id="chartSanPham" height="200"></canvas>
+                }
+                else
+                {
+                    <div class="text-center text-muted py-5">
+                        <i class="fas fa-box fa-3x mb-3"></i>
+                        <p>Chưa có dữ liệu sản phẩm</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Bảng tất cả sản phẩm -->
+    <div class="col-lg-5 mb-4">
+        <div class="card shadow h-100">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="fas fa-list me-2"></i>Doanh thu theo sản phẩm</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive" style="max-height:380px;overflow-y:auto">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light sticky-top">
+                            <tr>
+                                <th>STT</th>
+                                <th>Sản phẩm</th>
+                                <th class="text-end">Doanh thu</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (saleByProducts.Any())
+                            {
+                                int i = 1;
+                                @foreach (var p in saleByProducts)
+                                {
+                                    <tr>
+                                        <td class="text-center fw-bold @(i <= 3 ? "text-warning" : "")">@i</td>
+                                        <td>@p.ProductName</td>
+                                        <td class="text-end text-danger fw-bold">@p.Sales.ToString("N0") ₫</td>
+                                    </tr>
+                                    i++;
+                                }
+                            }
+                            else
+                            {
+                                <tr><td colspan="3" class="text-center text-muted py-4">Chưa có dữ liệu</td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        @if (saleByMonths.Any())
+        {
+            <text>
+            const ctxThang = document.getElementById('chartThang').getContext('2d');
+            new Chart(ctxThang, {
+                type: 'bar',
+                data: {
+                    labels: [@Html.Raw(string.Join(",", saleByMonths.Select(x => $"'{x.MonthName}'")))],
+                    datasets: [{
+                        label: 'Doanh thu (₫)',
+                        data: [@string.Join(",", saleByMonths.Select(x => x.Sale))],
+                        backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return new Intl.NumberFormat('vi-VN').format(value) + ' ₫';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            </text>
+        }
+
+        @if (top5.Any())
+        {
+            <text>
+            const ctxSanPham = document.getElementById('chartSanPham').getContext('2d');
+            new Chart(ctxSanPham, {
+                type: 'doughnut',
+                data: {
+                    labels: [@Html.Raw(string.Join(",", top5.Select(x => { var name = (x.ProductName ?? string.Empty).Replace("'", "\\'"); return "'" + name.Substring(0, Math.Min(name.Length, 20)) + "'"; })))],
+                    datasets: [{
+                        data: [@string.Join(",", top5.Select(x => x.Sales))],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 205, 86, 0.8)',
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(153, 102, 255, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+            </text>
+        }
+    </script>
+}

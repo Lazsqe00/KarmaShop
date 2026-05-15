@@ -1,0 +1,28 @@
+@model IEnumerable<KarmaShop.Models.Loai>
+@{ ViewBag.Title = "Loại giày"; }
+<h1 class="text-center fw-bold mt-5 mb-4">DANH SÁCH LOẠI GIÀY</h1>
+<p><a asp-area="Admin" asp-controller="Loai" asp-action="Create" class="btn btn-success">+ Thêm mới</a></p>
+<div class="table-responsive">
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr><th>STT</th><th>Tên loại</th><th>Hành động</th></tr>
+        </thead>
+        <tbody>
+            @{ int stt = 1; }
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="text-center">@stt</td>
+                    <td>@item.TenLoai</td>
+                    <td class="text-center">
+                        <a asp-area="Admin" asp-controller="Loai" asp-action="Details" asp-route-id="@item.MaLoai" class="btn btn-info btn-sm">Chi tiết</a>
+                        <a asp-area="Admin" asp-controller="Loai" asp-action="Edit" asp-route-id="@item.MaLoai" class="btn btn-warning btn-sm">Sửa</a>
+                        <a asp-area="Admin" asp-controller="Loai" asp-action="Delete" asp-route-id="@item.MaLoai"
+                           onclick="return confirm('Xóa loại này?');" class="btn btn-danger btn-sm">Xóa</a>
+                    </td>
+                </tr>
+                stt++;
+            }
+        </tbody>
+    </table>
+</div>

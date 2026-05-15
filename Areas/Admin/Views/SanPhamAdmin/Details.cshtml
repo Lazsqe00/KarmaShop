@@ -1,0 +1,138 @@
+@model KarmaShop.Models.SanPham
+@{
+    ViewBag.Title = "Chi tiết sản phẩm";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0"><i class="fas fa-info-circle me-2"></i>Chi tiết sản phẩm</h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <!-- Hình ảnh -->
+            <div class="col-lg-5 mb-4">
+                <h5 class="fw-bold text-primary mb-3"><i class="fas fa-images me-2"></i>Hình ảnh sản phẩm</h5>
+                <div class="mb-4">
+                    <label class="form-label text-muted small fw-bold">Ảnh đại diện</label>
+                    @if (!string.IsNullOrEmpty(Model.AnhDaiDien))
+                    {
+                        <div class="text-center border rounded bg-light p-3 shadow-sm">
+                            <img src="~/img/@Model.MaDongSanPham/Avatar/@Model.AnhDaiDien"
+                                 alt="Ảnh đại diện" class="img-fluid rounded"
+                                 style="object-fit: contain;" />
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center text-muted border rounded p-5 bg-light">
+                            <i class="fas fa-image fa-4x mb-3"></i>
+                            <p class="mb-0">Chưa có ảnh đại diện</p>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Thông tin -->
+            <div class="col-lg-7">
+                <h4 class="text-primary fw-bold mb-4">@Model.TenSanPham</h4>
+                <table class="table table-bordered table-hover align-middle">
+                    <tbody>
+                        <tr>
+                            <th class="table-light" style="width:30%">Mã sản phẩm</th>
+                            <td><code class="text-danger fw-bold">@Model.MaSanPham</code></td>
+                        </tr>
+                        <tr>
+                            <th class="table-light">Dòng sản phẩm</th>
+                            <td><strong>@Model.MaDongSanPhamNavigation?.TenDongSanPham</strong></td>
+                        </tr>
+                        <tr>
+                            <th class="table-light">Màu sắc</th>
+                            <td>
+                                <span class="badge bg-primary px-3 py-2 fs-6">
+                                    @Model.MaMauNavigation?.TenMau
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="table-light">Giá bán</th>
+                            <td class="text-danger fw-bold fs-4">
+                                @if (Model.MaDongSanPhamNavigation?.GiaBan.HasValue == true)
+                                {
+                                    @String.Format("{0:N0} ₫", Model.MaDongSanPhamNavigation.GiaBan.Value)
+                                }
+                                else
+                                {
+                                    <em class="text-muted">Chưa thiết lập giá</em>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="table-light">Trạng thái</th>
+                            <td>
+                                @if (Model.TrangThai == true)
+                                {
+                                    <span class="badge bg-success fs-6"><i class="fas fa-fire me-1"></i> HOT</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary fs-6"><i class="fas fa-circle me-1"></i> Bình thường</span>
+                                }
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h5 class="fw-bold text-primary mt-4 mb-3">
+                    <i class="fas fa-ruler me-2"></i>Size & Tồn kho
+                </h5>
+                @if (Model.SanPhamSizes != null && Model.SanPhamSizes.Any())
+                {
+                    <table class="table table-sm table-bordered table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="text-center">Size</th>
+                                <th class="text-center">Số lượng tồn</th>
+                                <th class="text-center">Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var size in Model.SanPhamSizes.OrderBy(s => s.MaSizeNavigation?.TenSize))
+                            {
+                                <tr>
+                                    <td class="text-center fw-bold">@size.MaSizeNavigation?.TenSize</td>
+                                    <td class="text-center">@size.SoLuong</td>
+                                    <td class="text-center">
+                                        @if (size.SoLuong > 10)
+                                        {
+                                            <span class="badge bg-success">Còn nhiều</span>
+                                        }
+                                        else if (size.SoLuong > 0)
+                                        {
+                                            <span class="badge bg-warning text-dark">Sắp hết</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">Hết hàng</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>Chưa có thông tin size nào cho sản phẩm này.
+                    </div>
+                }
+            </div>
+        </div>
+
+        <hr class="my-4" />
+        <div class="d-flex gap-3">
+            <a asp-area="Admin" asp-controller="SanPhamAdmin" asp-action="Index"
+               class="btn btn-secondary btn-lg px-5">Quay lại danh sách</a>
+        </div>
+    </div>
+</div>

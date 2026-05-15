@@ -1,0 +1,22 @@
+@model KarmaShop.Models.Loai
+@{ ViewBag.Title = "Sửa loại giày"; }
+<div class="card shadow-sm"><div class="card-header bg-primary text-white"><h4 class="mb-0">Chỉnh sửa loại giày</h4></div>
+<div class="card-body">
+<form asp-area="Admin" asp-controller="Loai" asp-action="Edit" asp-route-id="@Model.MaLoai" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="MaLoai" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="mb-3 row">
+        <label asp-for="TenLoai" class="col-md-2 col-form-label fw-bold">Tên loại</label>
+        <div class="col-md-10">
+            <input asp-for="TenLoai" class="form-control" required />
+            <span asp-validation-for="TenLoai" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row"><div class="col-md-10 offset-md-2">
+        <button type="submit" class="btn btn-primary me-2">Lưu thay đổi</button>
+        <a asp-area="Admin" asp-controller="Loai" asp-action="Index" class="btn btn-secondary">Quay lại</a>
+    </div></div>
+</form>
+</div></div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

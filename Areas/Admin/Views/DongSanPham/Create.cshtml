@@ -1,0 +1,54 @@
+@model KarmaShop.Models.DongSanPham
+@{ ViewBag.Title = "Thêm dòng sản phẩm"; }
+
+<div class="card shadow-sm">
+    <div class="card-header bg-success text-white"><h4 class="mb-0">Thêm dòng sản phẩm mới</h4></div>
+    <div class="card-body">
+        <form asp-area="Admin" asp-controller="DongSanPham" asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3 row">
+                <label class="col-md-2 col-form-label fw-bold">Loại</label>
+                <div class="col-md-10">
+                    <select asp-for="MaLoai" asp-items="ViewBag.MaLoai" class="form-select" required>
+                        <option value="">-- Chọn loại --</option>
+                    </select>
+                    <span asp-validation-for="MaLoai" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label asp-for="TenDongSanPham" class="col-md-2 col-form-label fw-bold">Tên dòng SP</label>
+                <div class="col-md-10">
+                    <input asp-for="TenDongSanPham" class="form-control" required placeholder="Tên dòng sản phẩm" />
+                    <span asp-validation-for="TenDongSanPham" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label asp-for="GiaBan" class="col-md-2 col-form-label fw-bold">Giá bán</label>
+                <div class="col-md-10">
+                    <input asp-for="GiaBan" class="form-control" type="number" step="1000" min="0" placeholder="Giá bán (VND)" />
+                    <span asp-validation-for="GiaBan" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label asp-for="MoTa" class="col-md-2 col-form-label fw-bold">Mô tả</label>
+                <div class="col-md-10">
+                    <textarea asp-for="MoTa" class="form-control" rows="3" placeholder="Mô tả dòng sản phẩm"></textarea>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 offset-md-2">
+                    <button type="submit" class="btn btn-success me-2">Lưu</button>
+                    <a asp-area="Admin" asp-controller="DongSanPham" asp-action="Index" class="btn btn-secondary">Quay lại</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

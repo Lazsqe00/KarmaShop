@@ -1,0 +1,90 @@
+@model IEnumerable<KarmaShop.Models.PhieuMua>
+@{
+    ViewBag.Title = "Quản lý đơn hàng";
+}
+
+<h1 class="text-center fw-bold mt-5 mb-4">QUẢN LÝ ĐƠN HÀNG</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<style>
+    .table th, .table td { text-align: center !important; vertical-align: middle !important; }
+    .badge-status { padding: 6px 14px; border-radius: 20px; font-weight: 500; font-size: 0.85rem; }
+    .badge-cho { background-color: #fff3cd; color: #856404; }
+    .badge-giao { background-color: #cce5ff; color: #004085; }
+    .badge-tuchoi { background-color: #f8d7da; color: #721c24; }
+    .badge-other { background-color: #e2e3e5; color: #383d41; }
+</style>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Mã ĐH</th>
+                <th>Ngày đặt</th>
+                <th>Khách hàng</th>
+                <th>Nhân viên</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pm in Model)
+            {
+                <tr>
+                    <td><strong>#@pm.MaPhieuMua</strong></td>
+                    <td>@pm.NgayDat?.ToString("dd/MM/yyyy")</td>
+                    <td>@(pm.MaKhachHangNavigation?.TenKhachHang ?? "—")</td>
+                    <td>@(pm.MaNhanVienNavigation?.TenNhanVien ?? "Chưa xử lý")</td>
+                    <td class="text-end fw-bold text-success">@pm.TongTien?.ToString("N0") ₫</td>
+                    <td>
+                        @{
+                            string badgeClass = pm.TinhTrang switch
+                            {
+                                "Chờ xác nhận" => "badge-cho",
+                                "Đang giao hàng" => "badge-giao",
+                                "Từ chối" => "badge-tuchoi",
+                                _ => "badge-other"
+                            };
+                        }
+                        <span class="badge-status @badgeClass">@(pm.TinhTrang ?? "Chưa có")</span>
+                    </td>
+                    <td>
+                        <div class="d-flex justify-content-center gap-2 flex-wrap">
+                            <a asp-area="Admin" asp-controller="PhieuMuaAdmin" asp-action="Details"
+                               asp-route-id="@pm.MaPhieuMua" class="btn btn-info btn-sm text-white">
+                                <i class="fas fa-eye"></i> Chi tiết
+                            </a>
+                            @if (pm.TinhTrang == null || pm.TinhTrang == "Chờ xác nhận")
+                            {
+                                <form asp-area="Admin" asp-controller="PhieuMuaAdmin" asp-action="Approve"
+                                      asp-route-id="@pm.MaPhieuMua" method="post" class="d-inline"
+                                      onsubmit="return confirm('Duyệt đơn hàng #@pm.MaPhieuMua?');">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-success btn-sm">
+                                        <i class="fas fa-check"></i> Duyệt
+                                    </button>
+                                </form>
+                                <form asp-area="Admin" asp-controller="PhieuMuaAdmin" asp-action="Reject"
+                                      asp-route-id="@pm.MaPhieuMua" method="post" class="d-inline"
+                                      onsubmit="return confirm('Từ chối đơn hàng #@pm.MaPhieuMua?');">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-times"></i> Từ chối
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

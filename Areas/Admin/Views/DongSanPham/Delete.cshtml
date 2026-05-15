@@ -1,0 +1,23 @@
+@model KarmaShop.Models.DongSanPham
+@{ ViewBag.Title = "Xóa dòng sản phẩm"; }
+
+<div class="card shadow-sm">
+    <div class="card-header bg-danger text-white"><h4 class="mb-0">Xác nhận xóa dòng sản phẩm</h4></div>
+    <div class="card-body">
+        <div class="alert alert-warning">
+            <strong>Cảnh báo:</strong> Bạn có chắc muốn xóa dòng sản phẩm <strong>@Model.TenDongSanPham</strong>?
+        </div>
+        <dl class="row">
+            <dt class="col-sm-3">Tên dòng SP</dt><dd class="col-sm-9">@Model.TenDongSanPham</dd>
+            <dt class="col-sm-3">Loại</dt><dd class="col-sm-9">@Model.MaLoaiNavigation?.TenLoai</dd>
+            <dt class="col-sm-3">Giá bán</dt>
+            <dd class="col-sm-9">@(Model.GiaBan.HasValue ? String.Format("{0:N0} ₫", Model.GiaBan) : "-")</dd>
+        </dl>
+        <form asp-area="Admin" asp-controller="DongSanPham" asp-action="Delete"
+              asp-route-id="@Model.MaDongSanPham" method="post">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-danger me-2">Xóa</button>
+            <a asp-area="Admin" asp-controller="DongSanPham" asp-action="Index" class="btn btn-secondary">Hủy</a>
+        </form>
+    </div>
+</div>

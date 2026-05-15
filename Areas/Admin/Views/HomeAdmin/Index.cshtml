@@ -1,0 +1,166 @@
+@using KarmaShop.Areas.Admin.ViewModels
+@{
+    ViewBag.Title = "Dashboard";
+    var loaiTK = Context.Session.GetString("LoaiTK");
+    var thongKe = ViewBag.ThongKe as ThongKeDoanhThu;
+
+    var monthNames = new string[] {
+        "Tháng 1","Tháng 2","Tháng 3","Tháng 4",
+        "Tháng 5","Tháng 6","Tháng 7","Tháng 8",
+        "Tháng 9","Tháng 10","Tháng 11","Tháng 12"
+    };
+
+    var saleByMonths = thongKe?.SaleByMonths
+        .OrderBy(x => x.Month)
+        .Select(m => new { MonthName = monthNames[m.Month - 1], m.Sale })
+        .ToList();
+
+    var top5Products = thongKe?.SaleByProducts
+        .OrderByDescending(p => p.Sales)
+        .Take(5)
+        .ToList();
+
+    decimal tongDoanhThu = thongKe?.SaleByMonths.Sum(x => x.Sale) ?? 0;
+}
+
+<style>
+    .custom-card { height: 200px; }
+</style>
+
+<div class="container mt-2">
+    <div class="row">
+        <div class="col-md-2 p-1 mx-1">
+            <div class="card bg-gradient-info card-img-holder text-white custom-card w-100">
+                <div class="card-body">
+                    <h4 class="font-weight-normal mb-3">
+                        Total Products Sold <i class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
+                    </h4>
+                    <h2 class="mb-5">@ViewBag.TongSanPham</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2 p-1 mx-1">
+            <div class="card bg-gradient-success card-img-holder text-white custom-card w-100">
+                <div class="card-body">
+                    <h4 class="font-weight-normal mb-3">
+                        Total Orders (Tháng này) <i class="mdi mdi-diamond mdi-24px float-right"></i>
+                    </h4>
+                    <h2 class="mb-5">@ViewBag.TongDonHang</h2>
+                </div>
+            </div>
+        </div>
+
+        @if (loaiTK == "2")
+        {
+            <div class="col-md-2 p-1 mx-1">
+                <div class="card bg-gradient-primary card-img-holder text-white custom-card w-100">
+                    <div class="card-body">
+                        <h4 class="font-weight-normal mb-3">
+                            Total Employees <i class="mdi mdi-account mdi-24px float-right"></i>
+                        </h4>
+                        <h2 class="mb-5">@ViewBag.TongNhanVien</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2 p-1 mx-1">
+                <div class="card bg-gradient-warning card-img-holder text-white custom-card w-100">
+                    <div class="card-body">
+                        <h4 class="font-weight-normal mb-3">
+                            Total Customers <i class="mdi mdi-account mdi-24px float-right"></i>
+                        </h4>
+                        <h2 class="mb-5">@ViewBag.TongKhachHang</h2>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Thống kê doanh thu -->
+<div class="row my-5">
+    <div class="col-12 mb-4">
+        <div class="card shadow bg-primary text-white">
+            <div class="card-body text-center py-4">
+                <h3 class="mb-0">Tổng Doanh Thu (Tất cả các tháng)</h3>
+                <h2 class="display-4 fw-bold">@tongDoanhThu.ToString("N0") ₫</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow h-100">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0 text-center">Doanh Thu Theo Tháng</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="text-center">Tháng</th>
+                                <th class="text-end">Doanh Thu</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (saleByMonths != null && saleByMonths.Any())
+                            {
+                                foreach (var item in saleByMonths)
+                                {
+                                    <tr>
+                                        <td class="text-center fw-bold">@item.MonthName</td>
+                                        <td class="text-end text-success fw-bold">@item.Sale.ToString("N0") ₫</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr><td colspan="2" class="text-center text-muted py-4">Chưa có dữ liệu</td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow h-100">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0 text-center">Top 5 Sản Phẩm Bán Chạy Nhất</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>STT</th>
+                                <th>Tên Sản Phẩm</th>
+                                <th class="text-end">Doanh Thu</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (top5Products != null && top5Products.Any())
+                            {
+                                for (int i = 0; i < top5Products.Count; i++)
+                                {
+                                    var p = top5Products[i];
+                                    <tr>
+                                        <td class="text-center fw-bold text-primary">@(i + 1)</td>
+                                        <td>@p.ProductName</td>
+                                        <td class="text-end text-danger fw-bold">@p.Sales.ToString("N0") ₫</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr><td colspan="3" class="text-center text-muted py-4">Chưa có dữ liệu</td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

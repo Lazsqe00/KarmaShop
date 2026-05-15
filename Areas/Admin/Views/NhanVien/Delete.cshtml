@@ -1,0 +1,53 @@
+@model KarmaShop.Models.NhanVien
+@{
+    ViewBag.Title = "Xóa nhân viên";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 mt-3">
+    <h3 class="fw-bold mb-0 text-danger"><i class="fas fa-user-times me-2"></i>XÓA NHÂN VIÊN</h3>
+    <a asp-area="Admin" asp-controller="NhanVien" asp-action="Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-1"></i> Quay lại
+    </a>
+</div>
+
+<div class="card shadow-sm border-danger">
+    <div class="card-header bg-danger text-white">
+        <h5 class="mb-0">Xác nhận xóa nhân viên #@Model.MaNhanVien</h5>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <strong>Cảnh báo:</strong> Bạn có chắc muốn xóa nhân viên này? Hành động này không thể hoàn tác.
+        </div>
+
+        <table class="table table-borderless">
+            <tr>
+                <td class="fw-bold" style="width:25%">Tên nhân viên:</td>
+                <td>@Model.TenNhanVien</td>
+            </tr>
+            <tr>
+                <td class="fw-bold">Email:</td>
+                <td>@Model.Email</td>
+            </tr>
+            <tr>
+                <td class="fw-bold">Số điện thoại:</td>
+                <td>@(Model.SoDienThoai ?? "—")</td>
+            </tr>
+            <tr>
+                <td class="fw-bold">Giới tính:</td>
+                <td>@(Model.GioiTinh ?? "—")</td>
+            </tr>
+        </table>
+
+        <form asp-area="Admin" asp-controller="NhanVien" asp-action="Delete"
+              asp-route-id="@Model.MaNhanVien" method="post">
+            @Html.AntiForgeryToken()
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash me-1"></i> Xác nhận xóa
+                </button>
+                <a asp-area="Admin" asp-controller="NhanVien" asp-action="Index" class="btn btn-secondary">Hủy</a>
+            </div>
+        </form>
+    </div>
+</div>

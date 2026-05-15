@@ -1,0 +1,224 @@
+@model KarmaShop.Models.PhieuMua
+@{
+    ViewBag.Title = "Chi tiết đơn hàng #" + Model.MaPhieuMua;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 mt-3">
+    <h3 class="fw-bold mb-0">
+        <i class="fas fa-receipt me-2"></i> Chi tiết đơn hàng #@Model.MaPhieuMua
+    </h3>
+    <a asp-area="Admin" asp-controller="PhieuMuaAdmin" asp-action="Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-1"></i> Quay lại
+    </a>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row">
+    <!-- Thông tin đơn hàng -->
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Thông tin đơn hàng</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless mb-0">
+                    <tr>
+                        <td class="fw-bold" style="width:40%">Mã đơn hàng:</td>
+                        <td>#@Model.MaPhieuMua</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Ngày đặt:</td>
+                        <td>@Model.NgayDat?.ToString("dd/MM/yyyy")</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Trạng thái:</td>
+                        <td>
+                            @{
+                                string tinhTrangBadge = Model.TinhTrang switch
+                                {
+                                    "Đang giao hàng" => "primary",
+                                    "Từ chối" => "danger",
+                                    "Đã giao hàng" => "success",
+                                    _ => "warning text-dark"
+                                };
+                            }
+                            <span class="badge bg-@tinhTrangBadge">
+                                @(Model.TinhTrang ?? "Chờ xác nhận")
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Tổng tiền:</td>
+                        <td class="text-success fw-bold fs-5">@Model.TongTien?.ToString("N0") ₫</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Voucher:</td>
+                        <td>@(Model.MaVoucher ?? "Không dùng")</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Ghi chú:</td>
+                        <td>@(Model.GhiChu ?? "—")</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Thông tin người nhận -->
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-user me-2"></i>Thông tin giao hàng</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless mb-0">
+                    <tr>
+                        <td class="fw-bold" style="width:40%">Khách hàng:</td>
+                        <td>@(Model.MaKhachHangNavigation?.TenKhachHang ?? "—")</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Người nhận:</td>
+                        <td>@(Model.TenNguoiNhan ?? "—")</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Email:</td>
+                        <td>@(Model.EmailNguoiNhan ?? "—")</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">SĐT:</td>
+                        <td>@(Model.SoDienThoaiNguoiNhan ?? "—")</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Địa chỉ:</td>
+                        <td>@(Model.DiaChiGiaoHang ?? "—")</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Nhân viên:</td>
+                        <td>@(Model.MaNhanVienNavigation?.TenNhanVien ?? "Chưa xử lý")</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chi tiết sản phẩm -->
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0"><i class="fas fa-shopping-cart me-2"></i>Sản phẩm trong đơn</h5>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="text-center">STT</th>
+                        <th>Tên sản phẩm</th>
+                        <th class="text-center">Size</th>
+                        <th class="text-center">Số lượng</th>
+                        <th class="text-end">Đơn giá</th>
+                        <th class="text-end">Thành tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{int stt = 1;}
+                    @foreach (var ct in Model.ChiTietPhieuMuas)
+                    {
+                        <tr>
+                            <td class="text-center">@stt</td>
+                            <td>
+                                <strong>@ct.MaSanPhamNavigation?.TenSanPham</strong>
+                                @if (ct.MaSanPhamNavigation?.MaDongSanPhamNavigation != null)
+                                {
+                                    <br /><small class="text-muted">@ct.MaSanPhamNavigation.MaDongSanPhamNavigation.TenDongSanPham</small>
+                                }
+                            </td>
+                            <td class="text-center">@ct.MaSizeNavigation?.TenSize</td>
+                            <td class="text-center">@ct.SoLuong</td>
+                            <td class="text-end">@ct.DonGia?.ToString("N0") ₫</td>
+                            <td class="text-end fw-bold text-success">
+                                @(((decimal?)ct.SoLuong * ct.DonGia)?.ToString("N0")) ₫
+                            </td>
+                        </tr>
+                        stt++;
+                    }
+                </tbody>
+                <tfoot class="table-light">
+                    <tr>
+                        <td colspan="5" class="text-end fw-bold">TỔNG CỘNG:</td>
+                        <td class="text-end fw-bold fs-5 text-success">@Model.TongTien?.ToString("N0") ₫</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Đổi trạng thái -->
+@if (Model.TinhTrang == null || Model.TinhTrang == "Chờ xác nhận")
+{
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-warning">
+            <h5 class="mb-0"><i class="fas fa-exchange-alt me-2"></i>Xử lý đơn hàng</h5>
+        </div>
+        <div class="card-body">
+            <form id="changeStatusForm">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="MaPhieuMua" value="@Model.MaPhieuMua" />
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Trạng thái mới</label>
+                        <select name="TinhTrangMoi" id="TinhTrangMoi" class="form-select" required>
+                            <option value="">-- Chọn trạng thái --</option>
+                            <option value="Đang giao hàng">Đang giao hàng</option>
+                            <option value="Từ chối">Từ chối</option>
+                        </select>
+                    </div>
+                    <div class="col-md-5">
+                        <label class="form-label fw-bold">Ghi chú (tùy chọn)</label>
+                        <input type="text" name="GhiChu" class="form-control" placeholder="Nhập lý do hoặc ghi chú..." />
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-save me-1"></i> Cập nhật trạng thái
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        $('#changeStatusForm').on('submit', function(e) {
+            e.preventDefault();
+            const tinhTrang = $('#TinhTrangMoi').val();
+            if (!tinhTrang) { alert('Vui lòng chọn trạng thái!'); return; }
+            if (!confirm('Cập nhật trạng thái đơn hàng thành "' + tinhTrang + '"?')) return;
+
+            $.ajax({
+                url: '@Url.Action("ChangeStatus", "PhieuMuaAdmin", new { area = "Admin" })',
+                method: 'POST',
+                data: $(this).serialize(),
+                success: function(res) {
+                    if (res.success) {
+                        window.location.href = res.redirectUrl;
+                    } else {
+                        alert(res.message || 'Có lỗi xảy ra!');
+                    }
+                },
+                error: function() {
+                    alert('Lỗi kết nối, vui lòng thử lại!');
+                }
+            });
+        });
+    </script>
+}

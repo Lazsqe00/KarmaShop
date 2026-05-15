@@ -1,0 +1,101 @@
+@model KarmaShop.Models.SanPham
+@{
+    ViewBag.Title = "Xóa sản phẩm";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-danger text-white">
+        <h4 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Xác nhận xóa sản phẩm</h4>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-warning border-0 rounded-3">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <strong>Cảnh báo:</strong> Bạn có chắc chắn muốn xóa sản phẩm này?
+            Hành động này <strong>không thể hoàn tác</strong> và sẽ xóa luôn tất cả thông tin size tồn kho liên quan.
+        </div>
+
+        <h4 class="mt-4 mb-3 text-danger fw-bold">@Model.TenSanPham</h4>
+
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <h5 class="fw-bold text-primary mb-3"><i class="fas fa-images me-2"></i>Hình ảnh</h5>
+                @if (!string.IsNullOrEmpty(Model.AnhDaiDien))
+                {
+                    <div class="text-center border rounded p-2 bg-light">
+                        <img src="~/img/@Model.MaDongSanPham/Avatar/@Model.AnhDaiDien"
+                             alt="Ảnh đại diện" class="img-fluid rounded shadow-sm"
+                             style="max-height: 300px; object-fit: contain;" />
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center text-muted border rounded p-5 bg-light">
+                        <i class="fas fa-image fa-3x mb-3"></i>
+                        <p>Không có ảnh đại diện</p>
+                    </div>
+                }
+            </div>
+
+            <div class="col-md-6">
+                <h5 class="fw-bold text-primary mb-3"><i class="fas fa-info-circle me-2"></i>Thông tin sản phẩm</h5>
+                <table class="table table-bordered table-hover">
+                    <tbody>
+                        <tr>
+                            <th class="table-light" style="width:30%">Dòng sản phẩm</th>
+                            <td>@Model.MaDongSanPhamNavigation?.TenDongSanPham</td>
+                        </tr>
+                        <tr>
+                            <th class="table-light">Màu sắc</th>
+                            <td>
+                                <span class="badge bg-primary px-3 py-2">@Model.MaMauNavigation?.TenMau</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="table-light">Giá bán</th>
+                            <td class="text-danger fw-bold fs-5">
+                                @if (Model.MaDongSanPhamNavigation?.GiaBan.HasValue == true)
+                                {
+                                    @String.Format("{0:N0} ₫", Model.MaDongSanPhamNavigation.GiaBan.Value)
+                                }
+                                else
+                                {
+                                    <em>Chưa thiết lập</em>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="table-light">Trạng thái</th>
+                            <td>
+                                @if (Model.TrangThai == true)
+                                {
+                                    <span class="badge bg-success fs-6"><i class="fas fa-fire me-1"></i>HOT</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary fs-6"><i class="fas fa-circle me-1"></i>Bình thường</span>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="table-light">Mã sản phẩm</th>
+                            <td><code>@Model.MaSanPham</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <hr class="my-4" />
+        <form asp-area="Admin" asp-controller="SanPhamAdmin" asp-action="Delete"
+              asp-route-id="@Model.MaSanPham" method="post">
+            @Html.AntiForgeryToken()
+            <div class="d-flex gap-3">
+                <button type="submit" class="btn btn-danger btn-lg px-5">
+                    <i class="fas fa-trash-alt me-2"></i>Xóa sản phẩm
+                </button>
+                <a asp-area="Admin" asp-controller="SanPhamAdmin" asp-action="Index"
+                   class="btn btn-secondary btn-lg px-5">Hủy và quay lại</a>
+            </div>
+        </form>
+    </div>
+</div>

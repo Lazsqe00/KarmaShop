@@ -1,0 +1,11 @@
+@model KarmaShop.Models.Loai
+@{ ViewBag.Title = "Chi tiết loại giày"; }
+<div class="card shadow-sm"><div class="card-header bg-info text-white"><h4 class="mb-0">Chi tiết loại giày</h4></div>
+<div class="card-body">
+    <dl class="row">
+        <dt class="col-sm-3">Mã loại</dt><dd class="col-sm-9">@Model.MaLoai</dd>
+        <dt class="col-sm-3">Tên loại</dt><dd class="col-sm-9">@Model.TenLoai</dd>
+    </dl>
+    <a asp-area="Admin" asp-controller="Loai" asp-action="Edit" asp-route-id="@Model.MaLoai" class="btn btn-warning me-2">Sửa</a>
+    <a asp-area="Admin" asp-controller="Loai" asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</div></div>

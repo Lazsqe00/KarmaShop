@@ -1,0 +1,109 @@
+@using KarmaShop.Areas.Admin.ViewModels
+@model ThongKeDoanhThu
+@{
+    var monthNames = new string[] {
+        "Tháng 1","Tháng 2","Tháng 3","Tháng 4",
+        "Tháng 5","Tháng 6","Tháng 7","Tháng 8",
+        "Tháng 9","Tháng 10","Tháng 11","Tháng 12"
+    };
+
+    var saleByMonths = Model.SaleByMonths
+        .OrderBy(x => x.Month)
+        .Select(m => new { MonthName = monthNames[m.Month - 1], m.Sale })
+        .ToList();
+
+    var saleByProducts = Model.SaleByProducts
+        .OrderByDescending(p => p.Sales)
+        .Take(5)
+        .ToList();
+
+    decimal tongDoanhThu = Model.SaleByMonths.Sum(x => x.Sale);
+}
+
+<div class="row mb-3">
+    <div class="col-12">
+        <div class="card bg-primary text-white">
+            <div class="card-body text-center py-3">
+                <h5 class="mb-1">Tổng doanh thu</h5>
+                <h3 class="fw-bold mb-0">@tongDoanhThu.ToString("N0") ₫</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6 mb-3">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-success text-white py-2">
+                <h6 class="mb-0">Doanh thu theo tháng</h6>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive" style="max-height:250px;overflow-y:auto">
+                    <table class="table table-sm table-hover mb-0">
+                        <thead class="table-light sticky-top">
+                            <tr>
+                                <th>Tháng</th>
+                                <th class="text-end">Doanh thu</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (saleByMonths.Any())
+                            {
+                                @foreach (var item in saleByMonths)
+                                {
+                                    <tr>
+                                        <td>@item.MonthName</td>
+                                        <td class="text-end text-success fw-bold">@item.Sale.ToString("N0") ₫</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr><td colspan="2" class="text-center text-muted py-3">Chưa có dữ liệu</td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 mb-3">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-info text-white py-2">
+                <h6 class="mb-0">Top 5 sản phẩm bán chạy</h6>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive" style="max-height:250px;overflow-y:auto">
+                    <table class="table table-sm table-hover mb-0">
+                        <thead class="table-light sticky-top">
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th>Sản phẩm</th>
+                                <th class="text-end">Doanh thu</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (saleByProducts.Any())
+                            {
+                                int i = 1;
+                                @foreach (var p in saleByProducts)
+                                {
+                                    <tr>
+                                        <td class="text-center fw-bold @(i <= 3 ? "text-warning" : "")">@i</td>
+                                        <td>@p.ProductName</td>
+                                        <td class="text-end text-danger fw-bold">@p.Sales.ToString("N0") ₫</td>
+                                    </tr>
+                                    i++;
+                                }
+                            }
+                            else
+                            {
+                                <tr><td colspan="3" class="text-center text-muted py-3">Chưa có dữ liệu</td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
