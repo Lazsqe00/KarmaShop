@@ -3,7 +3,7 @@
     Layout = "_ThuNganLayout";
 }
 
-<!-- Tiêu đề trang phong cách Admin với Icon Gradient -->
+
 <div class="d-flex align-items-center mb-4">
     <div class="bg-gradient-primary-custom text-white d-flex align-items-center justify-content-center rounded-3 me-3" style="width: 40px; height: 40px; box-shadow: 0 4px 10px rgba(0,0,0,0.15)">
         <i class="mdi mdi-credit-card fs-4"></i>
@@ -11,7 +11,7 @@
     <h3 class="fw-bold mb-0 text-dark" style="font-size: 1.5rem;">Thanh toán & Cập nhật</h3>
 </div>
 
-<!-- Alert thông báo đơn chờ duyệt thiết kế lại mềm mại hơn -->
+
 @if (ViewBag.DonChoDuyet > 0)
 {
     <div class="alert border-0 shadow-sm mb-4 d-flex align-items-center p-3" style="background: #fef1e6; border-radius: 10px; color: #e65c00;">
@@ -20,7 +20,7 @@
     </div>
 }
 
-<!-- Card chứa bảng danh sách hóa đơn -->
+
 <div class="card border-0 shadow-sm" style="border-radius: 10px; background: #fff;">
     <div class="card-body p-4">
         <h5 class="card-title fw-bold text-dark mb-4" style="font-size: 1.1rem;">Hóa đơn chờ thanh toán</h5>
@@ -80,7 +80,7 @@
     </div>
 </div>
 
-<!-- Styles bổ sung cục bộ để tạo nút Gradient Success và các hiệu ứng nhỏ -->
+
 @section styles {
     <style>
         .btn-gradient-success-custom {

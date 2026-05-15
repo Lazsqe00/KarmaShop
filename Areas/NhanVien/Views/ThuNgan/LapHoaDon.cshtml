@@ -5,12 +5,12 @@
 
 <div class="d-flex align-items-center justify-content-between mb-4">
     <div class="d-flex align-items-center">
-        <div class="bg-gradient-primary-custom text-white d-flex align-items-center justify-content-center rounded-3 me-3" style="width: 45px; height: 45px; shadow: 0 4px 10px rgba(0,0,0,0.15)">
+        <div class="bg-gradient-primary-custom text-white d-flex align-items-center justify-content-center rounded-3 me-3" style="width: 45px; height: 45px; box-shadow: 0 4px 10px rgba(0,0,0,0.15)">
             <i class="mdi mdi-file-document-edit fs-4"></i>
         </div>
         <div>
             <h3 class="fw-bold mb-0 text-dark">Lập hóa đơn</h3>
-            <small class="text-muted fw-bold">TN_BM1 — @DateTime.Now.ToString("'Ngày' dd 'Tháng' MM 'Năm' yyyy")</small>
+            <small class="text-muted fw-bold">@DateTime.Now.ToString("'Ngày' dd 'Tháng' MM 'Năm' yyyy")</small>
         </div>
     </div>
 </div>
@@ -19,10 +19,20 @@
     <div class="col-lg-4">
         <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
             <div class="card-body p-4">
-                <h6 class="fw-bold mb-3 text-primary"><i class="mdi mdi-account-card-details me-2"></i>THÔNG TIN KHÁCH HÀNG</h6>
+                <h6 class="fw-bold mb-3 text-primary border-bottom pb-2">
+                    <i class="mdi mdi-account-card-details me-2"></i>THÔNG TIN KHÁCH HÀNG
+                </h6>
                 <div class="mb-3">
-                    <label class="small fw-bold text-muted">Mã khách hàng:</label>
-                    <input type="number" id="MaKH" class="form-control border-0 bg-light" placeholder="Nhập mã số KH...">
+                    <label class="small fw-bold text-muted">Họ tên khách hàng:</label>
+                    <input type="text" id="HoTenKH" class="form-control border-0 bg-light" placeholder="Nhập tên khách hàng...">
+                </div>
+                <div class="mb-3">
+                    <label class="small fw-bold text-muted">Địa chỉ nhận hàng:</label>
+                    <input type="text" id="DiaChiKH" class="form-control border-0 bg-light" placeholder="Nhập địa chỉ cụ thể...">
+                </div>
+                <div class="mb-3">
+                    <label class="small fw-bold text-muted">Số điện thoại:</label>
+                    <input type="text" id="SdtKH" class="form-control border-0 bg-light" placeholder="Nhập số điện thoại...">
                 </div>
                 <div class="mb-0">
                     <label class="small fw-bold text-muted">Hình thức thanh toán:</label>
@@ -38,7 +48,9 @@
 
         <div class="card border-0 shadow-sm" style="border-radius: 12px;">
             <div class="card-body p-4">
-                <h6 class="fw-bold mb-3 text-primary"><i class="mdi mdi-cart-plus me-2"></i>THÊM SẢN PHẨM</h6>
+                <h6 class="fw-bold mb-3 text-primary border-bottom pb-2">
+                    <i class="mdi mdi-cart-plus me-2"></i>THÊM SẢN PHẨM
+                </h6>
                 <div class="mb-3">
                     <label class="small fw-bold text-muted">Chọn sản phẩm:</label>
                     <select id="MaSP" class="form-select border-0 bg-light py-2">
@@ -48,8 +60,8 @@
                             <option value="@s.MaSanPham"
                                     data-price="@s.MaDongSanPhamNavigation?.GiaBan"
                                     data-name="@s.TenSanPham"
-                                    data-type="@s.MaLoaiNavigation?.TenLoai"
-                                    data-brand="@s.MaDongSanPhamNavigation?.MaThuongHieuNavigation?.TenThuongHieu"
+                                    data-type="@(s.MaLoaiNavigation?.TenLoai ?? "Chưa rõ")"
+                                    data-brand="@(s.MaDongSanPhamNavigation?.MaThuongHieuNavigation?.TenThuongHieu ?? "Chưa rõ")"
                                     data-img="/images/@s.AnhDaiDien">
                                 @s.TenSanPham
                             </option>
@@ -67,7 +79,7 @@
                     </div>
                 </div>
                 <button class="btn btn-gradient-primary-custom w-100 fw-bold py-2" onclick="addToOrder()">
-                    <i class="mdi mdi-plus-box me-1"></i> THÊM VÀO GIỎ
+                    <i class="mdi mdi-plus-box me-1"></i> THÊM VÀO HÓA ĐƠN
                 </button>
             </div>
         </div>
@@ -77,22 +89,22 @@
         <div class="card border-0 shadow-sm h-100" style="border-radius: 12px; overflow: hidden;">
             <div class="card-header bg-white py-3 border-bottom-0 text-center">
                 <h5 class="fw-bold text-dark mb-0 mt-2">CHI TIẾT ĐƠN HÀNG</h5>
-                <hr class="mx-auto w-25">
+                <hr class="mx-auto w-25" style="border-top: 2px solid #000;">
             </div>
             <div class="card-body p-0 d-flex flex-column">
                 <div class="table-responsive flex-grow-1">
-                    <table class="table align-middle mb-0" id="orderTable">
-                        <thead class="bg-light text-dark small fw-bold">
+                    <table class="table table-bordered align-middle mb-0" id="orderTable">
+                        <thead class="bg-light text-dark small fw-bold text-center">
                             <tr>
-                                <th class="ps-3 text-center">STT</th>
-                                <th>Ảnh</th>
-                                <th>Tên sản phẩm</th>
-                                <th class="text-center">Loại</th>
-                                <th class="text-center">Thương hiệu</th>
-                                <th class="text-end">Đơn giá</th>
-                                <th class="text-center">Số lượng</th>
-                                <th class="text-end">Thành tiền</th>
-                                <th></th>
+                                <th style="width: 5%">STT</th>
+                                <th style="width: 10%">Ảnh sản phẩm</th>
+                                <th style="width: 25%">Tên sản phẩm</th>
+                                <th style="width: 15%">Loại sản phẩm</th>
+                                <th style="width: 15%">Thương hiệu</th>
+                                <th style="width: 10%">Đơn giá</th>
+                                <th style="width: 5%">Số lượng</th>
+                                <th style="width: 10%">Thành tiền</th>
+                                <th style="width: 5%"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -128,16 +140,21 @@
         if (!sp.val()) return Swal.fire("Lỗi", "Vui lòng chọn sản phẩm!", "error");
         if (!size) return Swal.fire("Lỗi", "Vui lòng nhập Size!", "error");
 
-        orderItems.push({
-            MaSanPham: parseInt(sp.val()),
-            TenSP: sp.data("name"),
-            Loai: sp.data("type") || "N/A",
-            Brand: sp.data("brand") || "N/A",
-            Img: sp.data("img"),
-            MaSize: parseInt(size),
-            SoLuong: qty,
-            GiaBan: parseFloat(sp.data("price"))
-        });
+        const existing = orderItems.find(x => x.MaSanPham == sp.val() && x.MaSize == size);
+        if (existing) {
+            existing.SoLuong += qty;
+        } else {
+            orderItems.push({
+                MaSanPham: parseInt(sp.val()),
+                TenSP: sp.data("name"),
+                Loai: sp.data("type"),
+                Brand: sp.data("brand"),
+                Img: sp.data("img"),
+                MaSize: parseInt(size),
+                SoLuong: qty,
+                GiaBan: parseFloat(sp.data("price"))
+            });
+        }
         renderOrder();
     }
 
@@ -150,22 +167,22 @@
             total += sum;
             h += `
                 <tr>
-                    <td class="text-center text-muted">${i + 1}</td>
-                    <td><img src="${it.Img}" width="40" height="40" class="rounded border" style="object-fit:cover" onerror="this.src='/images/default-shoe.png'"></td>
-                    <td class="fw-bold">${it.TenSP} <br><small class="text-muted">Size: ${it.MaSize}</small></td>
+                    <td class="text-center">${i + 1}</td>
+                    <td class="text-center"><img src="${it.Img}" width="45" height="45" class="rounded" style="object-fit:cover" onerror="this.src='/images/default-shoe.png'"></td>
+                    <td class="fw-bold text-dark">${it.TenSP} <br><small class="text-muted">Size: ${it.MaSize}</small></td>
                     <td class="text-center small">${it.Loai}</td>
                     <td class="text-center small">${it.Brand}</td>
-                    <td class="text-end fw-semibold">${it.GiaBan.toLocaleString()}₫</td>
+                    <td class="text-end">${it.GiaBan.toLocaleString()}₫</td>
                     <td class="text-center">${it.SoLuong}</td>
                     <td class="text-end fw-bold text-danger">${sum.toLocaleString()}₫</td>
                     <td class="text-center">
-                        <i class="mdi mdi-delete-forever text-danger fs-5" style="cursor:pointer" onclick="orderItems.splice(${i},1);renderOrder()"></i>
+                        <i class="mdi mdi-close-circle text-danger fs-5" style="cursor:pointer" onclick="orderItems.splice(${i},1);renderOrder()"></i>
                     </td>
                 </tr>`;
         });
 
         if(orderItems.length === 0) {
-            h = '<tr><td colspan="9" class="text-center py-5 text-muted">Chưa có sản phẩm nào trong đơn hàng</td></tr>';
+            h = '<tr><td colspan="9" class="text-center py-5 text-muted italic">Chưa có sản phẩm nào được chọn</td></tr>';
         }
 
         $("#orderTable tbody").html(h);
@@ -173,11 +190,14 @@
     }
 
     function saveOrder() {
-        if (orderItems.length === 0) return Swal.fire("Chú ý", "Hóa đơn trống!", "warning");
-        if (!$("#MaKH").val()) return Swal.fire("Chú ý", "Chưa nhập mã khách hàng!", "warning");
+        if (orderItems.length === 0) return Swal.fire("Chú ý", "Hóa đơn chưa có sản phẩm!", "warning");
+        if (!$("#HoTenKH").val()) return Swal.fire("Chú ý", "Vui lòng nhập Họ tên khách hàng!", "warning");
+        if (!$("#SdtKH").val()) return Swal.fire("Chú ý", "Vui lòng nhập Số điện thoại!", "warning");
 
         const data = {
-            MaKhachHang: parseInt($("#MaKH").val()),
+            TenKhachHang: $("#HoTenKH").val(),
+            DiaChi: $("#DiaChiKH").val(),
+            SoDienThoai: $("#SdtKH").val(),
             MaPttt: parseInt($("#MaPttt").val()),
             ChiTietPhieuMuas: orderItems
         };
@@ -192,20 +212,23 @@
                     location.href='/NhanVien/ThuNgan/DanhSachHoaDon';
                 });
             } else {
-                Swal.fire("Lỗi", "Không thể lưu hóa đơn!", "error");
+                Swal.fire("Lỗi", d.message || "Không thể lưu hóa đơn!", "error");
             }
         });
     }
 
-    // Khởi tạo bảng trống lúc mới vào trang
     $(document).ready(function() {
         renderOrder();
     });
 </script>
 
 <style>
+    .bg-gradient-primary-custom {
+        background: linear-gradient(135deg, #6e8efb, #a777e3);
+    }
+
     .btn-gradient-success-custom {
-        background: linear-gradient(to right, #84d9d2, #07cdae);
+        background: linear-gradient(to right, #00b09b, #96c93d);
         border: none;
         color: white;
     }
@@ -213,16 +236,28 @@
         .btn-gradient-success-custom:hover {
             opacity: 0.9;
             color: white;
+            transform: translateY(-1px);
         }
 
-    #orderTable thead th {
-        border-top: none;
-        text-transform: uppercase;
-        font-size: 0.75rem;
-        letter-spacing: 0.5px;
+    #orderTable {
+        border: 1px solid #dee2e6;
     }
 
-    .table td {
-        border-color: #f3f3f3;
+        #orderTable thead th {
+            border-bottom: 2px solid #dee2e6;
+            vertical-align: middle;
+            background-color: #f8f9fa;
+            text-transform: uppercase;
+            font-size: 11px;
+        }
+
+        #orderTable td {
+            border-color: #dee2e6;
+            font-size: 13px;
+        }
+
+    .form-control:focus, .form-select:focus {
+        background-color: #fff !important;
+        box-shadow: 0 0 0 0.2rem rgba(110, 142, 251, 0.25);
     }
 </style>

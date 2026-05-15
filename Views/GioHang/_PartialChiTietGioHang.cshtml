@@ -18,7 +18,7 @@
         <tbody>
             @foreach (var cartItem in Model)
             {
-                // Tính toán dựa trên DonGia và SoLuong của Model ChiTietPhieuMua
+               
                 decimal gia = cartItem.DonGia ?? 0;
                 int soLuong = cartItem.SoLuong ?? 0;
                 decimal itemTotal = gia * soLuong;
@@ -29,7 +29,7 @@
                         <div class="media">
                             <div class="d-flex">
                                 <a href="@Url.Action("HienThiSanPham", "SanPham", new { id = cartItem.MaSanPham })">
-                                    @* Lấy ảnh từ Navigation *@
+                                    
                                     <img class="imageProduct"
                                          src="@Url.Content("~/img/products/" + cartItem.MaSanPhamNavigation?.AnhDaiDien)"
                                          alt="Hình sản phẩm"
@@ -38,7 +38,7 @@
                             </div>
 
                             <div class="media-body">
-                                @* Lấy tên từ Navigation *@
+                                
                                 <h4>@cartItem.MaSanPhamNavigation?.TenSanPham</h4>
                                 <h5>Size: @cartItem.MaSizeNavigation?.TenSize</h5>
                             </div>
@@ -47,7 +47,7 @@
 
                     <td class="text-center">
                         <div class="product_count">
-                            @* Gửi MaSize thay vì TenSize *@
+                            
                             <a class="btn btn-light btn-sm DecreaseOne"
                                data-id="@cartItem.MaSanPham"
                                data-sizeid="@cartItem.MaSize">
@@ -106,7 +106,7 @@
 
 <script>
     $(function () {
-        // Cập nhật URL và tham số maSize
+        
         $('.DecreaseOne').click(function () {
             $.get('/GioHang/DecreaseOne', {
                 maSanPham: $(this).data('id'),

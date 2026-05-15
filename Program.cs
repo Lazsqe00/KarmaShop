@@ -1,4 +1,7 @@
 ﻿using KarmaShop.Models;
+using KarmaShop.Repositories;
+using KarmaShop.Repository.Cart;
+using KarmaShop.Repository.PhieuThu;
 using KarmaShop.Repository.User;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,15 +15,16 @@ builder.Services.AddDbContext<QuanLyBanGiayContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("KarmaShop"));
 });
 
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // Giỏ hàng tồn tại trong 30 phút client không thao tác
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true; // Bắt buộc phải có để chạy giỏ hàng
-});
+builder.Services.AddHttpContextAccessor();
+
 
 builder.Services.AddScoped<UserInterface, UserRepository>();
 
+builder.Services.AddScoped<ProductInterface, ProductRepository>();
+builder.Services.AddScoped<CartInterface, CartRepository>();
+
+builder.Services.AddScoped<VoucherInterface, VoucherRepository>();
+builder.Services.AddScoped<OrderInterface, OrderRepository>();
 
 builder.Services.AddAntiforgery(options =>
 {

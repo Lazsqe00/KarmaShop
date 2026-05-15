@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Karma - Thu Ngân</title>
 
-    <!-- Tải Bootstrap 5 & FontAwesome / Material Design Icons từ CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/@@mdi/font@7.2.96/css/materialdesignicons.min.css" rel="stylesheet" />
@@ -23,7 +22,7 @@
             overflow-x: hidden;
         }
 
-        /* Top Navbar */
+    
         .navbar-custom {
             background: #fff;
             height: 70px;
@@ -40,7 +39,7 @@
             height: 42px;
         }
 
-        /* Sidebar Container */
+     
         .sidebar-wrapper {
             width: var(--sidebar-width);
             background: #fff;
@@ -53,7 +52,7 @@
             overflow-y: auto;
         }
 
-        /* Profile Section */
+       
         .sidebar-profile {
             padding: 1.25rem 1.5rem;
             display: flex;
@@ -84,7 +83,7 @@
             border-radius: 50%;
         }
 
-        /* Navigation Links */
+        
         .nav-section-title {
             padding: 1.25rem 1.5rem 0.5rem 1.5rem;
             font-size: 0.72rem;
@@ -136,7 +135,7 @@
             color: #9a55ff;
         }
 
-        /* Main Content */
+      
         .main-panel-custom {
             margin-left: var(--sidebar-width);
             padding-top: 70px;
@@ -150,7 +149,7 @@
             flex-grow: 1;
         }
 
-        /* Footer */
+
         .footer-custom {
             background: #fff;
             padding: 1.25rem 2.25rem;
@@ -159,7 +158,7 @@
             color: #8d9498;
         }
 
-        /* Tiện ích Gradient phụ trợ */
+
         .bg-gradient-primary-custom {
             background: var(--purple-gradient) !important;
         }
@@ -179,7 +178,7 @@
 </head>
 <body>
 
-    <!-- Top Navbar -->
+
     <nav class="navbar-custom d-flex align-items-center justify-content-between">
         <a class="navbar-brand" href="#">
             <img src="/karma-master/img/logo.png" alt="Logo" onerror="this.src='https://placehold.co/120x40?text=KARMA'" />
@@ -191,7 +190,6 @@
         </div>
     </nav>
 
-    <!-- Sidebar Wrapper -->
     <div class="sidebar-wrapper">
         <div class="sidebar-profile">
             <div class="profile-img-container">
@@ -205,7 +203,7 @@
         </div>
 
         <ul class="nav-menu">
-            <!-- PHÂN ĐOẠN 1 -->
+
             <li class="nav-section-title">Sản phẩm & KH</li>
             <li class="nav-menu-item @(ViewContext.RouteData.Values["action"].ToString() == "Index" ? "active" : "")">
                 <a class="nav-menu-link" href="@Url.Action("Index")">
@@ -220,7 +218,6 @@
                 </a>
             </li>
 
-            <!-- PHÂN ĐOẠN 2 -->
             <li class="nav-section-title">Hóa đơn</li>
             <li class="nav-menu-item @(ViewContext.RouteData.Values["action"].ToString() == "LapHoaDon" ? "active" : "")">
                 <a class="nav-menu-link" href="@Url.Action("LapHoaDon")">
@@ -241,7 +238,7 @@
                 </a>
             </li>
 
-            <!-- PHÂN ĐOẠN 3 -->
+
             <li class="nav-section-title">Xử lý</li>
             <li class="nav-menu-item @(ViewContext.RouteData.Values["action"].ToString() == "ThanhToan" ? "active" : "")">
                 <a class="nav-menu-link" href="@Url.Action("ThanhToan")">
@@ -252,7 +249,7 @@
         </ul>
     </div>
 
-    <!-- Toàn bộ nội dung view con -->
+
     <div class="main-panel-custom">
         <div class="content-wrapper-custom">
             @RenderBody()
@@ -264,7 +261,7 @@
         </footer>
     </div>
 
-    <!-- Core Javascript CDN -->
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

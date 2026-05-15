@@ -10,10 +10,10 @@
         </div>
         <div>
             <h3 class="fw-bold mb-0 text-dark">Danh sách hóa đơn</h3>
-            <small class="text-muted fw-bold">TN_BM3 — BIỂU MẪU CHI TIẾT HỆ THỐNG</small>
+            <small class="text-muted fw-bold">QUẢN LÝ GIAO DỊCH HỆ THỐNG</small>
         </div>
     </div>
-    <button class="btn btn-outline-primary btn-sm py-2 px-3 shadow-sm" onclick="window.print()">
+    <button class="btn btn-outline-primary btn-sm py-2 px-3 shadow-sm fw-bold" onclick="window.print()">
         <i class="mdi mdi-printer me-1"></i> In biểu mẫu
     </button>
 </div>
@@ -66,22 +66,25 @@
 </div>
 
 <div class="card border-0 shadow-sm" style="border-radius: 15px; overflow: hidden;">
-    <div class="card-header bg-white py-3 border-bottom-0">
-        <h5 class="text-center fw-bold text-dark my-2" style="letter-spacing: 1px;">DANH SÁCH HOÁ ĐƠN</h5>
+    <div class="card-header bg-white py-4 border-bottom-0">
+        <h5 class="text-center fw-bold text-dark mb-0" style="letter-spacing: 1.5px;">DANH SÁCH HOÁ ĐƠN</h5>
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="bg-light">
+            <table class="table table-hover align-middle mb-0 custom-table">
+                <thead>
                     <tr class="text-dark">
-                        <th class="ps-4 py-3 text-center" style="width: 60px;">STT</th>
-                        <th class="text-center">Mã hoá đơn</th>
-                        <th>Thời gian lập</th>
-                        <th class="text-center">Mã khách hàng</th>
-                        <th>Họ tên khách hàng</th>
-                        <th class="text-end">Tổng hoá đơn</th>
-                        <th class="text-center">Phương thức thanh toán</th>
-                        <th class="text-center pe-4">Trạng thái</th>
+                        <th class="text-center" style="width: 5%;">STT</th>
+                        <th class="text-center" style="width: 10%;">Mã hoá đơn</th>
+
+                        <th style="width: 15%;">Thời gian lập</th>
+                        <th class="text-center" style="width: 12%;">Mã khách hàng</th>
+
+                        <th style="width: 23%;">Họ tên khách hàng</th>
+
+                        <th class="text-end" style="width: 12%;">Tổng hoá đơn</th>
+                        <th class="text-center" style="width: 13%;">Phương thức</th>
+                        <th class="text-center" style="width: 10%;">Trạng thái</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -91,37 +94,44 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td class="ps-4 text-center text-muted">@(i++)</td>
+                            <td class="text-center text-muted fw-bold">@i</td>
                             <td class="text-center fw-bold text-primary">@($"HD{item.MaPhieuMua:D2}")</td>
                             <td>
-                                <i class="mdi mdi-calendar-clock text-muted me-1"></i>
-                                @item.NgayDat?.ToString("dd/MM/yyyy")
+                                <div class="d-flex align-items-center">
+                                    <i class="mdi mdi-calendar-clock text-muted me-2"></i>
+                                    @item.NgayDat?.ToString("dd/MM/yyyy")
+                                </div>
                             </td>
                             <td class="text-center">
                                 <span class="badge bg-light text-dark fw-normal border">@($"KH{item.MaKhachHang:D2}")</span>
                             </td>
-                            <td class="fw-semibold">@item.MaKhachHangNavigation?.TenKhachHang</td>
-                            <td class="text-end fw-bold text-danger">@string.Format("{0:N0}₫", item.TongTien ?? 0)</td>
+                            <td class="fw-semibold text-dark text-truncate" style="max-width: 180px;">
+                                @item.MaKhachHangNavigation?.TenKhachHang
+                            </td>
+                            <td class="text-end fw-bold text-danger">
+                                @string.Format("{0:N0}₫", item.TongTien ?? 0)
+                            </td>
                             <td class="text-center">
-                                <small class="fw-bold text-secondary">
+                                <small class="fw-bold text-secondary text-truncate d-block">
                                     <i class="mdi mdi-wallet-outline me-1"></i>@item.MaPtttNavigation?.TenPttt
                                 </small>
                             </td>
-                            <td class="text-center pe-4">
+                            <td class="text-center">
                                 @if (item.TinhTrang == "Đã thanh toán")
                                 {
-                                    <span class="badge bg-soft-success text-success border-success-subtle px-3 py-2">Đã thanh toán</span>
+                                    <span class="badge status-success">Đã thanh toán</span>
                                 }
                                 else if (item.TinhTrang == "Đã hủy")
                                 {
-                                    <span class="badge bg-soft-danger text-danger border-danger-subtle px-3 py-2">Đã hủy</span>
+                                    <span class="badge status-danger">Đã hủy</span>
                                 }
                                 else
                                 {
-                                    <span class="badge bg-soft-warning text-warning border-warning-subtle px-3 py-2">Chờ thanh toán</span>
+                                    <span class="badge status-warning">Chờ thanh toán</span>
                                 }
                             </td>
                         </tr>
+                        i++;
                     }
                 </tbody>
             </table>
@@ -131,23 +141,55 @@
 
 @section styles {
     <style>
-        /* Màu cho Badge trạng thái kiểu hiện đại (Soft Background) */
-        .bg-soft-success {
+        
+        .custom-table {
+            table-layout: fixed; 
+            width: 100%;
+        }
+
+            .custom-table thead th {
+                background-color: #f8f9fa;
+                border-top: none;
+                border-bottom: 2px solid #edf1f2 !important;
+                padding: 15px 10px !important;
+                vertical-align: middle !important;
+                font-size: 0.7rem;
+                font-weight: 800;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                color: #495057;
+            }
+
+            .custom-table tbody td {
+                padding: 15px 10px !important;
+                vertical-align: middle !important;
+                font-size: 0.85rem;
+                border-bottom: 1px solid #f2f2f2;
+            }
+
+        
+        .status-success {
             background-color: #e8fadf;
             color: #71dd37;
+            border: 1px solid #d4f4c1;
+            width: 110px;
         }
 
-        .bg-soft-danger {
+        .status-danger {
             background-color: #ffe5e5;
             color: #ff3e1d;
+            border: 1px solid #ffd1d1;
+            width: 110px;
         }
 
-        .bg-soft-warning {
+        .status-warning {
             background-color: #fff2d6;
             color: #ffab00;
+            border: 1px solid #ffe5b5;
+            width: 110px;
         }
 
-        /* Hiệu ứng hover cho card thống kê */
+        
         .card-hover-effect {
             transition: all 0.3s ease;
         }
@@ -157,9 +199,9 @@
                 box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
             }
 
-        /* Tối ưu khi in ra giấy */
+       
         @@media print {
-            .sidebar-wrapper, .navbar-custom, .bg-gradient-primary-custom, .btn, .nav-section-title {
+            .sidebar-wrapper, .navbar-custom, .bg-gradient-primary-custom, .btn, .nav-section-title, .card-header {
                 display: none !important;
             }
 
@@ -169,14 +211,22 @@
             }
 
             .card {
-                border: 1px solid #000 !important;
-                shadow: none !important;
+                border: none !important;
+                box-shadow: none !important;
             }
 
-            .table th, .table td {
-                border: 1px solid #000 !important;
-                color: #000 !important;
+            .table-responsive {
+                overflow: visible !important;
             }
+
+            .custom-table {
+                table-layout: auto;
+            }
+
+                .custom-table th, .custom-table td {
+                    border: 1px solid #000 !important;
+                    color: #000 !important;
+                }
         }
     </style>
 }

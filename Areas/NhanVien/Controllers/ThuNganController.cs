@@ -8,15 +8,15 @@ public class ThuNganController : Controller
     private readonly QuanLyBanGiayContext _context;
     public ThuNganController(QuanLyBanGiayContext context) => _context = context;
 
-    // 1. Tra cứu sản phẩm (Lấy từ DB)
+   
     public async Task<IActionResult> Index(string keyword, int? maLoai)
     {
-        // Phải nạp Loais cho Dropdown để không bị lỗi null ở View
+        
         ViewBag.Loais = await _context.Loais.ToListAsync();
 
         var query = _context.SanPhams
-            .Include(s => s.MaDongSanPhamNavigation) // Bắt buộc để lấy Giá
-            .Include(s => s.SanPhamSizes)           // Để tính tổng số lượng
+            .Include(s => s.MaDongSanPhamNavigation) 
+            .Include(s => s.SanPhamSizes)           
             
             .AsQueryable();
 
@@ -25,11 +25,11 @@ public class ThuNganController : Controller
 
         var model = await query.ToListAsync();
 
-        // Nếu vẫn trắng trang, hãy kiểm tra xem model có dữ liệu không
+        
         return View(model);
     }
 
-    // 2. Khách hàng: Hiển thị danh sách và Form lưu
+    
     public async Task<IActionResult> KhachHang(string search)
     {
         var query = _context.KhachHangs.AsQueryable();
@@ -47,7 +47,6 @@ public class ThuNganController : Controller
         return RedirectToAction("KhachHang");
     }
 
-    // 3. Lập hóa đơn: Lấy danh sách SP và PTTT từ DB để chọn
     public async Task<IActionResult> LapHoaDon()
     {
         ViewBag.SanPhams = await _context.SanPhams.ToListAsync();
@@ -65,7 +64,7 @@ public class ThuNganController : Controller
             hoadon.TinhTrang = "Chờ thanh toán";
 
             _context.PhieuMuas.Add(hoadon);
-            await _context.SaveChangesAsync(); // Lưu để lấy MaPhieuMua
+            await _context.SaveChangesAsync(); 
 
             foreach (var ct in hoadon.ChiTietPhieuMuas)
             {
@@ -73,7 +72,7 @@ public class ThuNganController : Controller
                 if (kho != null)
                 {
                     if (kho.SoLuong < ct.SoLuong) return Json(new { success = false, msg = "Hết hàng!" });
-                    kho.SoLuong -= ct.SoLuong; // Trừ kho thực tế
+                    kho.SoLuong -= ct.SoLuong; 
                 }
             }
             await _context.SaveChangesAsync();
@@ -83,7 +82,6 @@ public class ThuNganController : Controller
         catch { return Json(new { success = false }); }
     }
 
-    // 4. Danh sách hóa đơn: Thống kê và lọc
     public async Task<IActionResult> DanhSachHoaDon(string search, string status, DateOnly? date)
     {
         var query = _context.PhieuMuas.Include(p => p.MaKhachHangNavigation).Include(p => p.MaPtttNavigation).AsQueryable();
@@ -102,12 +100,12 @@ public class ThuNganController : Controller
         return View(list);
     }
 
-    // 5. Xuất hóa đơn: Tìm kiếm 1 hóa đơn cụ thể
+   
     public async Task<IActionResult> XuatHoaDon(string id)
     {
         if (string.IsNullOrEmpty(id)) return View();
 
-        // Nếu người dùng nhập "HD01" hoặc "hd01", ta chỉ lấy số "01" rồi chuyển thành int
+       
         string cleanId = id.ToUpper().Replace("HD", "").Replace("KH", "").Trim();
 
         if (int.TryParse(cleanId, out int maSo))
@@ -121,7 +119,7 @@ public class ThuNganController : Controller
         return View();
     }
 
-    // 6. Thanh toán: Xử lý cập nhật trạng thái
+    
     public async Task<IActionResult> ThanhToan()
     {
         ViewBag.DonChoDuyet = await _context.PhieuMuas.CountAsync(x => x.TinhTrang == "Chờ duyệt");
@@ -129,7 +127,7 @@ public class ThuNganController : Controller
         return View(list);
     }
 
-    // Xem chi tiết sản phẩm (Lấy thông tin giày + các size hiện có)
+
     public async Task<IActionResult> ChiTietSanPham(int id)
     {
         var sp = await _context.SanPhams
@@ -138,10 +136,9 @@ public class ThuNganController : Controller
             .Include(s => s.SanPhamSizes).ThenInclude(sz => sz.MaSizeNavigation)
             .FirstOrDefaultAsync(m => m.MaSanPham == id);
         if (sp == null) return NotFound();
-        return PartialView("_ChiTietSanPham", sp); // Trả về một Partial View để hiển thị trong Modal
+        return PartialView("_ChiTietSanPham", sp);
     }
 
-    // Xem chi tiết khách hàng (Lấy thông tin cá nhân + Lịch sử mua hàng)
     public async Task<IActionResult> ChiTietKhachHang(int id)
     {
         var kh = await _context.KhachHangs

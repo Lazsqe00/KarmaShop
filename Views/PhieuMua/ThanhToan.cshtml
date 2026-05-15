@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Thanh Toán";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    // Lấy dữ liệu từ ViewBag truyền từ Controller
+    
     var cart = ViewBag.Cart as List<KarmaShop.Models.ChiTietPhieuMua>;
     var tongTamTinh = ViewBag.TongTien ?? 0;
 }
@@ -29,12 +29,12 @@
 
                 <form asp-action="ThanhToan" asp-controller="PhieuMua" method="post">
                     @Html.AntiForgeryToken()
-                    @* Các trường ẩn cần thiết để submit *@
+                    
                     <input type="hidden" asp-for="MaKhachHang" />
                     <input type="hidden" asp-for="TongTien" id="hiddenThanhTien" />
 
                     <div class="row">
-                        <!-- CỘT TRÁI: THÔNG TIN NHẬN HÀNG -->
+                        
                         <div class="col-lg-7">
                             <h4>Thông tin nhận hàng</h4>
                             <hr />
@@ -66,7 +66,6 @@
                                 <textarea asp-for="GhiChu" class="form-control" rows="2" placeholder="Lưu ý cho người giao hàng..."></textarea>
                             </div>
 
-                            <!-- PHƯƠNG THỨC THANH TOÁN -->
                             <div class="payment-method-section mt-4">
                                 <h4>Phương thức thanh toán</h4>
                                 <hr />
@@ -82,7 +81,7 @@
                                 }
                             </div>
 
-                            <!-- VOUCHER -->
+                           
                             <div class="form-group mt-4">
                                 <label>Mã giảm giá (nếu có)</label>
                                 <div class="voucher-input">
@@ -97,7 +96,7 @@
                             </button>
                         </div>
 
-                        <!-- CỘT PHẢI: TÓM TẮT ĐƠN HÀNG -->
+                        
                         <div class="col-lg-5">
                             <div class="order-summary">
                                 <h4>Đơn hàng (@(cart?.Count ?? 0) sản phẩm)</h4>
@@ -107,7 +106,7 @@
                                 {
                                     foreach (var item in cart)
                                     {
-                                        // Giả sử item là ChiTietPhieuMua, MaSanPhamNavigation là tblSanPham
+                                        
                                         <div class="product-item">
                                             <img src="~/img/products/@item.MaSanPhamNavigation?.AnhDaiDien" alt="Sản phẩm" />
                                             <div style="flex:1">
@@ -160,7 +159,7 @@
             }
 
             $.ajax({
-                url: '/PhieuMua/KiemTraVoucher', // Điều chỉnh URL phù hợp Route của bạn
+                url: '/PhieuMua/KiemTraVoucher', 
                 type: 'POST',
                 data: {
                     maVoucher: voucherCode,
@@ -168,14 +167,14 @@
                 },
                 success: function (response) {
                     if (response.success) {
-                        // Hiện dòng giảm giá
+                        
                         document.getElementById('giamGiaRow').style.display = 'flex';
                         document.getElementById('giamGiaText').textContent = '-' + response.giamGia.toLocaleString('vi-VN') + '₫';
 
-                        // Cập nhật text hiển thị tổng tiền
+                        
                         document.getElementById('thanhTienDisplay').textContent = response.thanhTienMoi.toLocaleString('vi-VN') + '₫';
 
-                        // Cập nhật giá trị vào input hidden để gửi lên Server
+                        
                         document.getElementById('hiddenThanhTien').value = response.thanhTienMoi;
 
                         showVoucherMessage(response.message, "success");
@@ -201,7 +200,7 @@
 }
 
 <style>
-    /* Kế thừa các style bạn đã có, chỉ thêm chỉnh sửa nhỏ cho Payment Item */
+    
     .payment_item input[type="radio"] {
         width: 18px;
         height: 18px;
@@ -212,7 +211,7 @@
         cursor: pointer;
         font-weight: 500;
     }
-    /* Giữ nguyên các style card, product-item, btn-checkout của bạn ở trên */
+    
     .checkout-container {
         max-width: 1100px;
         margin: 40px auto;
