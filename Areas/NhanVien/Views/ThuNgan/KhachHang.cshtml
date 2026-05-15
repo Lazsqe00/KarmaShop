@@ -1,0 +1,53 @@
+﻿@model IEnumerable<KarmaShop.Models.KhachHang>
+@{
+    Layout = "_ThuNganLayout";
+}
+
+<div class="d-flex align-items-center mb-4">
+    <div class="bg-gradient-primary-custom text-white d-flex align-items-center justify-content-center rounded-3 me-3" style="width: 45px; height: 45px; shadow: 0 4px 10px rgba(0,0,0,0.15)">
+        <i class="mdi mdi-account-group fs-4"></i>
+    </div>
+    <h3 class="fw-bold mb-0 text-dark">Quản lý Khách hàng</h3>
+</div>
+
+<div class="card border-0 shadow-sm" style="border-radius: 15px;">
+    <div class="card-body p-4">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="bg-light">
+                    <tr class="text-secondary small fw-bold text-uppercase">
+                        <th class="ps-3">Mã KH</th>
+                        <th>Họ và tên</th>
+                        <th>Số điện thoại</th>
+                        <th>Email</th>
+                        <th class="text-end pe-3">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-3 fw-bold text-primary">@($"KH{item.MaKhachHang:D2}")</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                                        <i class="mdi mdi-account text-secondary"></i>
+                                    </div>
+                                    <span class="fw-bold text-dark">@item.TenKhachHang</span>
+                                </div>
+                            </td>
+                            <td><i class="mdi mdi-phone-outline me-1 text-muted"></i>@item.SoDienThoai</td>
+                            <td class="text-muted">@item.Email</td>
+                            <td class="text-end pe-3">
+                                <a href="@Url.Action("ChiTietKhachHang", "ThuNgan", new { area = "NhanVien", id = item.MaKhachHang })"
+                                   class="btn btn-sm btn-gradient-primary-custom px-3 fw-bold" style="border-radius: 5px; font-size: 0.8rem;">
+                                    <i class="mdi mdi-eye-outline me-1"></i> Hồ sơ
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,120 @@
+﻿@model IEnumerable<KarmaShop.Models.PhieuMua>
+@{
+    Layout = "_ThuNganLayout";
+}
+
+<!-- Tiêu đề trang phong cách Admin với Icon Gradient -->
+<div class="d-flex align-items-center mb-4">
+    <div class="bg-gradient-primary-custom text-white d-flex align-items-center justify-content-center rounded-3 me-3" style="width: 40px; height: 40px; box-shadow: 0 4px 10px rgba(0,0,0,0.15)">
+        <i class="mdi mdi-credit-card fs-4"></i>
+    </div>
+    <h3 class="fw-bold mb-0 text-dark" style="font-size: 1.5rem;">Thanh toán & Cập nhật</h3>
+</div>
+
+<!-- Alert thông báo đơn chờ duyệt thiết kế lại mềm mại hơn -->
+@if (ViewBag.DonChoDuyet > 0)
+{
+    <div class="alert border-0 shadow-sm mb-4 d-flex align-items-center p-3" style="background: #fef1e6; border-radius: 10px; color: #e65c00;">
+        <i class="mdi mdi-bell-ring fs-4 me-3"></i>
+        <span class="fw-medium">Bạn có <b class="text-danger">@ViewBag.DonChoDuyet</b> đơn hàng cần duyệt Online.</span>
+    </div>
+}
+
+<!-- Card chứa bảng danh sách hóa đơn -->
+<div class="card border-0 shadow-sm" style="border-radius: 10px; background: #fff;">
+    <div class="card-body p-4">
+        <h5 class="card-title fw-bold text-dark mb-4" style="font-size: 1.1rem;">Hóa đơn chờ thanh toán</h5>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light text-secondary" style="font-size: 0.85rem; font-weight: 600;">
+                    <tr>
+                        <th class="ps-3">Mã HD</th>
+                        <th>Khách hàng</th>
+                        <th>Tổng tiền</th>
+                        <th>Ngày đặt</th>
+                        <th class="text-end pe-3">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody style="font-size: 0.9rem; color: #4a5568;">
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="fw-bold text-primary ps-3">@($"HD{item.MaPhieuMua:D2}")</td>
+                                <td class="fw-semibold text-dark">@item.MaKhachHangNavigation?.TenKhachHang</td>
+                                <td class="fw-bold text-danger">@string.Format("{0:N0}₫", item.TongTien ?? 0)</td>
+                                <td>
+                                    <span class="text-muted">
+                                        <i class="mdi mdi-calendar-blank me-1"></i>@item.NgayDat?.ToString("dd/MM/yyyy")
+                                    </span>
+                                </td>
+                                <td class="text-end pe-3">
+                                    <button class="btn btn-sm btn-gradient-success-custom me-1 fw-semibold"
+                                            style="font-size: 0.8rem; border-radius: 4px;"
+                                            onclick="updateStt(@item.MaPhieuMua, 'Đã thanh toán')">
+                                        <i class="mdi mdi-check-circle-outline me-1"></i>Xác nhận tiền
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger fw-semibold"
+                                            style="font-size: 0.8rem; border-radius: 4px;"
+                                            onclick="updateStt(@item.MaPhieuMua, 'Đã hủy')">
+                                        <i class="mdi mdi-close-circle-outline me-1"></i>Hủy
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-4">
+                                <i class="mdi mdi-clipboard-text-off-outline fs-3 d-block mb-2"></i>
+                                Không có hóa đơn nào đang chờ thanh toán.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Styles bổ sung cục bộ để tạo nút Gradient Success và các hiệu ứng nhỏ -->
+@section styles {
+    <style>
+        .btn-gradient-success-custom {
+            background: linear-gradient(to right, #84d9d2, #07cdae);
+            border: none;
+            color: white;
+            transition: opacity 0.2s;
+        }
+
+            .btn-gradient-success-custom:hover {
+                opacity: 0.9;
+                color: white;
+            }
+
+        .table-light {
+            background-color: #f8f9fa !important;
+        }
+
+        .table tbody tr {
+            transition: background-color 0.2s;
+        }
+
+            .table tbody tr:hover {
+                background-color: #fcfaff !important;
+            }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        function updateStt(id, stt) {
+            if(confirm('Xác nhận cập nhật trạng thái đơn hàng này?')){
+                $.post('/NhanVien/ThuNgan/CapNhatDonHang', { id: id, trangThai: stt }, () => location.reload());
+            }
+        }
+    </script>
+}

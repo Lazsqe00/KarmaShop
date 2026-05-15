@@ -78,6 +78,9 @@ namespace KarmaShop.Controllers
                 HttpContext.Session.GetString("LoaiTK") == "0")
                 return RedirectToAction("Index", "Home");
 
+           
+
+
             if (!string.IsNullOrEmpty(backToPage))
                 ViewBag.backToPage = backToPage;
             return View();
@@ -90,19 +93,37 @@ namespace KarmaShop.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var user = userRepo.GetUser(model.Email, model.MatKhau);
+            // 1. Kiểm tra tài khoản trong bảng TaiKhoan (Sử dụng db trực tiếp để đảm bảo lấy đúng LoaiTaiKhoan)
+            var user = db.TaiKhoans.FirstOrDefault(u => u.Email == model.Email && u.MatKhau == model.MatKhau);
+
             if (user != null)
             {
-                var khachHang = userRepo.GetProfile(user.Email);
+                // 2. Phân loại để lấy tên hiển thị và điều hướng
+                if (user.LoaiTaiKhoan == 1) // Vai trò: NHÂN VIÊN
+                {
+                    var nv = db.NhanViens.FirstOrDefault(n => n.Email == user.Email);
+                    string tenNV = nv?.TenNhanVien ?? "Nhân viên";
 
-                SetUserSession(user.Email, user.LoaiTaiKhoan, khachHang?.TenKhachHang);
+                    SetUserSession(user.Email, user.LoaiTaiKhoan, tenNV);
 
-                if (!string.IsNullOrEmpty(backToPage))
-                    return Redirect(backToPage);
+                    // Điều hướng về trang Dashboard của Thu ngân
+                    return RedirectToAction("Index", "ThuNgan", new { area = "NhanVien" });
+                }
+                else if (user.LoaiTaiKhoan == 0) // Vai trò: KHÁCH HÀNG
+                {
+                    var kh = db.KhachHangs.FirstOrDefault(k => k.Email == user.Email);
+                    string tenKH = kh?.TenKhachHang ?? user.Email;
 
-                return RedirectToAction("Index", "Home"); 
+                    SetUserSession(user.Email, user.LoaiTaiKhoan, tenKH);
+
+                    if (!string.IsNullOrEmpty(backToPage))
+                        return Redirect(backToPage);
+
+                    return RedirectToAction("Index", "Home");
+                }
             }
 
+            // Nếu không tìm thấy user hoặc sai mật khẩu
             ModelState.AddModelError("", "Email hoặc mật khẩu không đúng");
             if (!string.IsNullOrEmpty(backToPage))
                 ViewBag.backToPage = backToPage;
@@ -115,6 +136,14 @@ namespace KarmaShop.Controllers
         {
             HttpContext.Session.SetString("Email", email);
             HttpContext.Session.SetString("LoaiTK", loaiTaiKhoan.ToString()!);
+
+            string displayName = email;
+
+            if (loaiTaiKhoan == 1) // Nhân viên
+            {
+                var nhanVien = db.NhanViens.FirstOrDefault(nv => nv.Email == email);
+                if (nhanVien != null) displayName = nhanVien.TenNhanVien;
+            }
 
             if (!string.IsNullOrEmpty(tenKhachHang))
             {

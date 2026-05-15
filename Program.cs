@@ -1,4 +1,4 @@
-using KarmaShop.Models;
+﻿using KarmaShop.Models;
 using KarmaShop.Repository.User;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +10,13 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<QuanLyBanGiayContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("KarmaShop"));
+});
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Giỏ hàng tồn tại trong 30 phút client không thao tác
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true; // Bắt buộc phải có để chạy giỏ hàng
 });
 
 builder.Services.AddScoped<UserInterface, UserRepository>();
@@ -37,8 +44,17 @@ app.UseRouting();
 app.UseSession();
 app.UseAuthorization();
 
+
+app.MapControllerRoute(
+    name: "MyAreas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Register}/{id?}");
+
 
 app.Run();

@@ -1,94 +1,58 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\CNPM\\KarmaShop\\",
+  "WorkspaceRootPath": "D:\\CODE\\KarmaShop\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\cnpm\\karmashop\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\code\\karmashop\\areas\\nhanvien\\views\\thungan\\xuathoadon.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:areas\\nhanvien\\views\\thungan\\xuathoadon.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\cnpm\\karmashop\\repository\\user\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:repository\\user\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\code\\karmashop\\models\\quanlybangiaycontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:models\\quanlybangiaycontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\cnpm\\karmashop\\repository\\user\\userinterface.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:repository\\user\\userinterface.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\code\\karmashop\\areas\\nhanvien\\views\\thungan\\_chitietsanpham.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:areas\\nhanvien\\views\\thungan\\_chitietsanpham.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\cnpm\\karmashop\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\code\\karmashop\\areas\\nhanvien\\views\\thungan\\danhsachhoadon.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:areas\\nhanvien\\views\\thungan\\danhsachhoadon.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\cnpm\\karmashop\\models\\viewmodels\\regviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:models\\viewmodels\\regviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\cnpm\\karmashop\\models\\viewmodels\\loginviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:models\\viewmodels\\loginviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\cnpm\\karmashop\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\cnpm\\karmashop\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\cnpm\\karmashop\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\cnpm\\karmashop\\views\\home\\privacy.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:views\\home\\privacy.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\cnpm\\karmashop\\views\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:views\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\cnpm\\karmashop\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\cnpm\\karmashop\\models\\taikhoan.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:models\\taikhoan.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\cnpm\\karmashop\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\cnpm\\karmashop\\views\\shared\\error.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:views\\shared\\error.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\cnpm\\karmashop\\views\\shared\\_validationscriptspartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:views\\shared\\_validationscriptspartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\cnpm\\karmashop\\models\\errorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:models\\errorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\cnpm\\karmashop\\models\\phieumua.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\code\\karmashop\\models\\phieumua.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:models\\phieumua.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\cnpm\\karmashop\\models\\phuongthucthanhtoan.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:models\\phuongthucthanhtoan.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\code\\karmashop\\areas\\nhanvien\\views\\thungan\\chitietkhachhang.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:areas\\nhanvien\\views\\thungan\\chitietkhachhang.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\cnpm\\karmashop\\models\\nhanvien.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:models\\nhanvien.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\code\\karmashop\\areas\\nhanvien\\views\\thungan\\khachhang.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:areas\\nhanvien\\views\\thungan\\khachhang.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\cnpm\\karmashop\\wwwroot\\karma shop-doc\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:wwwroot\\karma shop-doc\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\code\\karmashop\\areas\\nhanvien\\views\\thungan\\laphoadon.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:areas\\nhanvien\\views\\thungan\\laphoadon.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\cnpm\\karmashop\\models\\quanlybangiaycontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:models\\quanlybangiaycontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\code\\karmashop\\areas\\nhanvien\\views\\thungan\\thanhtoan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:areas\\nhanvien\\views\\thungan\\thanhtoan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\code\\karmashop\\areas\\nhanvien\\views\\thungan\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:areas\\nhanvien\\views\\thungan\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\code\\karmashop\\views\\shared\\_thunganlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:views\\shared\\_thunganlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\code\\karmashop\\areas\\nhanvien\\controllers\\thungancontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:areas\\nhanvien\\controllers\\thungancontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|d:\\code\\karmashop\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -98,291 +62,180 @@
       "DocumentGroups": [
         {
           "DockedWidth": 263,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 8,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ThuNganController.cs",
+              "DocumentMoniker": "D:\\CODE\\KarmaShop\\Areas\\NhanVien\\Controllers\\ThuNganController.cs",
+              "RelativeDocumentMoniker": "Areas\\NhanVien\\Controllers\\ThuNganController.cs",
+              "ToolTip": "D:\\CODE\\KarmaShop\\Areas\\NhanVien\\Controllers\\ThuNganController.cs",
+              "RelativeToolTip": "Areas\\NhanVien\\Controllers\\ThuNganController.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAxwBMAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-15T03:02:42.541Z",
+              "IsPinned": true
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "AccountController.cs",
-              "DocumentMoniker": "D:\\CNPM\\KarmaShop\\Controllers\\AccountController.cs",
-              "RelativeDocumentMoniker": "Controllers\\AccountController.cs",
-              "ToolTip": "D:\\CNPM\\KarmaShop\\Controllers\\AccountController.cs",
-              "RelativeToolTip": "Controllers\\AccountController.cs",
-              "ViewState": "AgIAAHoAAAAAAAAAAADwv44AAAA2AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-27T13:26:16.87Z",
+              "DocumentIndex": 9,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\CODE\\KarmaShop\\Areas\\NhanVien\\Views\\ThuNgan\\Index.cshtml",
+              "RelativeDocumentMoniker": "Areas\\NhanVien\\Views\\ThuNgan\\Index.cshtml",
+              "ToolTip": "D:\\CODE\\KarmaShop\\Areas\\NhanVien\\Views\\ThuNgan\\Index.cshtml",
+              "RelativeToolTip": "Areas\\NhanVien\\Views\\ThuNgan\\Index.cshtml",
+              "ViewState": "AgIAADwAAAAAAAAAAAAQwFIAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-15T03:32:45.02Z",
+              "IsPinned": true,
               "EditorCaption": ""
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "LoginViewModel.cs",
-              "DocumentMoniker": "D:\\CNPM\\KarmaShop\\Models\\ViewModels\\LoginViewModel.cs",
-              "RelativeDocumentMoniker": "Models\\ViewModels\\LoginViewModel.cs",
-              "ToolTip": "D:\\CNPM\\KarmaShop\\Models\\ViewModels\\LoginViewModel.cs",
-              "RelativeToolTip": "Models\\ViewModels\\LoginViewModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "QuanLyBanGiayContext.cs",
+              "DocumentMoniker": "D:\\CODE\\KarmaShop\\Models\\QuanLyBanGiayContext.cs",
+              "RelativeDocumentMoniker": "Models\\QuanLyBanGiayContext.cs",
+              "ToolTip": "D:\\CODE\\KarmaShop\\Models\\QuanLyBanGiayContext.cs",
+              "RelativeToolTip": "Models\\QuanLyBanGiayContext.cs",
+              "ViewState": "AgIAACIAAAAAAAAAAAAcwC4AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-27T15:51:11.674Z",
+              "WhenOpened": "2026-05-15T08:42:10.724Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "RegViewModel.cs",
-              "DocumentMoniker": "D:\\CNPM\\KarmaShop\\Models\\ViewModels\\RegViewModel.cs",
-              "RelativeDocumentMoniker": "Models\\ViewModels\\RegViewModel.cs",
-              "ToolTip": "D:\\CNPM\\KarmaShop\\Models\\ViewModels\\RegViewModel.cs",
-              "RelativeToolTip": "Models\\ViewModels\\RegViewModel.cs",
-              "ViewState": "AgIAAAIAAAAAAAAAAAAiwBMAAAAXAAAAAAAAAA==",
+              "Title": "PhieuMua.cs",
+              "DocumentMoniker": "D:\\CODE\\KarmaShop\\Models\\PhieuMua.cs",
+              "RelativeDocumentMoniker": "Models\\PhieuMua.cs",
+              "ToolTip": "D:\\CODE\\KarmaShop\\Models\\PhieuMua.cs",
+              "RelativeToolTip": "Models\\PhieuMua.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAA/wAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-27T15:36:52.865Z",
+              "WhenOpened": "2026-05-15T08:37:23.824Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\CNPM\\KarmaShop\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "D:\\CNPM\\KarmaShop\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-27T10:55:25.917Z",
+              "DocumentIndex": 5,
+              "Title": "ChiTietKhachHang.cshtml",
+              "DocumentMoniker": "D:\\CODE\\KarmaShop\\Areas\\NhanVien\\Views\\ThuNgan\\ChiTietKhachHang.cshtml",
+              "RelativeDocumentMoniker": "Areas\\NhanVien\\Views\\ThuNgan\\ChiTietKhachHang.cshtml",
+              "ToolTip": "D:\\CODE\\KarmaShop\\Areas\\NhanVien\\Views\\ThuNgan\\ChiTietKhachHang.cshtml",
+              "RelativeToolTip": "Areas\\NhanVien\\Views\\ThuNgan\\ChiTietKhachHang.cshtml",
+              "ViewState": "AgIAAEkAAAAAAAAAAAAQwH8AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-15T06:12:41.993Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "UserInterface.cs",
-              "DocumentMoniker": "D:\\CNPM\\KarmaShop\\Repository\\User\\UserInterface.cs",
-              "RelativeDocumentMoniker": "Repository\\User\\UserInterface.cs",
-              "ToolTip": "D:\\CNPM\\KarmaShop\\Repository\\User\\UserInterface.cs",
-              "RelativeToolTip": "Repository\\User\\UserInterface.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-27T14:31:07.111Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "UserRepository.cs",
-              "DocumentMoniker": "D:\\CNPM\\KarmaShop\\Repository\\User\\UserRepository.cs",
-              "RelativeDocumentMoniker": "Repository\\User\\UserRepository.cs",
-              "ToolTip": "D:\\CNPM\\KarmaShop\\Repository\\User\\UserRepository.cs",
-              "RelativeToolTip": "Repository\\User\\UserRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-27T14:32:48.656Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "HomeController.cs",
-              "DocumentMoniker": "D:\\CNPM\\KarmaShop\\Controllers\\HomeController.cs",
-              "RelativeDocumentMoniker": "Controllers\\HomeController.cs",
-              "ToolTip": "D:\\CNPM\\KarmaShop\\Controllers\\HomeController.cs",
-              "RelativeToolTip": "Controllers\\HomeController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAdAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-27T10:49:58.979Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Login.cshtml",
-              "DocumentMoniker": "D:\\CNPM\\KarmaShop\\Views\\Account\\Login.cshtml",
-              "RelativeDocumentMoniker": "Views\\Account\\Login.cshtml",
-              "ToolTip": "D:\\CNPM\\KarmaShop\\Views\\Account\\Login.cshtml",
-              "RelativeToolTip": "Views\\Account\\Login.cshtml",
-              "ViewState": "AgIAABsAAAAAAAAAAAAAADcAAAAVAAAAAAAAAA==",
+              "Title": "_ChiTietSanPham.cshtml",
+              "DocumentMoniker": "D:\\CODE\\KarmaShop\\Areas\\NhanVien\\Views\\ThuNgan\\_ChiTietSanPham.cshtml",
+              "RelativeDocumentMoniker": "Areas\\NhanVien\\Views\\ThuNgan\\_ChiTietSanPham.cshtml",
+              "ToolTip": "D:\\CODE\\KarmaShop\\Areas\\NhanVien\\Views\\ThuNgan\\_ChiTietSanPham.cshtml",
+              "RelativeToolTip": "Areas\\NhanVien\\Views\\ThuNgan\\_ChiTietSanPham.cshtml",
+              "ViewState": "AgIAACkAAAAAAAAAAAAQwFEAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-28T03:43:04.347Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "Privacy.cshtml",
-              "DocumentMoniker": "D:\\CNPM\\KarmaShop\\Views\\Home\\Privacy.cshtml",
-              "RelativeDocumentMoniker": "Views\\Home\\Privacy.cshtml",
-              "ToolTip": "D:\\CNPM\\KarmaShop\\Views\\Home\\Privacy.cshtml",
-              "RelativeToolTip": "Views\\Home\\Privacy.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-28T04:19:05.34Z",
+              "WhenOpened": "2026-05-15T06:12:08.085Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 8,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\CNPM\\KarmaShop\\Views\\Home\\Index.cshtml",
-              "RelativeDocumentMoniker": "Views\\Home\\Index.cshtml",
-              "ToolTip": "D:\\CNPM\\KarmaShop\\Views\\Home\\Index.cshtml",
-              "RelativeToolTip": "Views\\Home\\Index.cshtml",
-              "ViewState": "AgIAAL8AAAAAAAAAAAAAANQAAAAAAAAAAAAAAA==",
+              "Title": "ThanhToan.cshtml",
+              "DocumentMoniker": "D:\\CODE\\KarmaShop\\Areas\\NhanVien\\Views\\ThuNgan\\ThanhToan.cshtml",
+              "RelativeDocumentMoniker": "Areas\\NhanVien\\Views\\ThuNgan\\ThanhToan.cshtml",
+              "ToolTip": "D:\\CODE\\KarmaShop\\Areas\\NhanVien\\Views\\ThuNgan\\ThanhToan.cshtml",
+              "RelativeToolTip": "Areas\\NhanVien\\Views\\ThuNgan\\ThanhToan.cshtml",
+              "ViewState": "AgIAAD0AAAAAAAAAAAAQwHcAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-28T03:45:22.585Z",
+              "WhenOpened": "2026-05-15T05:54:36.829Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "XuatHoaDon.cshtml",
+              "DocumentMoniker": "D:\\CODE\\KarmaShop\\Areas\\NhanVien\\Views\\ThuNgan\\XuatHoaDon.cshtml",
+              "RelativeDocumentMoniker": "Areas\\NhanVien\\Views\\ThuNgan\\XuatHoaDon.cshtml",
+              "ToolTip": "D:\\CODE\\KarmaShop\\Areas\\NhanVien\\Views\\ThuNgan\\XuatHoaDon.cshtml",
+              "RelativeToolTip": "Areas\\NhanVien\\Views\\ThuNgan\\XuatHoaDon.cshtml",
+              "ViewState": "AgIAAHAAAAAAAAAAAAAAwHkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-15T05:54:16.151Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "KhachHang.cshtml",
+              "DocumentMoniker": "D:\\CODE\\KarmaShop\\Areas\\NhanVien\\Views\\ThuNgan\\KhachHang.cshtml",
+              "RelativeDocumentMoniker": "Areas\\NhanVien\\Views\\ThuNgan\\KhachHang.cshtml",
+              "ToolTip": "D:\\CODE\\KarmaShop\\Areas\\NhanVien\\Views\\ThuNgan\\KhachHang.cshtml",
+              "RelativeToolTip": "Areas\\NhanVien\\Views\\ThuNgan\\KhachHang.cshtml",
+              "ViewState": "AgIAABMAAAAAAAAAAAAQwDQAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-15T05:52:54.354Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 10,
-              "Title": "Register.cshtml",
-              "DocumentMoniker": "D:\\CNPM\\KarmaShop\\Views\\Account\\Register.cshtml",
-              "RelativeDocumentMoniker": "Views\\Account\\Register.cshtml",
-              "ToolTip": "D:\\CNPM\\KarmaShop\\Views\\Account\\Register.cshtml",
-              "RelativeToolTip": "Views\\Account\\Register.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAF8AAAAAAAAAAAAAAA==",
+              "Title": "_ThuNganLayout.cshtml",
+              "DocumentMoniker": "D:\\CODE\\KarmaShop\\Views\\Shared\\_ThuNganLayout.cshtml",
+              "RelativeDocumentMoniker": "Views\\Shared\\_ThuNganLayout.cshtml",
+              "ToolTip": "D:\\CODE\\KarmaShop\\Views\\Shared\\_ThuNganLayout.cshtml",
+              "RelativeToolTip": "Views\\Shared\\_ThuNganLayout.cshtml",
+              "ViewState": "AgIAAO8AAAAAAAAAAAAQwBABAAAHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-28T01:12:48.777Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "D:\\CNPM\\KarmaShop\\appsettings.json",
-              "RelativeDocumentMoniker": "appsettings.json",
-              "ToolTip": "D:\\CNPM\\KarmaShop\\appsettings.json",
-              "RelativeToolTip": "appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-04-27T10:50:43.32Z",
+              "WhenOpened": "2026-05-15T05:46:45.34Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 12,
-              "Title": "TaiKhoan.cs",
-              "DocumentMoniker": "D:\\CNPM\\KarmaShop\\Models\\TaiKhoan.cs",
-              "RelativeDocumentMoniker": "Models\\TaiKhoan.cs",
-              "ToolTip": "D:\\CNPM\\KarmaShop\\Models\\TaiKhoan.cs",
-              "RelativeToolTip": "Models\\TaiKhoan.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\CODE\\KarmaShop\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "D:\\CODE\\KarmaShop\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAAADsAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-28T04:02:23.405Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-15T04:56:12.937Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "_Layout.cshtml",
-              "DocumentMoniker": "D:\\CNPM\\KarmaShop\\Views\\Shared\\_Layout.cshtml",
-              "RelativeDocumentMoniker": "Views\\Shared\\_Layout.cshtml",
-              "ToolTip": "D:\\CNPM\\KarmaShop\\Views\\Shared\\_Layout.cshtml",
-              "RelativeToolTip": "Views\\Shared\\_Layout.cshtml",
-              "ViewState": "AgIAAHEAAAAAAAAAAAAAAIAAAAAlAAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "DanhSachHoaDon.cshtml",
+              "DocumentMoniker": "D:\\CODE\\KarmaShop\\Areas\\NhanVien\\Views\\ThuNgan\\DanhSachHoaDon.cshtml",
+              "RelativeDocumentMoniker": "Areas\\NhanVien\\Views\\ThuNgan\\DanhSachHoaDon.cshtml",
+              "ToolTip": "D:\\CODE\\KarmaShop\\Areas\\NhanVien\\Views\\ThuNgan\\DanhSachHoaDon.cshtml",
+              "RelativeToolTip": "Areas\\NhanVien\\Views\\ThuNgan\\DanhSachHoaDon.cshtml",
+              "ViewState": "AgIAAGAAAAAAAAAAAAAAwHIAAAA3AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-28T01:42:02.653Z",
+              "WhenOpened": "2026-05-15T04:00:33.054Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "Error.cshtml",
-              "DocumentMoniker": "D:\\CNPM\\KarmaShop\\Views\\Shared\\Error.cshtml",
-              "RelativeDocumentMoniker": "Views\\Shared\\Error.cshtml",
-              "ToolTip": "D:\\CNPM\\KarmaShop\\Views\\Shared\\Error.cshtml",
-              "RelativeToolTip": "Views\\Shared\\Error.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 7,
+              "Title": "LapHoaDon.cshtml",
+              "DocumentMoniker": "D:\\CODE\\KarmaShop\\Areas\\NhanVien\\Views\\ThuNgan\\LapHoaDon.cshtml",
+              "RelativeDocumentMoniker": "Areas\\NhanVien\\Views\\ThuNgan\\LapHoaDon.cshtml",
+              "ToolTip": "D:\\CODE\\KarmaShop\\Areas\\NhanVien\\Views\\ThuNgan\\LapHoaDon.cshtml",
+              "RelativeToolTip": "Areas\\NhanVien\\Views\\ThuNgan\\LapHoaDon.cshtml",
+              "ViewState": "AgIAALUAAAAAAAAAAAAQwOMAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-28T03:39:47.073Z",
+              "WhenOpened": "2026-05-15T04:00:06.284Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "_ValidationScriptsPartial.cshtml",
-              "DocumentMoniker": "D:\\CNPM\\KarmaShop\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
-              "RelativeDocumentMoniker": "Views\\Shared\\_ValidationScriptsPartial.cshtml",
-              "ToolTip": "D:\\CNPM\\KarmaShop\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
-              "RelativeToolTip": "Views\\Shared\\_ValidationScriptsPartial.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-28T03:45:30.507Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "PhieuMua.cs",
-              "DocumentMoniker": "D:\\CNPM\\KarmaShop\\Models\\PhieuMua.cs",
-              "RelativeDocumentMoniker": "Models\\PhieuMua.cs",
-              "ToolTip": "D:\\CNPM\\KarmaShop\\Models\\PhieuMua.cs",
-              "RelativeToolTip": "Models\\PhieuMua.cs",
-              "ViewState": "AgIAABoAAAAAAAAAAAAzwCsAAAAUAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-27T15:22:34.464Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "ErrorViewModel.cs",
-              "DocumentMoniker": "D:\\CNPM\\KarmaShop\\Models\\ErrorViewModel.cs",
-              "RelativeDocumentMoniker": "Models\\ErrorViewModel.cs",
-              "ToolTip": "D:\\CNPM\\KarmaShop\\Models\\ErrorViewModel.cs",
-              "RelativeToolTip": "Models\\ErrorViewModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-27T10:53:53.425Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "PhuongThucThanhToan.cs",
-              "DocumentMoniker": "D:\\CNPM\\KarmaShop\\Models\\PhuongThucThanhToan.cs",
-              "RelativeDocumentMoniker": "Models\\PhuongThucThanhToan.cs",
-              "ToolTip": "D:\\CNPM\\KarmaShop\\Models\\PhuongThucThanhToan.cs",
-              "RelativeToolTip": "Models\\PhuongThucThanhToan.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-27T15:22:49.607Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
-              "Title": "NhanVien.cs",
-              "DocumentMoniker": "D:\\CNPM\\KarmaShop\\Models\\NhanVien.cs",
-              "RelativeDocumentMoniker": "Models\\NhanVien.cs",
-              "ToolTip": "D:\\CNPM\\KarmaShop\\Models\\NhanVien.cs",
-              "RelativeToolTip": "Models\\NhanVien.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-27T10:54:25.381Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 20,
-              "Title": "index.html",
-              "DocumentMoniker": "D:\\CNPM\\KarmaShop\\wwwroot\\Karma Shop-doc\\index.html",
-              "RelativeDocumentMoniker": "wwwroot\\Karma Shop-doc\\index.html",
-              "ToolTip": "D:\\CNPM\\KarmaShop\\wwwroot\\Karma Shop-doc\\index.html",
-              "RelativeToolTip": "wwwroot\\Karma Shop-doc\\index.html",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
-              "WhenOpened": "2026-04-27T13:21:17.773Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 21,
-              "Title": "QuanLyBanGiayContext.cs",
-              "DocumentMoniker": "D:\\CNPM\\KarmaShop\\Models\\QuanLyBanGiayContext.cs",
-              "RelativeDocumentMoniker": "Models\\QuanLyBanGiayContext.cs",
-              "ToolTip": "D:\\CNPM\\KarmaShop\\Models\\QuanLyBanGiayContext.cs",
-              "RelativeToolTip": "Models\\QuanLyBanGiayContext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAApAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-27T10:54:23.705Z"
             }
           ]
         }

@@ -1,0 +1,139 @@
+﻿@model List<KarmaShop.Models.ChiTietPhieuMua>
+
+@{
+   
+    decimal TotalCost = 0;
+}
+
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th><h4>Products</h4></th>
+                <th class="text-center"><h4>Quantity</h4></th>
+                <th class="text-center"><h4>Total cost</h4></th>
+                <th class="text-center"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cartItem in Model)
+            {
+                // Tính toán dựa trên DonGia và SoLuong của Model ChiTietPhieuMua
+                decimal gia = cartItem.DonGia ?? 0;
+                int soLuong = cartItem.SoLuong ?? 0;
+                decimal itemTotal = gia * soLuong;
+                TotalCost += itemTotal;
+
+                <tr>
+                    <td>
+                        <div class="media">
+                            <div class="d-flex">
+                                <a href="@Url.Action("HienThiSanPham", "SanPham", new { id = cartItem.MaSanPham })">
+                                    @* Lấy ảnh từ Navigation *@
+                                    <img class="imageProduct"
+                                         src="@Url.Content("~/img/products/" + cartItem.MaSanPhamNavigation?.AnhDaiDien)"
+                                         alt="Hình sản phẩm"
+                                         style="max-width:100px;" />
+                                </a>
+                            </div>
+
+                            <div class="media-body">
+                                @* Lấy tên từ Navigation *@
+                                <h4>@cartItem.MaSanPhamNavigation?.TenSanPham</h4>
+                                <h5>Size: @cartItem.MaSizeNavigation?.TenSize</h5>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td class="text-center">
+                        <div class="product_count">
+                            @* Gửi MaSize thay vì TenSize *@
+                            <a class="btn btn-light btn-sm DecreaseOne"
+                               data-id="@cartItem.MaSanPham"
+                               data-sizeid="@cartItem.MaSize">
+                                <i class="bi bi-dash" style="font-size:1.5em"></i>
+                            </a>
+
+                            <input disabled type="text"
+                                   value="@cartItem.SoLuong"
+                                   style="max-width:70px;font-size:larger; text-align:center" />
+
+                            <a class="btn btn-light btn-sm IncreaseOne"
+                               data-id="@cartItem.MaSanPham"
+                               data-sizeid="@cartItem.MaSize">
+                                <i class="bi bi-plus" style="font-size:1.5em"></i>
+                            </a>
+                        </div>
+                    </td>
+
+                    <td class="text-center">
+                        <h4>@itemTotal.ToString("#,##0")₫</h4>
+                    </td>
+
+                    <td class="text-center">
+                        <a class="btn btn-danger btn-sm Delete"
+                           data-id="@cartItem.MaSanPham"
+                           data-sizeid="@cartItem.MaSize">
+                            <i class="bi bi-trash" style="font-size:1.2em"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+
+            <tr>
+                <td></td>
+                <td></td>
+                <td><h4>Total Bill</h4></td>
+                <td><h4>@TotalCost.ToString("#,##0")₫</h4></td>
+            </tr>
+
+            <tr class="out_button_area">
+                <td colspan="3"></td>
+                <td>
+                    <div class="checkout_btn_inner d-flex align-items-center">
+                        <a class="btn btn-secondary" href="@Url.Action("Index", "Home")">
+                            Continue shopping
+                        </a>
+                        <a class="btn btn-primary ml-2" href="@Url.Action("ThanhToan", "PhieuMua")">
+                            Checkout
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(function () {
+        // Cập nhật URL và tham số maSize
+        $('.DecreaseOne').click(function () {
+            $.get('/GioHang/DecreaseOne', {
+                maSanPham: $(this).data('id'),
+                maSize: $(this).data('sizeid')
+            }, function (res) {
+                $('#partialCart').html(res);
+            });
+        });
+
+        $('.IncreaseOne').click(function () {
+            $.get('/GioHang/IncreaseOne', {
+                maSanPham: $(this).data('id'),
+                maSize: $(this).data('sizeid')
+            }, function (res) {
+                $('#partialCart').html(res);
+            });
+        });
+
+        $('.Delete').click(function () {
+            if (!confirm('Confirm remove product from shopping cart?')) return;
+
+            $.get('/GioHang/DeleteItem', {
+                maSanPham: $(this).data('id'),
+                maSize: $(this).data('sizeid')
+            }, function (res) {
+                $('#partialCart').html(res);
+            });
+        });
+    });
+</script>

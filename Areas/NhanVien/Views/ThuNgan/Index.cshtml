@@ -1,0 +1,94 @@
+﻿@model IEnumerable<KarmaShop.Models.SanPham>
+@{
+    Layout = "_ThuNganLayout";
+}
+
+<!-- Tiêu đề trang phong cách Admin -->
+<div class="d-flex align-items-center mb-4">
+    <div class="bg-gradient-primary-custom text-white d-flex align-items-center justify-content-center rounded-3 me-3" style="width: 40px; height: 40px; shadow: 0 4px 10px rgba(0,0,0,0.15)">
+        <i class="mdi mdi-magnify fs-4"></i>
+    </div>
+    <h3 class="fw-bold mb-0 text-dark" style="font-size: 1.5rem;">Tra cứu thông tin sản phẩm</h3>
+</div>
+
+<!-- Thanh tìm kiếm tích hợp Card trắng -->
+<div class="card border-0 shadow-sm mb-4" style="border-radius: 10px;">
+    <div class="card-body p-4">
+        <form method="get" class="row g-2 align-items-center">
+            <div class="col-md-10">
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-0"><i class="mdi mdi-magnify text-muted"></i></span>
+                    <input type="text" name="keyword" class="form-control border-0 bg-light py-2" style="font-size: 0.9rem;" placeholder="Tìm tên hoặc mã giày..." value="@Context.Request.Query["keyword"]">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-gradient-primary-custom w-100 py-2 fw-semibold" style="font-size: 0.9rem; border-radius: 6px;">Tìm kiếm</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Khu vực hiển thị sản phẩm -->
+@if (Model == null || !Model.Any())
+{
+    <div class="card border-0 shadow-sm text-center py-5">
+        <div class="card-body">
+            <i class="mdi mdi-package-variant-closed text-muted mb-3" style="font-size: 4rem; display:block;"></i>
+            <p class="text-muted mb-0">Không tìm thấy sản phẩm nào trong hệ thống.</p>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col">
+                <div class="card h-100 border-0 shadow-sm p-3 transition-card" style="border-radius: 10px; background: #fff;">
+
+                    <!-- Khung ảnh nền nhạt -->
+                    <div class="rounded p-4 mb-3 text-center position-relative" style="background-color: #f8f9fa;">
+                        <span class="badge bg-dark position-absolute top-0 start-0 m-2 font-weight-normal" style="font-size: 0.75rem;">@($"SP{item.MaSanPham:D2}")</span>
+                        <img src="/images/@item.AnhDaiDien" style="height: 120px; width:100%; object-fit: contain;" onerror="this.src='/images/default-shoe.png'">
+                    </div>
+
+                    <!-- Thông tin chi tiết -->
+                    <h6 class="fw-bold text-dark mb-2 text-truncate" title="@item.TenSanPham" style="font-size: 0.95rem;">@item.TenSanPham</h6>
+
+                    <div class="d-flex justify-content-between align-items-center mt-auto pt-2">
+                        <span class="text-danger fw-bold" style="font-size: 1.05rem;">
+                            @string.Format("{0:N0}₫", item.MaDongSanPhamNavigation?.GiaBan ?? 0)
+                        </span>
+                        <button class="btn btn-sm btn-outline-primary px-3" style="border-radius: 4px; font-size: 0.8rem;" onclick="showProductDetail(@item.MaSanPham)">Chi tiết</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<!-- Modal Chi tiết -->
+<div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0" style="border-radius: 12px; overflow: hidden;">
+            <div id="modalBodyContent">
+                <!-- Ajax nội dung trả về -->
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function showProductDetail(id) {
+            console.log("Đang gọi chi tiết cho ID: " + id);
+            $.get('/NhanVien/ThuNgan/ChiTietSanPham/' + id, function (data) {
+                $('#modalBodyContent').html(data);
+                $('#productModal').modal('show');
+            }).fail(function (xhr) {
+                console.error(xhr.responseText);
+                alert("Lỗi: Không tìm thấy hệ thống chi tiết hoặc dữ liệu!");
+            });
+        }
+    </script>
+}
