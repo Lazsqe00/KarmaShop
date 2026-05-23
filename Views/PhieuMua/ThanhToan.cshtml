@@ -1,0 +1,266 @@
+﻿@model KarmaShop.Models.PhieuMua
+@{
+    ViewData["Title"] = "Thanh Toán";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+    var cart = ViewBag.Cart as List<KarmaShop.Models.ChiTietPhieuMua>;
+    var tongTamTinh = ViewBag.TongTien ?? 0;
+}
+
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1>Thanh Toán</h1>
+                <nav class="d-flex align-items-center">
+                    <a href="/">Trang chủ<span class="lnr lnr-arrow-right"></span></a>
+                    <a href="#">Xác nhận đơn hàng</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cart_area">
+    <div class="container">
+        <div class="checkout-container">
+            <div class="checkout-card">
+                <h2 class="text-center mb-4">Xác Nhận Đơn Hàng</h2>
+
+                <form asp-action="ThanhToan" asp-controller="PhieuMua" method="post">
+                    @Html.AntiForgeryToken()
+                    
+                    <input type="hidden" asp-for="MaKhachHang" />
+                    <input type="hidden" asp-for="TongTien" id="hiddenThanhTien" />
+
+                    <div class="row">
+                        
+                        <div class="col-lg-7">
+                            <h4>Thông tin nhận hàng</h4>
+                            <hr />
+
+                            <div class="form-group">
+                                <label>Họ và tên người nhận <span class="text-danger">*</span></label>
+                                <input type="text" asp-for="TenNguoiNhan" class="form-control" placeholder="Nhập tên người nhận" required />
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label>Số điện thoại <span class="text-danger">*</span></label>
+                                    <input type="tel" asp-for="SoDienThoaiNguoiNhan" class="form-control" placeholder="09xxxx..." required />
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <label>Email người nhận</label>
+                                    <input type="email" asp-for="EmailNguoiNhan" class="form-control" readonly />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Địa chỉ giao hàng <span class="text-danger">*</span></label>
+                                <input type="text" asp-for="DiaChiGiaoHang" class="form-control" placeholder="Địa chỉ chi tiết (Số nhà, tên đường...)" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label>Ghi chú đơn hàng</label>
+                                <textarea asp-for="GhiChu" class="form-control" rows="2" placeholder="Lưu ý cho người giao hàng..."></textarea>
+                            </div>
+
+                            <div class="payment-method-section mt-4">
+                                <h4>Phương thức thanh toán</h4>
+                                <hr />
+                                @if (ViewBag.PhuongThucTT != null)
+                                {
+                                    foreach (var pttt in (List<KarmaShop.Models.PhuongThucThanhToan>)ViewBag.PhuongThucTT)
+                                    {
+                                        <div class="payment_item d-flex align-items-center mb-2">
+                                            <input type="radio" asp-for="MaPttt" value="@pttt.MaPttt" id="pttt_@pttt.MaPttt" required checked="@(pttt.MaPttt == 1)" />
+                                            <label for="pttt_@pttt.MaPttt" class="ml-2 mb-0">@pttt.TenPttt</label>
+                                        </div>
+                                    }
+                                }
+                            </div>
+
+                           
+                            <div class="form-group mt-4">
+                                <label>Mã giảm giá (nếu có)</label>
+                                <div class="voucher-input">
+                                    <input type="text" asp-for="MaVoucher" id="MaVoucher" class="form-control" placeholder="Nhập mã voucher" autocomplete="off" />
+                                    <button type="button" class="btn btn-outline-primary" id="btnApDung">Áp dụng</button>
+                                </div>
+                                <div id="voucherMsg" class="mt-2"></div>
+                            </div>
+
+                            <button type="submit" class="btn btn-success btn-checkout">
+                                XÁC NHẬN ĐẶT HÀNG
+                            </button>
+                        </div>
+
+                        
+                        <div class="col-lg-5">
+                            <div class="order-summary">
+                                <h4>Đơn hàng (@(cart?.Count ?? 0) sản phẩm)</h4>
+                                <hr />
+
+                                @if (cart != null)
+                                {
+                                    foreach (var item in cart)
+                                    {
+                                        
+                                        <div class="product-item">
+                                            <img src="~/img/products/@item.MaSanPhamNavigation?.AnhDaiDien" alt="Sản phẩm" />
+                                            <div style="flex:1">
+                                                <strong>@item.MaSanPhamNavigation?.TenSanPham</strong><br />
+                                                <small>
+                                                    Size: @item.MaSize | SL: @item.SoLuong
+                                                </small>
+                                            </div>
+                                            <div class="text-right">
+                                                <strong>@((item.DonGia * item.SoLuong)?.ToString("#,##0"))₫</strong>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+                                <hr />
+
+                                <div class="d-flex justify-content-between">
+                                    <strong>Tạm tính</strong>
+                                    <strong id="tamTinhText">@tongTamTinh.ToString("#,##0")₫</strong>
+                                </div>
+
+                                <div class="d-flex justify-content-between mt-2" id="giamGiaRow" style="display: none;">
+                                    <strong>Giảm giá Voucher</strong>
+                                    <strong id="giamGiaText" class="text-success"></strong>
+                                </div>
+
+                                <div class="d-flex justify-content-between mt-3 total-price">
+                                    <strong>Tổng thanh toán</strong>
+                                    <strong id="thanhTienDisplay">@tongTamTinh.ToString("#,##0")₫</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        document.getElementById('btnApDung').addEventListener('click', function () {
+            const voucherCode = document.getElementById('MaVoucher').value.trim();
+            const tamTinh = @tongTamTinh;
+
+            if (!voucherCode) {
+                showVoucherMessage("Vui lòng nhập mã voucher", "danger");
+                return;
+            }
+
+            $.ajax({
+                url: '/PhieuMua/KiemTraVoucher', 
+                type: 'POST',
+                data: {
+                    maVoucher: voucherCode,
+                    tongTamTinh: tamTinh
+                },
+                success: function (response) {
+                    if (response.success) {
+                        
+                        document.getElementById('giamGiaRow').style.display = 'flex';
+                        document.getElementById('giamGiaText').textContent = '-' + response.giamGia.toLocaleString('vi-VN') + '₫';
+
+                        
+                        document.getElementById('thanhTienDisplay').textContent = response.thanhTienMoi.toLocaleString('vi-VN') + '₫';
+
+                        
+                        document.getElementById('hiddenThanhTien').value = response.thanhTienMoi;
+
+                        showVoucherMessage(response.message, "success");
+                    } else {
+                        showVoucherMessage(response.message, "danger");
+                        resetVoucherDisplay();
+                    }
+                }
+            });
+        });
+
+        function showVoucherMessage(text, type) {
+            const msgElement = document.getElementById('voucherMsg');
+            msgElement.innerHTML = `<span class="text-${type}">${text}</span>`;
+        }
+
+        function resetVoucherDisplay() {
+            document.getElementById('giamGiaRow').style.display = 'none';
+            document.getElementById('thanhTienDisplay').textContent = '@tongTamTinh.ToString("#,##0")₫';
+            document.getElementById('hiddenThanhTien').value = '@tongTamTinh';
+        }
+    </script>
+}
+
+<style>
+    
+    .payment_item input[type="radio"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+    }
+
+    .payment_item label {
+        cursor: pointer;
+        font-weight: 500;
+    }
+    
+    .checkout-container {
+        max-width: 1100px;
+        margin: 40px auto;
+    }
+
+    .checkout-card {
+        background: #fff;
+        border-radius: 14px;
+        box-shadow: 0 10px 30px rgba(0,0,0,.08);
+        padding: 30px;
+    }
+
+    .order-summary {
+        background: #fafafa;
+        padding: 25px;
+        border-radius: 14px;
+        border: 1px solid #eee;
+    }
+
+    .product-item {
+        display: flex;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px dashed #ddd;
+    }
+
+        .product-item img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-right: 15px;
+        }
+
+    .total-price {
+        font-size: 26px;
+        color: #e74c3c;
+        font-weight: 700;
+    }
+
+    .btn-checkout {
+        width: 100%;
+        padding: 16px;
+        font-size: 18px;
+        font-weight: 600;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #28a745, #218838);
+        border: none;
+        margin-top: 25px;
+        color: white;
+    }
+</style>

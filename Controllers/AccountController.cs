@@ -15,7 +15,7 @@ namespace KarmaShop.Controllers
             this.userRepo = userRepo;
         }
 
-        // GET: /TaiKhoan_65130478/DangKy
+       
         public IActionResult Register()
         {
             if (HttpContext.Session.GetString("Email") != null &&
@@ -25,7 +25,7 @@ namespace KarmaShop.Controllers
             return View();
         }
 
-        // POST: /TaiKhoan_65130478/DangKy
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
 
@@ -71,18 +71,21 @@ namespace KarmaShop.Controllers
             }
         }
 
-        // GET: /Account/DangNhap
+        
         public IActionResult Login(string backToPage = "")
         {
             if (HttpContext.Session.GetString("Email") != null &&
                 HttpContext.Session.GetString("LoaiTK") == "0")
                 return RedirectToAction("Index", "Home");
 
+           
+
+
             if (!string.IsNullOrEmpty(backToPage))
                 ViewBag.backToPage = backToPage;
             return View();
         }
-        // POST: /Account/DangNhap
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Login(LoginViewModel model, string backToPage = "")
@@ -90,19 +93,37 @@ namespace KarmaShop.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var user = userRepo.GetUser(model.Email, model.MatKhau);
+            
+            var user = db.TaiKhoans.FirstOrDefault(u => u.Email == model.Email && u.MatKhau == model.MatKhau);
+
             if (user != null)
             {
-                var khachHang = userRepo.GetProfile(user.Email);
+                
+                if (user.LoaiTaiKhoan == 1) 
+                {
+                    var nv = db.NhanViens.FirstOrDefault(n => n.Email == user.Email);
+                    string tenNV = nv?.TenNhanVien ?? "Nhân viên";
 
-                SetUserSession(user.Email, user.LoaiTaiKhoan, khachHang?.TenKhachHang);
+                    SetUserSession(user.Email, user.LoaiTaiKhoan, tenNV);
 
-                if (!string.IsNullOrEmpty(backToPage))
-                    return Redirect(backToPage);
+                    
+                    return RedirectToAction("Index", "ThuNgan", new { area = "NhanVien" });
+                }
+                else if (user.LoaiTaiKhoan == 0) 
+                {
+                    var kh = db.KhachHangs.FirstOrDefault(k => k.Email == user.Email);
+                    string tenKH = kh?.TenKhachHang ?? user.Email;
 
-                return RedirectToAction("Index", "Home"); 
+                    SetUserSession(user.Email, user.LoaiTaiKhoan, tenKH);
+
+                    if (!string.IsNullOrEmpty(backToPage))
+                        return Redirect(backToPage);
+
+                    return RedirectToAction("Index", "Home");
+                }
             }
 
+           
             ModelState.AddModelError("", "Email hoặc mật khẩu không đúng");
             if (!string.IsNullOrEmpty(backToPage))
                 ViewBag.backToPage = backToPage;
@@ -115,6 +136,14 @@ namespace KarmaShop.Controllers
         {
             HttpContext.Session.SetString("Email", email);
             HttpContext.Session.SetString("LoaiTK", loaiTaiKhoan.ToString()!);
+
+            string displayName = email;
+
+            if (loaiTaiKhoan == 1) 
+            {
+                var nhanVien = db.NhanViens.FirstOrDefault(nv => nv.Email == email);
+                if (nhanVien != null) displayName = nhanVien.TenNhanVien;
+            }
 
             if (!string.IsNullOrEmpty(tenKhachHang))
             {

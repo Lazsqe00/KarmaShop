@@ -1,0 +1,42 @@
+﻿@model List<KarmaShop.Models.ChiTietPhieuMua>
+@{
+    ViewData["Title"] = "Giỏ hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .imageProduct {
+        max-height: 164px;
+        max-width: 164px;
+        object-fit: cover;
+    }
+
+    .cart_area {
+        padding-top: 50px;
+        padding-bottom: 50px;
+    }
+</style>
+
+
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1 class="text-white">Shopping Cart</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="cart_area">
+    <div class="container">
+        <div class="cart_inner">
+            <div id="partialCart">
+               
+                @await Html.PartialAsync("_PartialChiTietGioHang", Model)
+            </div>
+        </div>
+    </div>
+</section>
+

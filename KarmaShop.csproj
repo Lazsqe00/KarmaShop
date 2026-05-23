@@ -48,11 +48,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\NhanVien\Data\" />
+    <Folder Include="Areas\NhanVien\Models\" />
     <Folder Include="Data\" />
     <Folder Include="wwwroot\img\Avatar\" />
     <Folder Include="wwwroot\img\ChiTietAnh\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\Shared\" />
   </ItemGroup>
 
   <ItemGroup>

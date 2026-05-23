@@ -1,0 +1,232 @@
+﻿@model IEnumerable<KarmaShop.Models.PhieuMua>
+@{
+    Layout = "_ThuNganLayout";
+}
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div class="d-flex align-items-center">
+        <div class="bg-gradient-primary-custom text-white d-flex align-items-center justify-content-center rounded-3 me-3" style="width: 45px; height: 45px; box-shadow: 0 4px 10px rgba(0,0,0,0.15)">
+            <i class="mdi mdi-format-list-bulleted fs-4"></i>
+        </div>
+        <div>
+            <h3 class="fw-bold mb-0 text-dark">Danh sách hóa đơn</h3>
+            <small class="text-muted fw-bold">QUẢN LÝ GIAO DỊCH HỆ THỐNG</small>
+        </div>
+    </div>
+    <button class="btn btn-outline-primary btn-sm py-2 px-3 shadow-sm fw-bold" onclick="window.print()">
+        <i class="mdi mdi-printer me-1"></i> In biểu mẫu
+    </button>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-3 bg-white card-hover-effect" style="border-radius: 12px; border-left: 5px solid #9a55ff !important;">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <small class="text-muted fw-bold">TỔNG HÓA ĐƠN</small>
+                    <h2 class="fw-bold mb-0 mt-1">@ViewBag.Tong</h2>
+                </div>
+                <i class="mdi mdi-chart-line text-primary fs-1 opacity-25"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-3 bg-white card-hover-effect" style="border-radius: 12px; border-left: 5px solid #1bcfb4 !important;">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <small class="text-muted fw-bold">ĐÃ THANH TOÁN</small>
+                    <h2 class="fw-bold text-success mb-0 mt-1">@ViewBag.DaTT</h2>
+                </div>
+                <i class="mdi mdi-check-all text-success fs-1 opacity-25"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-3 bg-white card-hover-effect" style="border-radius: 12px; border-left: 5px solid #ffab00 !important;">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <small class="text-muted fw-bold">CHỜ THANH TOÁN</small>
+                    <h2 class="fw-bold text-warning mb-0 mt-1">@ViewBag.ChoTT</h2>
+                </div>
+                <i class="mdi mdi-clock-outline text-warning fs-1 opacity-25"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-3 bg-white card-hover-effect" style="border-radius: 12px; border-left: 5px solid #fe7c96 !important;">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <small class="text-muted fw-bold">ĐÃ HỦY</small>
+                    <h2 class="fw-bold text-danger mb-0 mt-1">@ViewBag.DaHuy</h2>
+                </div>
+                <i class="mdi mdi-close-circle-outline text-danger fs-1 opacity-25"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm" style="border-radius: 15px; overflow: hidden;">
+    <div class="card-header bg-white py-4 border-bottom-0">
+        <h5 class="text-center fw-bold text-dark mb-0" style="letter-spacing: 1.5px;">DANH SÁCH HOÁ ĐƠN</h5>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 custom-table">
+                <thead>
+                    <tr class="text-dark">
+                        <th class="text-center" style="width: 5%;">STT</th>
+                        <th class="text-center" style="width: 10%;">Mã hoá đơn</th>
+
+                        <th style="width: 15%;">Thời gian lập</th>
+                        <th class="text-center" style="width: 12%;">Mã khách hàng</th>
+
+                        <th style="width: 23%;">Họ tên khách hàng</th>
+
+                        <th class="text-end" style="width: 12%;">Tổng hoá đơn</th>
+                        <th class="text-center" style="width: 13%;">Phương thức</th>
+                        <th class="text-center" style="width: 10%;">Trạng thái</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int i = 1;
+                    }
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="text-center text-muted fw-bold">@i</td>
+                            <td class="text-center fw-bold text-primary">@($"HD{item.MaPhieuMua:D2}")</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <i class="mdi mdi-calendar-clock text-muted me-2"></i>
+                                    @item.NgayDat?.ToString("dd/MM/yyyy")
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge bg-light text-dark fw-normal border">@($"KH{item.MaKhachHang:D2}")</span>
+                            </td>
+                            <td class="fw-semibold text-dark text-truncate" style="max-width: 180px;">
+                                @item.MaKhachHangNavigation?.TenKhachHang
+                            </td>
+                            <td class="text-end fw-bold text-danger">
+                                @string.Format("{0:N0}₫", item.TongTien ?? 0)
+                            </td>
+                            <td class="text-center">
+                                <small class="fw-bold text-secondary text-truncate d-block">
+                                    <i class="mdi mdi-wallet-outline me-1"></i>@item.MaPtttNavigation?.TenPttt
+                                </small>
+                            </td>
+                            <td class="text-center">
+                                @if (item.TinhTrang == "Đã thanh toán")
+                                {
+                                    <span class="badge status-success">Đã thanh toán</span>
+                                }
+                                else if (item.TinhTrang == "Đã hủy")
+                                {
+                                    <span class="badge status-danger">Đã hủy</span>
+                                }
+                                else
+                                {
+                                    <span class="badge status-warning">Chờ thanh toán</span>
+                                }
+                            </td>
+                        </tr>
+                        i++;
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section styles {
+    <style>
+        
+        .custom-table {
+            table-layout: fixed; 
+            width: 100%;
+        }
+
+            .custom-table thead th {
+                background-color: #f8f9fa;
+                border-top: none;
+                border-bottom: 2px solid #edf1f2 !important;
+                padding: 15px 10px !important;
+                vertical-align: middle !important;
+                font-size: 0.7rem;
+                font-weight: 800;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                color: #495057;
+            }
+
+            .custom-table tbody td {
+                padding: 15px 10px !important;
+                vertical-align: middle !important;
+                font-size: 0.85rem;
+                border-bottom: 1px solid #f2f2f2;
+            }
+
+        
+        .status-success {
+            background-color: #e8fadf;
+            color: #71dd37;
+            border: 1px solid #d4f4c1;
+            width: 110px;
+        }
+
+        .status-danger {
+            background-color: #ffe5e5;
+            color: #ff3e1d;
+            border: 1px solid #ffd1d1;
+            width: 110px;
+        }
+
+        .status-warning {
+            background-color: #fff2d6;
+            color: #ffab00;
+            border: 1px solid #ffe5b5;
+            width: 110px;
+        }
+
+        
+        .card-hover-effect {
+            transition: all 0.3s ease;
+        }
+
+            .card-hover-effect:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+            }
+
+       
+        @@media print {
+            .sidebar-wrapper, .navbar-custom, .bg-gradient-primary-custom, .btn, .nav-section-title, .card-header {
+                display: none !important;
+            }
+
+            .main-panel-custom {
+                margin-left: 0 !important;
+                padding: 0 !important;
+            }
+
+            .card {
+                border: none !important;
+                box-shadow: none !important;
+            }
+
+            .table-responsive {
+                overflow: visible !important;
+            }
+
+            .custom-table {
+                table-layout: auto;
+            }
+
+                .custom-table th, .custom-table td {
+                    border: 1px solid #000 !important;
+                    color: #000 !important;
+                }
+        }
+    </style>
+}

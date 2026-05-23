@@ -1,4 +1,7 @@
-using KarmaShop.Models;
+﻿using KarmaShop.Models;
+using KarmaShop.Repositories;
+using KarmaShop.Repository.Cart;
+using KarmaShop.Repository.PhieuThu;
 using KarmaShop.Repository.User;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,8 +15,16 @@ builder.Services.AddDbContext<QuanLyBanGiayContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("KarmaShop"));
 });
 
+builder.Services.AddHttpContextAccessor();
+
+
 builder.Services.AddScoped<UserInterface, UserRepository>();
 
+builder.Services.AddScoped<ProductInterface, ProductRepository>();
+builder.Services.AddScoped<CartInterface, CartRepository>();
+
+builder.Services.AddScoped<VoucherInterface, VoucherRepository>();
+builder.Services.AddScoped<OrderInterface, OrderRepository>();
 
 builder.Services.AddAntiforgery(options =>
 {
@@ -37,6 +48,14 @@ app.UseRouting();
 app.UseSession();
 app.UseAuthorization();
 
+
+app.MapControllerRoute(
+    name: "MyAreas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapControllerRoute(
     name: "Admin",
     pattern: "{area:exists}/{controller=HomeAdmin}/{action=Index}/{id?}");
