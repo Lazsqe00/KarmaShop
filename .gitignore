@@ -1,0 +1,48 @@
+## Visual Studio / IDE
+.vs/
+*.user
+*.suo
+*.userprefs
+*.DotSettings.user
+
+## Build output
+bin/
+obj/
+
+## NuGet
+*.nupkg
+*.snupkg
+packages/
+!**/packages/build/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## .NET
+*.dll
+*.exe
+*.pdb
+*.cache
+
+## ASP.NET
+wwwroot/lib/
+
+## Logs & temp
+*.log
+*.tmp
+*.temp
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+## OS
+.DS_Store
+$RECYCLE.BIN/
+
+## Publish / deploy
+**/publish/
+**/PublishProfiles/
+
+## Secrets (KHÔNG commit connection string thật, API key)
+appsettings.Development.json
+secrets.json
