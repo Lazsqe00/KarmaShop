@@ -15,7 +15,7 @@
                                 <h1>Welcome to Shoes Store</h1>
                                 <h3>Best Shoes for You</h3>
                                 <div class="add-bag d-flex align-items-center">
-                                    <a class="primary-btn" href="@Url.Action("SanPhamTheoLoai", "SanPham_65130478")">Shopping Now</a>
+                                    <a class="primary-btn" href="@Url.Action("SanPhamTheoLoai", "SanPham")">Shopping Now</a>
                                 </div>
                             </div>
                         </div>
@@ -34,7 +34,7 @@
                                 <h1>Latest Collection</h1>
                                 <h3>Trendy & Comfortable Shoes</h3>
                                 <div class="add-bag d-flex align-items-center">
-                                    <a class="primary-btn" href="@Url.Action("SanPhamTheoLoai", "SanPham_65130478")">Shop Now</a>
+                                    <a class="primary-btn" href="@Url.Action("SanPhamTheoLoai", "SanPham")">Shop Now</a>
                                 </div>
                             </div>
                         </div>
@@ -119,7 +119,7 @@
 </section>
 
 
-@* @Html.Action("HomeProductSlider", "SanPham_65130478", new { hot = true }) *@
+@await Html.PartialAsync("~/Views/SanPham/HomeProductSlider.cshtml", (List<KarmaShop.Models.ViewModels.SanPhamHomeViewModel>)ViewBag.HotProducts)
 
 <div style="width:100%;height:100px"></div>
 
@@ -206,7 +206,7 @@
     </div>
 </section>
 
-@* @Html.Action("HomeProductSlider3", "SanPham_65130478") *@
+@await Html.PartialAsync("~/Views/SanPham/HomeProductSlider3.cshtml", (List<KarmaShop.Models.ViewModels.SanPhamHomeViewModel>)ViewBag.ExclusiveProducts)
 
 <div style="width:100%;height:100px"></div>
 

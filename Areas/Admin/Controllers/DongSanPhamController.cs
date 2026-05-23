@@ -22,10 +22,14 @@ namespace KarmaShop.Areas.Admin.Controllers
         }
 
         // GET: Admin/DongSanPham
-        public IActionResult Index()
+        public IActionResult Index(int page = 1)
         {
             if (!IsAdminOrStaff()) return RedirectToAction("Login", "TaiKhoanAdmin");
-            var list = _db.DongSanPhams.Include(d => d.MaLoaiNavigation).ToList();
+            const int pageSize = 10;
+            var query = _db.DongSanPhams.Include(d => d.MaLoaiNavigation).OrderBy(d => d.MaDongSanPham);
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages  = (int)Math.Ceiling(query.Count() / (double)pageSize);
+            var list = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
             return View(list);
         }
 

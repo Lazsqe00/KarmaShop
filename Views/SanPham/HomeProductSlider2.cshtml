@@ -1,0 +1,63 @@
+@model List<KarmaShop.Models.ViewModels.SanPhamHomeViewModel>
+
+@{
+    int chunkSize = 4;
+    var slides = new List<List<KarmaShop.Models.ViewModels.SanPhamHomeViewModel>>();
+    for (int i = 0; i < Model.Count; i += chunkSize)
+    {
+        slides.Add(Model.Skip(i).Take(chunkSize).ToList());
+    }
+}
+
+<section class="owl-carousel active-product-area section_gap">
+    @foreach (var slideGroup in slides)
+    {
+        <div class="single-product-slider">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 text-center">
+                        <div class="section-title">
+                            <h1>Danh mục sản phẩm</h1>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    @foreach (var item in slideGroup)
+                    {
+                        <div class="col-lg-3 col-md-6">
+                            <div class="single-product">
+                                <img class="img-fluid" src="~/img/@item.sp.MaDongSanPham/Avatar/@item.sp.AnhDaiDien" alt="@item.TenSanPhamFull" />
+                                <div class="product-details">
+                                    <h6>@item.TenSanPhamFull</h6>
+                                    <div class="price">
+                                        <h6>@(item.GiaHienThi?.ToString("#,##0")) đ</h6>
+                                    </div>
+                                    <div class="prd-bottom">
+                                        <a href="@Url.Action("HienThiSanPham", "SanPham", new { madongsanpham = item.sp.MaDongSanPham, masp = item.sp.MaSanPham })"
+                                           class="social-info">
+                                            <span class="ti-bag"></span>
+                                            <p class="hover-text">Add to cart</p>
+                                        </a>
+                                        <a href="#" class="social-info">
+                                            <span class="lnr lnr-heart"></span>
+                                            <p class="hover-text">Wishlist</p>
+                                        </a>
+                                        <a href="#" class="social-info">
+                                            <span class="lnr lnr-sync"></span>
+                                            <p class="hover-text">Compare</p>
+                                        </a>
+                                        <a href="@Url.Action("HienThiSanPham", "SanPham", new { madongsanpham = item.sp.MaDongSanPham, masp = item.sp.MaSanPham })" class="social-info">
+                                            <span class="lnr lnr-move"></span>
+                                            <p class="hover-text">View more</p>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</section>

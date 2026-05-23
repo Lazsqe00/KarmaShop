@@ -24,13 +24,31 @@ namespace KarmaShop.Areas.Admin.Controllers
         }
 
         // GET: Admin/SanPhamAdmin
-        public IActionResult Index()
+        public IActionResult Index(string? tuKhoa, int page = 1)
         {
             if (!IsAdminOrStaff()) return RedirectToAction("Login", "TaiKhoanAdmin");
-            var sanPhams = _db.SanPhams
+            const int pageSize = 10;
+            var query = _db.SanPhams
                 .Include(s => s.MaDongSanPhamNavigation)
                 .Include(s => s.MaMauNavigation)
-                .ToList();
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(tuKhoa))
+            {
+                string kw = tuKhoa.Trim().ToLower();
+                query = query.Where(s =>
+                    (s.TenSanPham != null && s.TenSanPham.ToLower().Contains(kw)) ||
+                    (s.MaDongSanPhamNavigation != null && s.MaDongSanPhamNavigation.TenDongSanPham != null &&
+                     s.MaDongSanPhamNavigation.TenDongSanPham.ToLower().Contains(kw)) ||
+                    (s.MaMauNavigation != null && s.MaMauNavigation.TenMau != null &&
+                     s.MaMauNavigation.TenMau.ToLower().Contains(kw)));
+            }
+
+            query = query.OrderBy(s => s.MaSanPham);
+            ViewBag.TuKhoa      = tuKhoa;
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages  = (int)Math.Ceiling(query.Count() / (double)pageSize);
+            var sanPhams = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
             return View(sanPhams);
         }
 
@@ -143,6 +161,108 @@ namespace KarmaShop.Areas.Admin.Controllers
                 ModelState.AddModelError("", "Phải thêm ít nhất một size hợp lệ.");
                 RepopulateViewBags(sanPham);
                 return View(sanPham);
+            }
+
+            await _db.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Admin/SanPhamAdmin/Edit/5
+        public IActionResult Edit(int? id)
+        {
+            if (!IsAdminOrStaff()) return RedirectToAction("Login", "TaiKhoanAdmin");
+            if (id == null) return BadRequest();
+
+            var sanPham = _db.SanPhams
+                .Include(s => s.SanPhamSizes)
+                .FirstOrDefault(s => s.MaSanPham == id);
+
+            if (sanPham == null) return NotFound();
+
+            RepopulateViewBags(sanPham);
+            ViewBag.ExistingSizes = _db.SanPhamSizes
+                .Include(ss => ss.MaSizeNavigation)
+                .Where(ss => ss.MaSanPham == id)
+                .ToList();
+
+            return View(sanPham);
+        }
+
+        // POST: Admin/SanPhamAdmin/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, SanPham sanPham,
+            IFormFile? AnhDaiDienFile,
+            IEnumerable<IFormFile>? AnhChiTietFile,
+            List<SanPhamSize>? Sizes)
+        {
+            if (!IsAdminOrStaff()) return RedirectToAction("Login", "TaiKhoanAdmin");
+            if (id != sanPham.MaSanPham) return BadRequest();
+
+            var existing = await _db.SanPhams.FindAsync(id);
+            if (existing == null) return NotFound();
+
+            // Cập nhật thông tin cơ bản
+            existing.TenSanPham = sanPham.TenSanPham;
+            existing.MaDongSanPham = sanPham.MaDongSanPham;
+            existing.MaMau = sanPham.MaMau;
+            existing.TrangThai = sanPham.TrangThai;
+
+            // Cập nhật ảnh đại diện nếu có file mới
+            if (AnhDaiDienFile != null && AnhDaiDienFile.Length > 0)
+            {
+                string ext = Path.GetExtension(AnhDaiDienFile.FileName).ToLower();
+                string newFileName = Guid.NewGuid() + ext;
+                string avatarFolder = Path.Combine(_env.WebRootPath, "img",
+                    existing.MaDongSanPham.ToString()!, "Avatar");
+                Directory.CreateDirectory(avatarFolder);
+                string path = Path.Combine(avatarFolder, newFileName);
+                using (var stream = new FileStream(path, FileMode.Create))
+                    await AnhDaiDienFile.CopyToAsync(stream);
+                existing.AnhDaiDien = newFileName;
+            }
+
+            // Cập nhật ảnh chi tiết nếu có file mới
+            if (AnhChiTietFile != null && AnhChiTietFile.Any())
+            {
+                var anhList = new List<string>();
+                string chiTietFolder = Path.Combine(_env.WebRootPath, "img",
+                    existing.MaDongSanPham.ToString()!, "ChiTietAnh");
+                Directory.CreateDirectory(chiTietFolder);
+
+                foreach (var file in AnhChiTietFile)
+                {
+                    if (file != null && file.Length > 0)
+                    {
+                        string ext = Path.GetExtension(file.FileName).ToLower();
+                        string newFileName = Guid.NewGuid() + ext;
+                        string path = Path.Combine(chiTietFolder, newFileName);
+                        using var stream = new FileStream(path, FileMode.Create);
+                        await file.CopyToAsync(stream);
+                        anhList.Add(newFileName);
+                    }
+                }
+                existing.AnhChiTiet = string.Join(",", anhList);
+            }
+
+            // Cập nhật sizes: xóa cũ, thêm mới
+            if (Sizes != null && Sizes.Any(s => s.MaSize > 0))
+            {
+                var oldSizes = _db.SanPhamSizes.Where(x => x.MaSanPham == id).ToList();
+                _db.SanPhamSizes.RemoveRange(oldSizes);
+
+                foreach (var size in Sizes)
+                {
+                    if (size.MaSize > 0 && size.SoLuong >= 0)
+                    {
+                        _db.SanPhamSizes.Add(new SanPhamSize
+                        {
+                            MaSanPham = id,
+                            MaSize = size.MaSize,
+                            SoLuong = size.SoLuong
+                        });
+                    }
+                }
             }
 
             await _db.SaveChangesAsync();

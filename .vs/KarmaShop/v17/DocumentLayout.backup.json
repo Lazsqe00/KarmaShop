@@ -3,24 +3,8 @@
   "WorkspaceRootPath": "E:\\Project\\KarmaShop\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|e:\\project\\karmashop\\areas\\admin\\views\\taikhoanadmin\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:areas\\admin\\views\\taikhoanadmin\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|e:\\project\\karmashop\\areas\\admin\\views\\homeadmin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:areas\\admin\\views\\homeadmin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|e:\\project\\karmashop\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|e:\\project\\karmashop\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|e:\\project\\karmashop\\views\\khachhang\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{198E02C4-5C9B-4D5C-A57F-3D3C54F7BE12}|KarmaShop.csproj|solutionrelative:views\\khachhang\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,12 +14,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 263,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 4,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
@@ -49,65 +29,21 @@
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "E:\\Project\\KarmaShop\\Areas\\Admin\\Views\\HomeAdmin\\Index.cshtml",
-              "RelativeDocumentMoniker": "Areas\\Admin\\Views\\HomeAdmin\\Index.cshtml",
-              "ToolTip": "E:\\Project\\KarmaShop\\Areas\\Admin\\Views\\HomeAdmin\\Index.cshtml",
-              "RelativeToolTip": "Areas\\Admin\\Views\\HomeAdmin\\Index.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-05-15T01:34:17.175Z"
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Login.cshtml",
-              "DocumentMoniker": "E:\\Project\\KarmaShop\\Areas\\Admin\\Views\\TaiKhoanAdmin\\Login.cshtml",
-              "RelativeDocumentMoniker": "Areas\\Admin\\Views\\TaiKhoanAdmin\\Login.cshtml",
-              "ToolTip": "E:\\Project\\KarmaShop\\Areas\\Admin\\Views\\TaiKhoanAdmin\\Login.cshtml",
-              "RelativeToolTip": "Areas\\Admin\\Views\\TaiKhoanAdmin\\Login.cshtml",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAAAB8AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-05-15T01:33:16.676Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
               "Title": "_Layout.cshtml",
               "DocumentMoniker": "E:\\Project\\KarmaShop\\Views\\Shared\\_Layout.cshtml",
               "RelativeDocumentMoniker": "Views\\Shared\\_Layout.cshtml",
               "ToolTip": "E:\\Project\\KarmaShop\\Views\\Shared\\_Layout.cshtml",
               "RelativeToolTip": "Views\\Shared\\_Layout.cshtml",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAAABQAAAAoAAAAAAAAAA==",
+              "ViewState": "AgIAAIAAAAAAAAAAAAAYwJoAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-05-14T13:06:31.347Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "E:\\Project\\KarmaShop\\Views\\KhachHang\\Index.cshtml",
-              "RelativeDocumentMoniker": "Views\\KhachHang\\Index.cshtml",
-              "ToolTip": "E:\\Project\\KarmaShop\\Views\\KhachHang\\Index.cshtml",
-              "RelativeToolTip": "Views\\KhachHang\\Index.cshtml",
-              "ViewState": "AgIAADMAAAAAAAAAAAAAABoAAAAQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-05-14T12:56:00.658Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "E:\\Project\\KarmaShop\\Views\\Home\\Index.cshtml",
-              "RelativeDocumentMoniker": "Views\\Home\\Index.cshtml",
-              "ToolTip": "E:\\Project\\KarmaShop\\Views\\Home\\Index.cshtml",
-              "RelativeToolTip": "Views\\Home\\Index.cshtml",
-              "ViewState": "AgIAABgAAAAAAAAAAAAAADIAAAAuAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-29T10:36:32.003Z"
+              "WhenOpened": "2026-05-21T08:12:17.518Z",
+              "EditorCaption": ""
             }
           ]
         }

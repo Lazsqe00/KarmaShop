@@ -1,0 +1,261 @@
+@model KarmaShop.Models.ViewModels.SanPhamViewModel
+@{
+    ViewBag.Title = "Chi tiết sản phẩm";
+}
+
+<!-- Banner -->
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1>Chi tiết sản phẩm</h1>
+                <nav class="d-flex align-items-center">
+                    <a href="@Url.Action("Index", "Home")">Trang chủ<span class="lnr lnr-arrow-right"></span></a>
+                    <a href="@Url.Action("SanPhamTheoLoai", "SanPham")">Sản phẩm<span class="lnr lnr-arrow-right"></span></a>
+                    <a href="#">Chi tiết</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Product Detail -->
+<div class="product_image_area">
+    <div class="container">
+        <div class="row s_product_inner">
+            <!-- Hình ảnh sản phẩm -->
+            <div class="col-lg-6">
+                <div class="s_Product_carousel">
+                    <div class="single-prd-item">
+                        <img class="img-fluid" src="~/img/@Model.SanPham.MaDongSanPham/Avatar/@Model.SanPham.AnhDaiDien" alt="Ảnh đại diện">
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.SanPham.AnhChiTiet))
+                    {
+                        var anhChiTietList = Model.SanPham.AnhChiTiet.Split(',');
+                        foreach (var anh in anhChiTietList)
+                        {
+                            <div class="single-prd-item">
+                                <img class="img-fluid" src="~/img/@Model.SanPham.MaDongSanPham/ChiTietAnh/@anh" alt="Ảnh chi tiết">
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+
+            <!-- Thông tin sản phẩm -->
+            <div class="col-lg-5 offset-lg-1">
+                <div class="s_product_text">
+                    <h3>@Model.SanPham.TenSanPham</h3>
+                    <h2>@string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:#,##0} ₫", Model.DongSanPham.GiaBan)</h2>
+
+                    <div id="slton" style="display:none;">
+                        <h5 style="color:#BA861E;">
+                            <i class="fas fa-clock"></i> Chỉ còn ít hàng. Đặt ngay!
+                        </h5>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <h5>Bảng size</h5>
+                        </div>
+                        @for (int i = 0; i < Model.TenSize.Count; i++)
+                        {
+                            <div class="col-lg-3 col-md-4 col-sm-6" style="max-width:80px;">
+                                @{
+                                    bool coHang = Model.SoLuongTon[i] > 0;
+                                    string boxClass = coHang ? "box-kho" : "box-kho kho-disable";
+                                    string onclickAttr = coHang ? $"updateIndex(this, {i}, '{Model.TenSize[i]}', {Model.MaSize[i]})" : "";
+                                }
+                                <div class="@boxClass" onclick="@onclickAttr">
+                                    @Model.TenSize[i]
+                                </div>
+                            </div>
+                        }
+                        <div class="col-12 mt-2">
+                            <h5 id="sizeError" style="color:red; visibility:hidden;">Vui lòng chọn size</h5>
+                        </div>
+                    </div>
+
+                    <!-- Nút thêm giỏ hàng -->
+                    <div class="card_area d-flex align-items-center mt-4">
+                        <a id="AddToCart" class="primary-btn" onclick="NotChooseSize(event)" href="#">Thêm vào giỏ hàng</a>
+                        <a class="icon_btn ml-3" href="#">
+                            <i class="lnr lnr-heart"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mô tả, đánh giá, bảng size -->
+<section class="product_description_area">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#description">Mô tả</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#sizetable">Bảng size</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="description">
+                <p>@Html.Raw(Model.DongSanPham.MoTa)</p>
+            </div>
+            <div class="tab-pane fade" id="sizetable">
+                <img src="~/img/size/sizes.jpg" style="width:50%; display:block; margin:auto;" />
+            </div>
+        </div>
+    </div>
+</section>
+
+@await Html.PartialAsync("~/Views/SanPham/HomeProductSlider.cshtml", (List<KarmaShop.Models.ViewModels.SanPhamHomeViewModel>)ViewBag.HotProducts)
+
+<section class="category-area section_gap">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-12">
+                <div class="row">
+                    <div class="col-lg-8 col-md-8">
+                        <div class="single-deal">
+                            <div class="overlay"></div>
+                            <img class="img-fluid w-100" src="~/img/category/c1.jpg" alt="">
+                            <div class="deal-details">
+                                <h6 class="deal-title">Sneaker for Sports</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <div class="single-deal">
+                            <div class="overlay"></div>
+                            <img class="img-fluid w-100" src="~/img/category/c2.jpg" alt="">
+                            <div class="deal-details">
+                                <h6 class="deal-title">Sneaker for Sports</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <div class="single-deal">
+                            <div class="overlay"></div>
+                            <img class="img-fluid w-100" src="~/img/category/c3.jpg" alt="">
+                            <div class="deal-details">
+                                <h6 class="deal-title">Product for Couple</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8 col-md-8">
+                        <div class="single-deal">
+                            <div class="overlay"></div>
+                            <img class="img-fluid w-100" src="~/img/category/c4.jpg" alt="">
+                            <div class="deal-details">
+                                <h6 class="deal-title">Sneaker for Sports</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="single-deal">
+                    <div class="overlay"></div>
+                    <img class="img-fluid w-100" src="~/img/category/c5.jpg" alt="">
+                    <div class="deal-details">
+                        <h6 class="deal-title">Sneaker for Sports</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        window.onload = function () {
+            var elements = document.getElementsByClassName("box-kho");
+            for (var i = 0; i < elements.length; ++i) {
+                elements[i].classList.remove("active");
+            }
+            var addToCartBtn = document.getElementById("AddToCart");
+            if (addToCartBtn) {
+                addToCartBtn.removeAttribute("data-masize");
+            }
+            document.getElementById("slton").style.display = "none";
+            document.getElementById("sizeError").style.visibility = "hidden";
+        };
+
+        function updateIndex(element, index, sizeName, maSize) {
+            document.getElementById("sizeError").style.visibility = "hidden";
+
+            var array = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.SoLuongTon));
+            var sltonDiv = document.getElementById("slton");
+            if (array[index] < 10 && array[index] > 0) {
+                sltonDiv.style.display = "block";
+            } else {
+                sltonDiv.style.display = "none";
+            }
+
+            var elements = document.getElementsByClassName("box-kho");
+            for (var i = 0; i < elements.length; ++i) {
+                elements[i].classList.remove("active");
+            }
+            element.classList.add("active");
+
+            var addToCartBtn = document.getElementById("AddToCart");
+            addToCartBtn.setAttribute("data-masize", maSize);
+        }
+
+        function NotChooseSize(event) {
+            event.preventDefault();
+
+            var isLoggedIn = '@(Context.Session.GetString("Email") != null ? "true" : "false")';
+            if (isLoggedIn === "false") {
+                if (confirm("Bạn cần đăng nhập để thêm vào giỏ hàng. Chuyển đến trang đăng nhập?")) {
+                    var currentUrl = window.location.href;
+                    window.location.href = '@Url.Action("Login", "Account")'
+                             + '?backToPage=' + encodeURIComponent(currentUrl);
+                }
+                return;
+            }
+
+            var link = document.getElementById("AddToCart");
+            var maSize = link.getAttribute("data-masize");
+            if (!maSize || maSize === "null" || maSize === "") {
+                document.getElementById("sizeError").style.visibility = "visible";
+                return;
+            }
+
+            var productId = @ViewBag.CurrentMaSP;
+
+            var addToCartUrl = '@Url.Action("ThemVaoGio", "GioHang")'
+                              + '?maSanPham=' + productId
+                              + '&maSize=' + maSize;
+
+            window.location.href = addToCartUrl;
+        }
+    </script>
+}
+
+<style>
+    .box-kho {
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        padding: 8px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        color: #111;
+        font-size: 16px;
+        text-align: center;
+    }
+
+        .box-kho:hover {
+            border-color: #111;
+        }
+
+        .box-kho.active {
+            border-color: #111;
+            background-color: #f8f8f8;
+        }
+
+    .kho-disable {
+        opacity: 0.5;
+        pointer-events: none;
+        background-color: #eee;
+    }
+</style>

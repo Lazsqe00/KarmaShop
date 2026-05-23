@@ -25,24 +25,31 @@ namespace KarmaShop.Areas.Admin.Controllers
         }
 
         // GET: Admin/NhanVien
-        public IActionResult Index(string? tuKhoa)
+        public IActionResult Index(string? tuKhoa, int? maNV, int page = 1)
         {
             if (!IsAdmin()) return RedirectToAction("Index", "HomeAdmin");
-
+            const int pageSize = 10;
             var danhSach = _db.NhanViens.AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(tuKhoa))
+            if (maNV.HasValue)
+            {
+                danhSach = danhSach.Where(nv => nv.MaNhanVien == maNV.Value);
+            }
+            else if (!string.IsNullOrWhiteSpace(tuKhoa))
             {
                 string kw = tuKhoa.Trim().ToLower();
                 danhSach = danhSach.Where(nv =>
                     (nv.TenNhanVien != null && nv.TenNhanVien.ToLower().Contains(kw)) ||
                     (nv.Email != null && nv.Email.ToLower().Contains(kw)) ||
-                    (nv.SoDienThoai != null && nv.SoDienThoai.Contains(kw)) ||
-                    nv.MaNhanVien.ToString().Contains(kw));
+                    (nv.SoDienThoai != null && nv.SoDienThoai.Contains(kw)));
             }
 
-            ViewBag.TuKhoa = tuKhoa;
-            return View(danhSach.ToList());
+            danhSach = danhSach.OrderBy(nv => nv.MaNhanVien);
+            ViewBag.TuKhoa      = tuKhoa;
+            ViewBag.MaNV        = maNV;
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages  = (int)Math.Ceiling(danhSach.Count() / (double)pageSize);
+            return View(danhSach.Skip((page - 1) * pageSize).Take(pageSize).ToList());
         }
 
         // GET: Admin/NhanVien/Details/5

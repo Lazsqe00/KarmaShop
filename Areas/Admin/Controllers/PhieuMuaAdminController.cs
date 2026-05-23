@@ -21,17 +21,18 @@ namespace KarmaShop.Areas.Admin.Controllers
         }
 
         // GET: Admin/PhieuMuaAdmin
-        public IActionResult Index()
+        public IActionResult Index(int page = 1)
         {
             if (!IsAdminOrStaff()) return RedirectToAction("Login", "TaiKhoanAdmin");
-
-            var list = _db.PhieuMuas
+            const int pageSize = 10;
+            var query = _db.PhieuMuas
                 .Include(p => p.MaKhachHangNavigation)
                 .Include(p => p.MaNhanVienNavigation)
                 .Include(p => p.MaVoucherNavigation)
-                .OrderByDescending(p => p.MaPhieuMua)
-                .ToList();
-
+                .OrderByDescending(p => p.MaPhieuMua);
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages  = (int)Math.Ceiling(query.Count() / (double)pageSize);
+            var list = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
             return View(list);
         }
 

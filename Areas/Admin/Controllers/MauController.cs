@@ -19,10 +19,14 @@ namespace KarmaShop.Areas.Admin.Controllers
             return loaiTK == "1" || loaiTK == "2";
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int page = 1)
         {
             if (!IsAdminOrStaff()) return RedirectToAction("Login", "TaiKhoanAdmin");
-            return View(_db.Maus.ToList());
+            const int pageSize = 10;
+            var query = _db.Maus.OrderBy(m => m.MaMau);
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages  = (int)Math.Ceiling(query.Count() / (double)pageSize);
+            return View(query.Skip((page - 1) * pageSize).Take(pageSize).ToList());
         }
 
         public IActionResult Details(int? id)

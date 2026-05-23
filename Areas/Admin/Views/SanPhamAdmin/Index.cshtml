@@ -5,17 +5,37 @@
 
 <h1 class="text-center fw-bold mt-5 mb-4">DANH SÁCH SẢN PHẨM</h1>
 
-<p>
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
     <a asp-area="Admin" asp-controller="SanPhamAdmin" asp-action="Create" class="btn btn-success btn-lg">
         Thêm mới sản phẩm
     </a>
-</p>
+
+    <form method="get" asp-area="Admin" asp-controller="SanPhamAdmin" asp-action="Index"
+          class="d-flex gap-2 align-items-center" style="min-width:320px;">
+        <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-search"></i></span>
+            <input type="text" name="tuKhoa" value="@ViewBag.TuKhoa" class="form-control"
+                   placeholder="Tìm theo tên, dòng SP, màu sắc..." />
+        </div>
+        <button type="submit" class="btn btn-primary">Tìm</button>
+        @if (!string.IsNullOrEmpty(ViewBag.TuKhoa as string))
+        {
+            <a asp-area="Admin" asp-controller="SanPhamAdmin" asp-action="Index" class="btn btn-secondary">Xóa</a>
+        }
+    </form>
+</div>
+@if (!string.IsNullOrEmpty(ViewBag.TuKhoa as string))
+{
+    <p class="text-muted mb-2">Kết quả cho: <strong>"@ViewBag.TuKhoa"</strong> — @Model.Count() sản phẩm trên trang này</p>
+}
 
 <style>
     .table th, .table td { text-align: center !important; vertical-align: middle !important; }
     .action-links a { margin: 0 8px; font-weight: 500; padding: 4px 8px; border-radius: 4px; transition: all 0.2s; }
     .action-links a.text-details { color: #17a2b8 !important; }
     .action-links a.text-details:hover { color: #138496 !important; background-color: #bee5eb; text-decoration: none; }
+    .action-links a.text-edit { color: #fd7e14 !important; }
+    .action-links a.text-edit:hover { color: #e8590c !important; background-color: #ffe5d0; text-decoration: none; }
     .action-links a.text-delete { color: #dc3545 !important; }
     .action-links a.text-delete:hover { color: #c82333 !important; background-color: #f1b0b7; text-decoration: none; }
     .product-img { width: 80px; height: 80px; object-fit: cover; border-radius: 6px; }
@@ -37,7 +57,7 @@
             </tr>
         </thead>
         <tbody>
-            @{int stt = 1;}
+            @{int stt = (ViewBag.CurrentPage - 1) * 10 + 1;}
             @foreach (var sp in Model)
             {
                 <tr>
@@ -58,6 +78,10 @@
                                asp-route-id="@sp.MaSanPham" title="Xem chi tiết" class="text-details">
                                 <i class="fas fa-eye fs-4"></i>
                             </a>
+                            <a asp-area="Admin" asp-controller="SanPhamAdmin" asp-action="Edit"
+                               asp-route-id="@sp.MaSanPham" title="Sửa sản phẩm" class="text-edit">
+                                <i class="fas fa-pen fs-4"></i>
+                            </a>
                             <a asp-area="Admin" asp-controller="SanPhamAdmin" asp-action="Delete"
                                asp-route-id="@sp.MaSanPham"
                                onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này không?');"
@@ -72,3 +96,31 @@
         </tbody>
     </table>
 </div>
+
+@{
+    int cur = ViewBag.CurrentPage;
+    int tot = ViewBag.TotalPages;
+    string kw = ViewBag.TuKhoa ?? "";
+}
+@if (tot > 1)
+{
+    <nav class="mt-3">
+        <ul class="pagination justify-content-center">
+            <li class="page-item @(cur == 1 ? "disabled" : "")">
+                <a class="page-link" asp-area="Admin" asp-controller="SanPhamAdmin" asp-action="Index"
+                   asp-route-page="@(cur - 1)" asp-route-tuKhoa="@kw">«</a>
+            </li>
+            @for (int p = Math.Max(1, cur - 2); p <= Math.Min(tot, cur + 2); p++)
+            {
+                <li class="page-item @(p == cur ? "active" : "")">
+                    <a class="page-link" asp-area="Admin" asp-controller="SanPhamAdmin" asp-action="Index"
+                       asp-route-page="@p" asp-route-tuKhoa="@kw">@p</a>
+                </li>
+            }
+            <li class="page-item @(cur == tot ? "disabled" : "")">
+                <a class="page-link" asp-area="Admin" asp-controller="SanPhamAdmin" asp-action="Index"
+                   asp-route-page="@(cur + 1)" asp-route-tuKhoa="@kw">»</a>
+            </li>
+        </ul>
+    </nav>
+}

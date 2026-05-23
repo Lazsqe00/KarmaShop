@@ -8,7 +8,7 @@
             <tr><th>STT</th><th>Tên loại</th><th>Hành động</th></tr>
         </thead>
         <tbody>
-            @{ int stt = 1; }
+            @{ int stt = (ViewBag.CurrentPage - 1) * 10 + 1; }
             @foreach (var item in Model)
             {
                 <tr>
@@ -26,3 +26,27 @@
         </tbody>
     </table>
 </div>
+
+@{
+    int cur = ViewBag.CurrentPage;
+    int tot = ViewBag.TotalPages;
+}
+@if (tot > 1)
+{
+    <nav class="mt-3">
+        <ul class="pagination justify-content-center">
+            <li class="page-item @(cur == 1 ? "disabled" : "")">
+                <a class="page-link" asp-area="Admin" asp-controller="Loai" asp-action="Index" asp-route-page="@(cur - 1)">«</a>
+            </li>
+            @for (int p = Math.Max(1, cur - 2); p <= Math.Min(tot, cur + 2); p++)
+            {
+                <li class="page-item @(p == cur ? "active" : "")">
+                    <a class="page-link" asp-area="Admin" asp-controller="Loai" asp-action="Index" asp-route-page="@p">@p</a>
+                </li>
+            }
+            <li class="page-item @(cur == tot ? "disabled" : "")">
+                <a class="page-link" asp-area="Admin" asp-controller="Loai" asp-action="Index" asp-route-page="@(cur + 1)">»</a>
+            </li>
+        </ul>
+    </nav>
+}

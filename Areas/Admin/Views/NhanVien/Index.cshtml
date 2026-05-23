@@ -12,13 +12,21 @@
 
 <!-- Tìm kiếm -->
 <form method="get" asp-area="Admin" asp-controller="NhanVien" asp-action="Index" class="mb-4">
-    <div class="input-group" style="max-width: 500px;">
-        <input type="text" name="tuKhoa" value="@ViewBag.TuKhoa" class="form-control"
-               placeholder="Tìm theo tên, email, SĐT..." />
+    <div class="d-flex flex-wrap gap-2 align-items-center">
+        <div class="input-group" style="max-width: 380px;">
+            <span class="input-group-text"><i class="fas fa-user"></i></span>
+            <input type="text" name="tuKhoa" value="@ViewBag.TuKhoa" class="form-control"
+                   placeholder="Tìm theo tên, email, SĐT..." />
+        </div>
+        <div class="input-group" style="max-width: 220px;">
+            <span class="input-group-text"><i class="fas fa-id-badge"></i></span>
+            <input type="number" name="maNV" value="@ViewBag.MaNV" class="form-control"
+                   placeholder="Mã nhân viên" min="1" />
+        </div>
         <button class="btn btn-primary" type="submit">
-            <i class="fas fa-search"></i>
+            <i class="fas fa-search"></i> Tìm kiếm
         </button>
-        @if (!string.IsNullOrEmpty(ViewBag.TuKhoa as string))
+        @if (!string.IsNullOrEmpty(ViewBag.TuKhoa as string) || ViewBag.MaNV != null)
         {
             <a asp-area="Admin" asp-controller="NhanVien" asp-action="Index" class="btn btn-secondary">
                 <i class="fas fa-times"></i> Xóa lọc
@@ -32,6 +40,7 @@
         <thead class="table-dark">
             <tr>
                 <th class="text-center">STT</th>
+                <th class="text-center">Mã nhân viên</th>    
                 <th>Tên nhân viên</th>
                 <th>Email</th>
                 <th class="text-center">SĐT</th>
@@ -41,11 +50,12 @@
             </tr>
         </thead>
         <tbody>
-            @{int stt = 1;}
+            @{int stt = (ViewBag.CurrentPage - 1) * 10 + 1;}
             @foreach (var nv in Model)
             {
                 <tr>
                     <td class="text-center">@stt</td>
+                    <td class="text-center">@nv.MaNhanVien</td>
                     <td><strong>@nv.TenNhanVien</strong></td>
                     <td>@nv.Email</td>
                     <td class="text-center">@nv.SoDienThoai</td>
@@ -77,3 +87,32 @@
         </tbody>
     </table>
 </div>
+
+@{
+    int cur = ViewBag.CurrentPage;
+    int tot = ViewBag.TotalPages;
+    string? kw  = ViewBag.TuKhoa;
+    int?   maNV = ViewBag.MaNV as int?;
+}
+@if (tot > 1)
+{
+    <nav class="mt-3">
+        <ul class="pagination justify-content-center">
+            <li class="page-item @(cur == 1 ? "disabled" : "")">
+                <a class="page-link" asp-area="Admin" asp-controller="NhanVien" asp-action="Index"
+                   asp-route-page="@(cur - 1)" asp-route-tuKhoa="@kw" asp-route-maNV="@maNV">«</a>
+            </li>
+            @for (int p = Math.Max(1, cur - 2); p <= Math.Min(tot, cur + 2); p++)
+            {
+                <li class="page-item @(p == cur ? "active" : "")">
+                    <a class="page-link" asp-area="Admin" asp-controller="NhanVien" asp-action="Index"
+                       asp-route-page="@p" asp-route-tuKhoa="@kw" asp-route-maNV="@maNV">@p</a>
+                </li>
+            }
+            <li class="page-item @(cur == tot ? "disabled" : "")">
+                <a class="page-link" asp-area="Admin" asp-controller="NhanVien" asp-action="Index"
+                   asp-route-page="@(cur + 1)" asp-route-tuKhoa="@kw" asp-route-maNV="@maNV">»</a>
+            </li>
+        </ul>
+    </nav>
+}

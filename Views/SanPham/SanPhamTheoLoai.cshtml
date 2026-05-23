@@ -1,0 +1,272 @@
+@model List<KarmaShop.Models.ViewModels.SanPhamHomeViewModel>
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewBag.Title = "Danh mục sản phẩm";
+}
+<style>
+    .product-images img {
+        max-width: 50px;
+        max-height: 50px;
+        margin: 5px;
+        border-radius: 4px;
+    }
+
+        .product-images img:hover {
+            transform: scale(1.2);
+            transition: 0.3s;
+        }
+
+    .product-card {
+        transition: all 0.3s;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        overflow: hidden;
+        height: 100%;
+    }
+
+        .product-card:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transform: translateY(-5px);
+        }
+
+    .product-images.hidden {
+        display: none;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        var maMau1   = '@ViewBag.maMau1' || '';
+        var sortGia1 = '@ViewBag.sortGia1' || '0';
+        var minPrice1 = parseFloat('@ViewBag.minPrice1') || 0;
+        var maxPrice1 = parseFloat('@ViewBag.maxPrice1') || 10000000;
+        var maLoai1  = '@ViewBag.maLoai' || '';
+
+        $(document).ready(function () {
+            // Restore selected price range radio
+            var currentRange = minPrice1 + '_' + maxPrice1;
+            $('.priceInput').each(function () {
+                if ($(this).val() === currentRange) $(this).prop('checked', true);
+            });
+
+            // Restore selected color radio
+            if (maMau1) {
+                $('.mauInput[value="' + maMau1 + '"]').prop('checked', true)
+                    .closest('li').find('input').css({ 'outline': '3px solid #FFBA00' });
+            }
+
+            $('#maLoai').change(function () {
+                maLoai1 = $(this).val();
+                submitFilter();
+            });
+
+            $('#sortGia').change(function () {
+                sortGia1 = $(this).val();
+                submitFilter();
+            });
+
+            $('.mauInput').change(function () {
+                maMau1 = $(this).val();
+                submitFilter();
+            });
+
+            $('.priceInput').change(function () {
+                var parts = $(this).val().split('_');
+                minPrice1 = parseFloat(parts[0]);
+                maxPrice1 = parseFloat(parts[1]);
+                submitFilter();
+            });
+
+            function submitFilter() {
+                var url = '@Url.Action("SanPhamTheoLoai", "SanPham")';
+                var params = {
+                    maLoai: maLoai1,
+                    maMau: maMau1,
+                    sortGia: sortGia1,
+                    minPrice: minPrice1,
+                    maxPrice: maxPrice1,
+                    page: 1
+                };
+                window.location = url + '?' + $.param(params);
+            }
+        });
+    </script>
+}
+
+<!-- Banner -->
+<section class="banner-area organic-breadcrumb mb-5">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1>Danh mục sản phẩm</h1>
+                <nav class="d-flex align-items-center">
+                    <a href="@Url.Action("Index", "Home")">Trang chủ <span class="lnr lnr-arrow-right"></span></a>
+                    <a href="#">@ViewBag.TenLoai</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="row">
+        <!-- Sidebar Filter -->
+        <div class="col-xl-3 col-lg-4 col-md-5">
+            <div class="sidebar-filter mt-0">
+                <div class="top-filter-head">Lọc sản phẩm</div>
+
+                <!-- Lọc màu -->
+                <div class="common-filter">
+                    <div class="head">Màu sắc</div>
+                    <ul>
+                        @foreach (SelectListItem mau in ViewBag.MauList)
+                        {
+                            <li class="filter-list">
+                                <input class="pixel-radio mauInput" type="radio" name="color"
+                                       value="@mau.Value">
+                                <label>@mau.Text</label>
+                            </li>
+                        }
+                    </ul>
+                </div>
+
+                <!-- Lọc giá -->
+                <div class="common-filter">
+                    <div class="head">Khoảng giá</div>
+                    <ul>
+                        <li class="filter-list">
+                            <input class="pixel-radio priceInput" type="radio" name="price" value="0_10000000">
+                            <label>Tất cả mức giá</label>
+                        </li>
+                        <li class="filter-list">
+                            <input class="pixel-radio priceInput" type="radio" name="price" value="0_500000">
+                            <label>Dưới 500.000₫</label>
+                        </li>
+                        <li class="filter-list">
+                            <input class="pixel-radio priceInput" type="radio" name="price" value="500000_1000000">
+                            <label>500.000₫ – 1.000.000₫</label>
+                        </li>
+                        <li class="filter-list">
+                            <input class="pixel-radio priceInput" type="radio" name="price" value="1000000_2000000">
+                            <label>1.000.000₫ – 2.000.000₫</label>
+                        </li>
+                        <li class="filter-list">
+                            <input class="pixel-radio priceInput" type="radio" name="price" value="2000000_3500000">
+                            <label>2.000.000₫ – 3.500.000₫</label>
+                        </li>
+                        <li class="filter-list">
+                            <input class="pixel-radio priceInput" type="radio" name="price" value="3500000_10000000">
+                            <label>Trên 3.500.000₫</label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Danh sách sản phẩm -->
+        <div class="col-xl-9 col-lg-8 col-md-7">
+            <div class="filter-bar d-flex flex-wrap align-items-center mb-4">
+                <div class="mr-auto">
+                    @{
+                        string selLoai = (string)(ViewBag.maLoai ?? "");
+                    }
+                    <select id="maLoai" class="sorting">
+                        @if (string.IsNullOrEmpty(selLoai))
+                        {
+                            <option value="" selected>Tất cả danh mục</option>
+                        }
+                        else
+                        {
+                            <option value="">Tất cả danh mục</option>
+                        }
+                        @foreach (SelectListItem loai in ViewBag.LoaiList)
+                        {
+                            if (loai.Value == selLoai)
+                            {
+                                <option value="@loai.Value" selected>@loai.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@loai.Value">@loai.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="mr-3">
+                    @{
+                        int selSort = (int)(ViewBag.sortGia1 ?? 0);
+                    }
+                    <select id="sortGia" class="sorting">
+                        @if (selSort == 0) { <option value="0" selected>Mặc định</option> } else { <option value="0">Mặc định</option> }
+                        @if (selSort == 1) { <option value="1" selected>Giá tăng dần</option> } else { <option value="1">Giá tăng dần</option> }
+                        @if (selSort == 2) { <option value="2" selected>Giá giảm dần</option> } else { <option value="2">Giá giảm dần</option> }
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+                        <div class="product-card single-product h-100 d-flex flex-column">
+                            <a href="@Url.Action("HienThiSanPham", "SanPham", new {
+                                madongsanpham = item.sp.MaDongSanPham,
+                                masp = item.sp.MaSanPham })">
+                                <img class="img-fluid w-100" style="height:300px; object-fit:cover;"
+                                     src="~/img/@item.sp.MaDongSanPham/Avatar/@item.sp.AnhDaiDien"
+                                     alt="@item.TenSanPhamFull">
+                            </a>
+                            <div class="p-3 flex-grow-1 d-flex flex-column">
+                                <h5 class="mb-2">@item.TenSanPhamFull</h5>
+                                <p class="text-muted small mb-3">@(item.sp.MaMauNavigation?.TenMau ?? "")</p>
+                                <h5 class="text-danger font-weight-bold mb-3">
+                                    @(item.GiaHienThi?.ToString("#,##0") ?? "N/A")₫
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            @if (!Model.Any())
+            {
+                <p class="text-center py-5 fs-4">Không tìm thấy sản phẩm nào phù hợp.</p>
+            }
+
+            @{
+                int cur = ViewBag.CurrentPage;
+                int tot = ViewBag.TotalPages;
+                string maLoaiQ      = ViewBag.maLoai ?? "";
+                string maMauQ       = ViewBag.maMau1 ?? "";
+                string sortGiaQ     = ViewBag.sortGia1.ToString();
+                string minPriceQ    = ViewBag.minPrice1.ToString();
+                string maxPriceQ    = ViewBag.maxPrice1.ToString();
+                string searchQ      = ViewBag.SearchString ?? "";
+            }
+            @if (!string.IsNullOrEmpty(searchQ))
+            {
+                <p class="text-muted mb-3">Kết quả tìm kiếm cho: <strong>"@searchQ"</strong> &mdash; tìm thấy <strong>@ViewBag.TotalCount</strong> sản phẩm</p>
+            }
+            @if (tot > 1)
+            {
+                <nav class="d-flex justify-content-center m-4">
+                    <ul class="pagination">
+                        <li class="page-item @(cur == 1 ? "disabled" : "")">
+                            <a class="page-link" href="@Url.Action("SanPhamTheoLoai", "SanPham", new { maLoai = maLoaiQ, maMau = maMauQ, sortGia = sortGiaQ, minPrice = minPriceQ, maxPrice = maxPriceQ, searchString = searchQ, page = cur - 1 })">«</a>
+                        </li>
+                        @for (int p = Math.Max(1, cur - 2); p <= Math.Min(tot, cur + 2); p++)
+                        {
+                            <li class="page-item @(p == cur ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("SanPhamTheoLoai", "SanPham", new { maLoai = maLoaiQ, maMau = maMauQ, sortGia = sortGiaQ, minPrice = minPriceQ, maxPrice = maxPriceQ, searchString = searchQ, page = p })">@p</a>
+                            </li>
+                        }
+                        <li class="page-item @(cur == tot ? "disabled" : "")">
+                            <a class="page-link" href="@Url.Action("SanPhamTheoLoai", "SanPham", new { maLoai = maLoaiQ, maMau = maMauQ, sortGia = sortGiaQ, minPrice = minPriceQ, maxPrice = maxPriceQ, searchString = searchQ, page = cur + 1 })">»</a>
+                        </li>
+                    </ul>
+                </nav>
+            }
+        </div>
+    </div>
+</div>
