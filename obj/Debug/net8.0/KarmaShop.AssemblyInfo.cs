@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KarmaShop")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c97535b3b461c08bc815c4c20d778af33245ace9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+252473b11962b6094357e7ee2b3edef155556002")]
 [assembly: System.Reflection.AssemblyProductAttribute("KarmaShop")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KarmaShop")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
