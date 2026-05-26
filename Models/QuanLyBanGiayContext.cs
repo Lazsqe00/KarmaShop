@@ -31,21 +31,31 @@ public partial class QuanLyBanGiayContext : DbContext
 
     public virtual DbSet<PhuongThucThanhToan> PhuongThucThanhToans { get; set; }
 
+    public virtual DbSet<PhuongXa> PhuongXas { get; set; }
+
+    public virtual DbSet<QuanHuyen> QuanHuyens { get; set; }
+
     public virtual DbSet<SanPham> SanPhams { get; set; }
 
     public virtual DbSet<SanPhamSize> SanPhamSizes { get; set; }
 
     public virtual DbSet<Size> Sizes { get; set; }
 
+    public virtual DbSet<Sodiachi> Sodiachis { get; set; }
+
     public virtual DbSet<TaiKhoan> TaiKhoans { get; set; }
+
+    public virtual DbSet<TinhThanh> TinhThanhs { get; set; }
 
     public virtual DbSet<ViVoucher> ViVouchers { get; set; }
 
     public virtual DbSet<Voucher> Vouchers { get; set; }
 
+    public virtual DbSet<YeuThich> YeuThiches { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=LAPTOP-H95A2D2T\\SQLEXPRESS01;Initial Catalog=QuanLyBanGiay;Integrated Security=True;Trust Server Certificate=True");
+        => optionsBuilder.UseSqlServer("Data Source=LAPTOP-2D858Q81;Initial Catalog=QuanLyBanGiay;Integrated Security=True;Trust Server Certificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -196,6 +206,46 @@ public partial class QuanLyBanGiayContext : DbContext
                 .HasColumnName("TenPTTT");
         });
 
+        modelBuilder.Entity<PhuongXa>(entity =>
+        {
+            entity.HasKey(e => e.MaPhuong).HasName("PK__PhuongXa__F7B9B544CB34478C");
+
+            entity.ToTable("PhuongXa");
+
+            entity.Property(e => e.MaPhuong)
+                .HasMaxLength(20)
+                .IsUnicode(false);
+            entity.Property(e => e.MaQuan)
+                .HasMaxLength(20)
+                .IsUnicode(false);
+            entity.Property(e => e.TenPhuong).HasMaxLength(100);
+
+            entity.HasOne(d => d.MaQuanNavigation).WithMany(p => p.PhuongXas)
+                .HasForeignKey(d => d.MaQuan)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__PhuongXa__MaQuan__59063A47");
+        });
+
+        modelBuilder.Entity<QuanHuyen>(entity =>
+        {
+            entity.HasKey(e => e.MaQuan).HasName("PK__QuanHuye__60AB417D97E96A76");
+
+            entity.ToTable("QuanHuyen");
+
+            entity.Property(e => e.MaQuan)
+                .HasMaxLength(20)
+                .IsUnicode(false);
+            entity.Property(e => e.MaTinh)
+                .HasMaxLength(20)
+                .IsUnicode(false);
+            entity.Property(e => e.TenQuan).HasMaxLength(100);
+
+            entity.HasOne(d => d.MaTinhNavigation).WithMany(p => p.QuanHuyens)
+                .HasForeignKey(d => d.MaTinh)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__QuanHuyen__MaTin__5629CD9C");
+        });
+
         modelBuilder.Entity<SanPham>(entity =>
         {
             entity.HasKey(e => e.MaSanPham).HasName("PK__SanPham__FAC7442D3E1291DE");
@@ -241,6 +291,48 @@ public partial class QuanLyBanGiayContext : DbContext
             entity.Property(e => e.TenSize).HasMaxLength(50);
         });
 
+        modelBuilder.Entity<Sodiachi>(entity =>
+        {
+            entity.HasKey(e => e.Masodiachi).HasName("PK__Sodiachi__91CCE4D714B050BC");
+
+            entity.ToTable("Sodiachi");
+
+            entity.Property(e => e.Diachi).HasMaxLength(255);
+            entity.Property(e => e.IsDefault).HasDefaultValue(false);
+            entity.Property(e => e.MaPhuong)
+                .HasMaxLength(20)
+                .IsUnicode(false);
+            entity.Property(e => e.MaQuan)
+                .HasMaxLength(20)
+                .IsUnicode(false);
+            entity.Property(e => e.MaTinh)
+                .HasMaxLength(20)
+                .IsUnicode(false);
+            entity.Property(e => e.Sdtnguoinhan)
+                .HasMaxLength(15)
+                .IsUnicode(false);
+            entity.Property(e => e.Tennguoinhan).HasMaxLength(100);
+
+            entity.HasOne(d => d.MaKhachHangNavigation).WithMany(p => p.Sodiachis)
+                .HasForeignKey(d => d.MaKhachHang)
+                .HasConstraintName("FK__Sodiachi__MaKhac__5CD6CB2B");
+
+            entity.HasOne(d => d.MaPhuongNavigation).WithMany(p => p.Sodiachis)
+                .HasForeignKey(d => d.MaPhuong)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Sodiachi__MaPhuo__5DCAEF64");
+
+            entity.HasOne(d => d.MaQuanNavigation).WithMany(p => p.Sodiachis)
+                .HasForeignKey(d => d.MaQuan)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Sodiachi__MaQuan__5EBF139D");
+
+            entity.HasOne(d => d.MaTinhNavigation).WithMany(p => p.Sodiachis)
+                .HasForeignKey(d => d.MaTinh)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Sodiachi__MaTinh__5FB337D6");
+        });
+
         modelBuilder.Entity<TaiKhoan>(entity =>
         {
             entity.HasKey(e => e.Email).HasName("PK__TaiKhoan__A9D10535DD1ED0C6");
@@ -253,6 +345,18 @@ public partial class QuanLyBanGiayContext : DbContext
             entity.Property(e => e.MatKhau)
                 .HasMaxLength(255)
                 .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<TinhThanh>(entity =>
+        {
+            entity.HasKey(e => e.MaTinh).HasName("PK__TinhThan__4CC544800DBED82F");
+
+            entity.ToTable("TinhThanh");
+
+            entity.Property(e => e.MaTinh)
+                .HasMaxLength(20)
+                .IsUnicode(false);
+            entity.Property(e => e.TenTinh).HasMaxLength(100);
         });
 
         modelBuilder.Entity<ViVoucher>(entity =>
@@ -289,6 +393,32 @@ public partial class QuanLyBanGiayContext : DbContext
 
             entity.Property(e => e.MaVoucher).HasMaxLength(20);
             entity.Property(e => e.GiamToiDa).HasColumnType("decimal(5, 2)");
+        });
+
+        modelBuilder.Entity<YeuThich>(entity =>
+        {
+            entity.HasKey(e => e.MaYeuThich).HasName("PK__YeuThich__B9007E4C4EEAD004");
+
+            entity.ToTable("YeuThich");
+
+            entity.HasIndex(e => new { e.Email, e.MaSanPham }, "UQ_YeuThich").IsUnique();
+
+            entity.Property(e => e.Email)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.NgayThem)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+
+            entity.HasOne(d => d.EmailNavigation).WithMany(p => p.YeuThiches)
+                .HasForeignKey(d => d.Email)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__YeuThich__Email__71D1E811");
+
+            entity.HasOne(d => d.MaSanPhamNavigation).WithMany(p => p.YeuThiches)
+                .HasForeignKey(d => d.MaSanPham)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__YeuThich__MaSanP__72C60C4A");
         });
 
         OnModelCreatingPartial(modelBuilder);

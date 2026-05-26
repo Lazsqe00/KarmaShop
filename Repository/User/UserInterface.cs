@@ -12,5 +12,10 @@ namespace KarmaShop.Repository.User
         KhachHang GetProfile(string email);
         bool UpdateProfile(string email, KhachHang kh);
         decimal GetTongChi(string email);
+
+        List<PhieuMua> GetOrderHistory(string email);
+        PhieuMua? GetOrderDetail(int id, string email);
+
+        List<Sodiachi> GetAddressBook(string email);
     }
 }

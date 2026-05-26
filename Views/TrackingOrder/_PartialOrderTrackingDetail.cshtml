@@ -1,0 +1,185 @@
+﻿@model KarmaShop.Models.PhieuMua
+
+
+<div class="order-popup">
+
+    <div class="order-detail">
+
+        <div class="row mb-3 align-items-center">
+            <div class="col-md-6">
+                <h5>
+                    Mã đơn hàng:
+                    <strong>#@Model.MaPhieuMua</strong>
+                </h5>
+
+                <p class="mb-0">
+                    <strong>Ngày đặt:</strong>
+                    @Model.NgayDat?.ToString("dd/MM/yyyy")
+                </p>
+            </div>
+
+            <div class="col-md-6 text-end">
+                <span class="badge-status
+                    @(Model.TinhTrang == "Đã giao hàng" ? "status-hoanthanh" :
+                                            Model.TinhTrang == "Đang giao hàng" ? "status-danggiao" :
+                                            Model.TinhTrang == "Từ chối" ? "status-tuchoi" :
+                                            "status-cho")">
+                    @Model.TinhTrang
+                </span>
+            </div>
+        </div>
+
+        <hr />
+
+        <h6 class="mb-4">Thông tin người nhận</h6>
+
+        <div class="row mb-4">
+
+            <div class="col-md-4">
+                <strong>Tên người nhận:</strong>
+                <br />
+                @Model.TenNguoiNhan
+            </div>
+
+            <div class="col-md-4">
+                <strong>Số điện thoại:</strong>
+                <br />
+                @Model.SoDienThoaiNguoiNhan
+            </div>
+
+            <div class="col-md-4">
+                <strong>Địa chỉ giao hàng:</strong>
+                <br />
+                @Model.DiaChiGiaoHang
+            </div>
+
+        </div>
+
+        <h6 class="mb-3">Danh sách sản phẩm</h6>
+
+        <table class="table table-striped table-bordered align-middle">
+
+            <thead class="table-light">
+                <tr>
+                    <th>Hình ảnh</th>
+                    <th>Sản phẩm</th>
+                    <th>Màu</th>
+                    <th>Size</th>
+                    <th class="text-center">Số lượng</th>
+                    <th class="text-end">Đơn giá</th>
+                    <th class="text-end">Thành tiền</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (var ct in Model.ChiTietPhieuMuas)
+                {
+                    var thanhTien = ct.SoLuong * ct.DonGia;
+
+                    <tr>
+
+                        <td width="100">
+                            <img src="~/img/@ct.MaSanPhamNavigation.MaDongSanPhamNavigation.MaDongSanPham/Avatar/@ct.MaSanPhamNavigation.AnhDaiDien"
+                                 width="80"
+                                 height="80"
+                                 style="object-fit:cover;" />
+                        </td>
+
+                        <td>
+                            @ct.MaSanPhamNavigation?.MaDongSanPhamNavigation?.TenDongSanPham
+                        </td>
+
+                        <td>
+                            @ct.MaSanPhamNavigation?.MaMauNavigation?.TenMau
+                        </td>
+
+                        <td>
+                            @ct.MaSizeNavigation?.TenSize
+                        </td>
+
+                        <td class="text-center">
+                            @ct.SoLuong
+                        </td>
+
+                        <td class="text-end">
+                            @ct.DonGia?.ToString("N0") ₫
+                        </td>
+
+                        <td class="text-end">
+                            <strong>@thanhTien?.ToString("N0") ₫</strong>
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+        <div class="row mt-4">
+
+            <div class="col-md-8"></div>
+
+            <div class="col-md-4">
+
+                @{
+                    decimal sum = 0;
+
+                    foreach (var ct in Model.ChiTietPhieuMuas)
+                    {
+                        decimal thanhTien = (ct.SoLuong ?? 0) * (ct.DonGia ?? 0);
+
+                        sum += thanhTien;
+                    }
+                }
+
+                <div class="summary-box">
+
+                    <div class="d-flex justify-content-between">
+                        <span>Tổng tiền hàng:</span>
+                        <strong>@sum.ToString("N0") ₫</strong>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <span>Phí vận chuyển:</span>
+                        <strong>-30.000 ₫</strong>
+                    </div>
+
+                    @{
+                        decimal giamGia = (sum * 20m) / 100m;
+
+                        if (giamGia > 25000m)
+                        {
+                            giamGia = 25000m;
+                        }
+                    }
+
+                    @if (!string.IsNullOrEmpty(Model.MaVoucher))
+                    {
+                        <div class="d-flex justify-content-between text-success">
+                            <span>
+                                Đã áp dụng mã giảm giá:
+                                <strong>@Model.MaVoucher</strong>
+                            </span>
+
+                            <strong>- @giamGia.ToString("N0") ₫</strong>
+                        </div>
+                    }
+
+                    <hr />
+
+                    <div class="d-flex justify-content-between total">
+                        <span>Tổng cộng:</span>
+                        <span>@Model.TongTien?.ToString("N0") ₫</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

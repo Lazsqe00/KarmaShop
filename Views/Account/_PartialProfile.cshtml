@@ -1,0 +1,42 @@
+﻿@model KarmaShop.Models.KhachHang
+
+<div class="mb-4">
+    <div class="row">
+        <div class="col-8">
+            <h3 class="fw-bolder text-dark mb-0 mt-3">Thông tin tài khoản</h3>
+        </div>
+        <div class="col-4 text-end">
+            <button class="primary-btn" id="btnEditProfile">
+                <i class="fas fa-edit"></i> Sửa thông tin
+            </button>
+        </div>
+    </div>
+    <hr />
+
+    <div class="row mb-2">
+        <div class="col-sm-3"><strong>Họ tên</strong></div>
+        <div class="col-sm-9">@Model.TenKhachHang</div>
+    </div>
+    <hr />
+    <div class="row mb-2">
+        <div class="col-sm-3"><strong>Email</strong></div>
+        <div class="col-sm-9">@Model.Email</div>
+    </div>
+    <hr />
+    <div class="row mb-2">
+        <div class="col-sm-3"><strong>Số điện thoại</strong></div>
+        <div class="col-sm-9">@Model.SoDienThoai</div>
+    </div>
+    <hr />
+    <div class="row mb-2">
+        <div class="col-sm-3"><strong>Giới tính</strong></div>
+        <div class="col-sm-9">@(Model.GioiTinh ?? "Chưa cập nhật")</div>
+    </div>
+    <hr />
+    <div class="row mb-2">
+        <div class="col-sm-3"><strong>Ngày sinh</strong></div>
+        <div class="col-sm-9">
+            @(Model.NgaySinh?.ToString("dd/MM/yyyy") ?? "Chưa cập nhật")
+        </div>
+    </div>
+</div>

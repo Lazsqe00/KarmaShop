@@ -26,4 +26,6 @@ public partial class SanPham
     public virtual Mau? MaMauNavigation { get; set; }
 
     public virtual ICollection<SanPhamSize> SanPhamSizes { get; set; } = new List<SanPhamSize>();
+
+    public virtual ICollection<YeuThich> YeuThiches { get; set; } = new List<YeuThich>();
 }

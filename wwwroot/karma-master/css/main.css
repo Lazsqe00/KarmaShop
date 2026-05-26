@@ -140,6 +140,57 @@
       left: 180px;
       opacity: .3; }
 
+
+.primary-btn-small{
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  padding: 0 20px;
+  line-height: 35px;
+  border-radius: 50px;
+  display: inline-block;
+  text-transform: uppercase;
+  font-weight: 500;
+  cursor: pointer;
+  -webkit-transition: all 0.3s ease 0s;
+  -moz-transition: all 0.3s ease 0s;
+  -o-transition: all 0.3s ease 0s;
+  transition: all 0.3s ease 0s; }
+  .primary-btn-small:before {
+    position: absolute;
+    left: -145px;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    content: "";
+    background: #000;
+    opacity: 0;
+    -webkit-transform: skew(40deg);
+    -moz-transform: skew(40deg);
+    -ms-transform: skew(40deg);
+    -o-transform: skew(40deg);
+    transform: skew(40deg);
+    -webkit-transition: all 0.3s ease 0s;
+    -moz-transition: all 0.3s ease 0s;
+    -o-transition: all 0.3s ease 0s;
+    transition: all 0.3s ease 0s; }
+  .primary-btn-small:hover {
+    color: #fff; }
+    .primary-btn-small:hover:before {
+      left: 180px;
+      opacity: .3; }
+
+.btn-outline-purple {
+    color: #7058FA;
+    border: 1px solid #7058FA;
+    background-color: transparent;
+}
+
+.btn-outline-purple:hover {
+    background-color: #7058FA;
+    color: white;
+}
+
 body {
   line-height: 24px;
   font-size: 14px;
@@ -173,6 +224,10 @@ h6 {
   margin: 0px;
   padding: 0px; }
 
+.text-purple {
+    color: #7058FA;
+}
+
 a {
   text-decoration: none;
   transition: all 0.3s ease-in-out; }
@@ -180,6 +235,44 @@ a {
     text-decoration: none;
     outline: none; }
 
+
+  .order-card {
+      transition: all 0.3s;
+      border-left: 4px solid #7058FA;
+  }
+
+      .order-card:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      }
+
+ .badge-status {
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.9em;
+  }
+
+.status-cho {
+      background-color: #917dff;
+      color: #ffff;
+  }
+
+.status-danggiao {
+      background-color: #75cbdb;
+      color: #ffffffe6;
+  }
+
+.status-hoanthanh {
+      background-color: #69de84;
+      color: #ffffffe6;
+  }
+
+.status-tuchoi {
+      background-color: #e8707a;
+      color: #ffffffd4;
+  }
+  
 button:focus {
   outline: none;
   box-shadow: none; }
@@ -958,7 +1051,7 @@ h1, h2, h3, h4, h5, h6 {
           color: #7058FA;
           background: transparent; }
         .default-select .nice-select .list .option:hover {
-          color: #7058FA
+          color: #7058FA;
           background: transparent; }
   .default-select .current {
     margin-right: 50px;
@@ -5815,3 +5908,5 @@ label {
     color: #ffba00; }
 
 /*# sourceMappingURL=main.css.map */
+
+

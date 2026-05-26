@@ -328,3 +328,58 @@ INSERT INTO PhuongThucThanhToan (TenPTTT) VALUES
 (N'VNPAY'),
 (N'MoMo'),
 (N'Chuyển khoản');
+
+
+
+
+CREATE TABLE TinhThanh (
+    MaTinh VARCHAR(20) PRIMARY KEY,
+    TenTinh NVARCHAR(100) NOT NULL
+);
+GO
+
+CREATE TABLE QuanHuyen (
+    MaQuan VARCHAR(20) PRIMARY KEY,
+    TenQuan NVARCHAR(100) NOT NULL,
+    MaTinh VARCHAR(20) NOT NULL,
+    FOREIGN KEY (MaTinh) REFERENCES TinhThanh(MaTinh)
+);
+GO
+
+CREATE TABLE PhuongXa (
+    MaPhuong VARCHAR(20) PRIMARY KEY,
+    TenPhuong NVARCHAR(100) NOT NULL,
+    MaQuan VARCHAR(20) NOT NULL,
+    FOREIGN KEY (MaQuan) REFERENCES QuanHuyen(MaQuan)
+);
+GO
+
+CREATE TABLE Sodiachi (
+    Masodiachi INT IDENTITY PRIMARY KEY,
+    MaKhachHang INT NOT NULL,
+    Tennguoinhan NVARCHAR(100) NOT NULL,
+    Sdtnguoinhan VARCHAR(15) NOT NULL,
+    Diachi NVARCHAR(255) NOT NULL,     
+    MaPhuong VARCHAR(20) NOT NULL,      
+    MaQuan VARCHAR(20) NOT NULL,        
+    MaTinh VARCHAR(20) NOT NULL,        
+    IsDefault BIT DEFAULT 0,            
+    FOREIGN KEY (MaKhachHang) REFERENCES KhachHang(MaKhachHang) ON DELETE CASCADE,
+    FOREIGN KEY (MaPhuong) REFERENCES PhuongXa(MaPhuong),
+    FOREIGN KEY (MaQuan) REFERENCES QuanHuyen(MaQuan),
+    FOREIGN KEY (MaTinh) REFERENCES TinhThanh(MaTinh)
+);
+GO
+
+CREATE TABLE YeuThich (
+    MaYeuThich INT IDENTITY(1,1) PRIMARY KEY,
+    Email VARCHAR(100) NOT NULL,
+    MaSanPham INT NOT NULL,
+    NgayThem DATETIME DEFAULT GETDATE(),
+    
+    FOREIGN KEY (Email) REFERENCES TaiKhoan(Email),
+    FOREIGN KEY (MaSanPham) REFERENCES SanPham(MaSanPham),
+    
+    -- Không cho phép thêm trùng lặp
+    CONSTRAINT UQ_YeuThich UNIQUE (Email, MaSanPham)
+);
