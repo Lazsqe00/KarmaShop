@@ -63,7 +63,8 @@ namespace KarmaShop.Controllers
                 return Json(new { success = false, message = "Voucher không tồn tại hoặc hết hạn" });
             }
 
-            decimal giamGia = (voucher.GiamToiDa ?? 0);
+            decimal phanTram = (voucher.GiamToiDa ?? 0);
+            decimal giamGia = Math.Round(tongTamTinh * phanTram / 100, 0);
             decimal thanhTienMoi = Math.Max(0, tongTamTinh - giamGia);
 
             return Json(new
@@ -71,7 +72,7 @@ namespace KarmaShop.Controllers
                 success = true,
                 giamGia = giamGia,
                 thanhTienMoi = thanhTienMoi,
-                message = $"Áp dụng thành công! Giảm {giamGia:#,##0}₫"
+                message = $"Áp dụng thành công! Giảm {phanTram:#,##0.##}% ({giamGia:#,##0}₫)"
             });
         }
 
