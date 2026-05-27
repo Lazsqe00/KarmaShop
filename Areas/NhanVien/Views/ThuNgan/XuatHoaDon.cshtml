@@ -1,6 +1,58 @@
 ﻿@model KarmaShop.Models.PhieuMua
+
 @{
     Layout = "_ThuNganLayout";
+
+    
+    decimal tongTienHang = 0;
+    decimal chietKhau = 0;
+    decimal tongThanhToan = 0;
+    decimal tienKhachDua = 0;
+    decimal tienThua = 0;
+
+    if (Model != null)
+    {
+   
+        foreach (var ct in Model.ChiTietPhieuMuas)
+        {
+            decimal gia = (decimal)(ct.DonGia ?? 0);
+            int sl = ct.SoLuong ?? 0;
+            tongTienHang += (gia * sl);
+        }
+
+        
+        if (Model.TinhTrang == "Đã thanh toán")
+        {
+           
+            if (Model.MaKhachHangNavigation != null)
+            {
+                decimal tc = Model.MaKhachHangNavigation.TongChi ?? 0m;
+                string hangHienTai = "Thành Viên";
+                if (tc >= 8000000m) hangHienTai = "Kim Cương";
+                else if (tc >= 5000000m) hangHienTai = "Bạch Kim";
+                else if (tc >= 3000000m) hangHienTai = "Vàng";
+                else if (tc >= 500000m) hangHienTai = "Bạc";
+
+                if (hangHienTai == "Vàng" && tongTienHang >= 350000m) chietKhau = tongTienHang * 0.05m;
+                else if (hangHienTai == "Bạch Kim" && tongTienHang >= 550000m) chietKhau = tongTienHang * 0.10m;
+                else if (hangHienTai == "Kim Cương" && tongTienHang >= 800000m) chietKhau = tongTienHang * 0.12m;
+            }
+
+            tongThanhToan = tongTienHang - chietKhau;
+
+            
+            tienKhachDua = tongThanhToan;
+            tienThua = 0;
+        }
+        else
+        {
+            
+            chietKhau = 0;
+            tongThanhToan = 0;
+            tienKhachDua = 0;
+            tienThua = 0;
+        }
+    }
 }
 
 <div class="d-flex align-items-center justify-content-between mb-4">
@@ -10,7 +62,6 @@
         </div>
         <div>
             <h3 class="fw-bold mb-0 text-dark">Xuất hóa đơn bán hàng</h3>
-            
         </div>
     </div>
 </div>
@@ -28,36 +79,39 @@
 
     @if (Model != null)
     {
-        <div id="invoice-print" class="p-4 mx-auto border shadow-sm rounded bg-white" style="max-width: 850px; color: #000; font-family: 'Times New Roman', serif;">
+        <div id="invoice-print" class="p-4 mx-auto border shadow-sm rounded bg-white" style="max-width: 900px; color: #000; font-family: 'Times New Roman', serif;">
 
             <div class="text-center mb-4">
-                <h2 class="fw-bold mb-1" style="text-transform: uppercase; letter-spacing: 2px;">Hoá đơn bán hàng</h2>
-                <p class="mb-1 italic">Ngày @Model.NgayDat?.Day Tháng @Model.NgayDat?.Month Năm @Model.NgayDat?.Year</p>
-                <p class="mb-0">Số hoá đơn: <span class="fw-bold text-danger">@($"HD{Model.MaPhieuMua:D4}")</span></p>
+                <h2 class="fw-bold mb-1" style="text-transform: uppercase; letter-spacing: 2px; font-size: 24px;">HOÁ ĐƠN BÁN HÀNG</h2>
+                <p class="mb-1">Ngày @Model.NgayDat?.Day Tháng @Model.NgayDat?.Month Năm @Model.NgayDat?.Year</p>
+                <p class="mb-0">Số hoá đơn: <span class="fw-bold">@($"HD{Model.MaPhieuMua:D2}")</span></p>
             </div>
 
-            <div class="row mb-4" style="font-size: 1.05rem; line-height: 1.8;">
-                <div class="col-7 border-end">
-                    <div>Họ tên khách hàng: <span class="fw-bold">@Model.MaKhachHangNavigation?.TenKhachHang</span></div>
-                    <div>Địa chỉ giao hàng: <span class="italic">@Model.MaKhachHangNavigation?.DiaChi</span></div>
-                    <div>Số điện thoại: <span class="fw-bold">@Model.MaKhachHangNavigation?.SoDienThoai</span></div>
-                    <div>Hình thức thanh toán: <span class="fw-bold">@Model.MaPtttNavigation?.TenPttt</span></div>
+            <div class="row mb-4" style="font-size: 0.95rem; line-height: 1.8;">
+                <div class="col-7">
+                    <div>Họ tên khách hàng: <span class="fw-bold">@(Model.MaKhachHangNavigation?.TenKhachHang ?? "Khách vãng lai")</span></div>
+                    <div>Địa chỉ giao hàng: <span>@(Model.MaKhachHangNavigation?.DiaChi ?? "Chưa có")</span></div>
+                    <div>Số điện thoại: <span class="fw-bold">@(Model.MaKhachHangNavigation?.SoDienThoai ?? "Chưa có")</span></div>
+                    <div>Hình thức thanh toán: <span class="fw-bold">@(Model.MaPtttNavigation?.TenPttt ?? "Tiền mặt")</span></div>
                 </div>
-                <div class="col-5 ps-4">
-                    <div><i class="mdi mdi-map-marker me-1"></i> <span class="fw-bold">Địa chỉ:</span> 53/24 Nguyễn Thiện Thuật, Lộc Thọ, Nha Trang</div>
-                    <div><i class="mdi mdi-phone me-1"></i> <span class="fw-bold">Số điện thoại:</span> 0347665000</div>
-                    <div><i class="mdi mdi-web me-1"></i> <span class="fw-bold">Website:</span> http://www.ericshoes.vn</div>
+                <div class="col-5">
+                    <div>Địa chỉ: 53/24 Nguyễn Thiện Thuật, Lộc Thọ, Nha Trang</div>
+                    <div>Số điện thoại: 0347665000</div>
+                    <div>Website: http://www.ericshoes.vn</div>
                 </div>
             </div>
 
-            <table class="table table-bordered border-dark align-middle mb-0">
-                <thead class="text-center fw-bold">
+            <table class="table table-bordered border-dark align-middle mb-3" style="border-color: #000 !important;">
+                <thead class="text-center fw-bold" style="background-color: #f0f0f0;">
                     <tr>
-                        <th style="width: 50px;">STT</th>
-                        <th>Tên sản phẩm</th>
-                        <th style="width: 100px;">Số lượng</th>
-                        <th style="width: 150px;">Đơn giá</th>
-                        <th style="width: 180px;">Thành tiền</th>
+                        <th style="width: 40px;">STT</th>
+                        <th style="width: 25%;">Tên sản phẩm</th>
+                        <th style="width: 20%;">Đồng sản phẩm</th>
+                        <th style="width: 10%;">Màu sắc</th>
+                        <th style="width: 8%;">Size</th>
+                        <th style="width: 12%;">Đơn giá</th>
+                        <th style="width: 8%;">Số lượng</th>
+                        <th style="width: 12%;">Thành tiền</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -68,32 +122,50 @@
                     {
                         <tr>
                             <td class="text-center">@(i++)</td>
-                            <td class="ps-3">@ct.MaSanPhamNavigation?.TenSanPham</td>
+                            <td class="ps-2">@ct.MaSanPhamNavigation?.TenSanPham</td>
+                            <td class="text-center">@(ct.MaSanPhamNavigation?.MaDongSanPhamNavigation?.TenDongSanPham ?? "Chưa rõ")</td>
+                            <td class="text-center">@(ct.MaSanPhamNavigation?.MaMauNavigation?.TenMau ?? "Chưa rõ")</td>
+                            <td class="text-center">@(ct.MaSizeNavigation?.TenSize ?? (ct.MaSize != null ? ct.MaSize.ToString() : "Chưa rõ"))</td>
+                            <td class="text-end pe-2">@string.Format("{0:N0}", ct.DonGia ?? 0)</td>
                             <td class="text-center">@ct.SoLuong</td>
-                            <td class="text-end pe-3">@string.Format("{0:N0}₫", ct.DonGia)</td>
-                            <td class="text-end pe-3 fw-bold">@string.Format("{0:N0}₫", ct.DonGia * ct.SoLuong)</td>
+                            <td class="text-end pe-2 fw-bold">@string.Format("{0:N0}", (ct.DonGia ?? 0) * (ct.SoLuong ?? 0))</td>
                         </tr>
                     }
-                    <tr>
-                        <td colspan="4" class="text-end fw-bold py-2 pe-3">Tổng tiền hàng:</td>
-                        <td class="text-end pe-3 fw-bold">@string.Format("{0:N0}₫", Model.TongTien)</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" class="text-end fw-bold py-2 pe-3" style="text-transform: uppercase;">Tổng cộng tiền thanh toán:</td>
-                        <td class="text-end pe-3 fw-bold text-danger fs-5">@string.Format("{0:N0}₫", Model.TongTien)</td>
-                    </tr>
                 </tbody>
             </table>
+
+            <div style="width: 100%; margin-top: 10px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <div style="width: 70%; text-align: right; font-weight: bold;">Tổng tiền hàng:</div>
+                    <div style="width: 30%; text-align: right; font-weight: bold;">@string.Format("{0:N0}₫", tongTienHang)</div>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <div style="width: 70%; text-align: right; font-weight: bold; color: green;">Chiết khấu giảm giá hạng:</div>
+                    <div style="width: 30%; text-align: right; font-weight: bold; color: green;">@string.Format("-{0:N0}₫", chietKhau)</div>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; background-color: #f8f9fa; padding: 8px 0;">
+                    <div style="width: 70%; text-align: right; font-weight: bold; font-size: 16px;">Tổng cộng tiền thanh toán:</div>
+                    <div style="width: 30%; text-align: right; font-weight: bold; font-size: 16px; color: red;">@string.Format("{0:N0}₫", tongThanhToan)</div>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <div style="width: 70%; text-align: right; font-weight: bold;">Tiền khách đưa:</div>
+                    <div style="width: 30%; text-align: right;">@string.Format("{0:N0}₫", tienKhachDua)</div>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <div style="width: 70%; text-align: right; font-weight: bold;">Tiền thừa trả lại khách:</div>
+                    <div style="width: 30%; text-align: right;">@string.Format("{0:N0}₫", tienThua)</div>
+                </div>
+            </div>
 
             <div class="row mt-5 text-center">
                 <div class="col-6">
                     <p class="fw-bold mb-1">Khách hàng</p>
-                    <p class="small italic text-muted">(Ký, họ tên)</p>
+                    <p class="small text-muted">(Ký, họ tên)</p>
                 </div>
                 <div class="col-6">
                     <p class="fw-bold mb-1">Nhân viên bán hàng</p>
-                    <p class="small italic text-muted">(Ký, họ tên)</p>
-                    <div class="mt-4 fw-bold text-primary">@Context.Session.GetString("Email")</div>
+                    <p class="small text-muted">(Ký, họ tên)</p>
+                    <div class="mt-4 fw-bold text-primary">@(Context.Session.GetString("Email") ?? "Thu ngân hệ thống")</div>
                 </div>
             </div>
         </div>
@@ -126,44 +198,45 @@
             font-style: italic;
         }
 
-        
-        media print {
-           
-            .sidebar-wrapper, .navbar-custom, .no-print, .footer-custom, .page-header
-
-        {
-            display: none !important;
+        .bg-gradient-primary-custom {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            border: none;
+            color: white;
         }
 
-        .main-panel-custom {
-            margin: 0 !important;
-            padding: 0 !important;
+        @@media print {
+            .sidebar-wrapper, .navbar-custom, .no-print, .footer-custom, .page-header {
+                display: none !important;
+            }
+
+            .main-panel-custom {
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            .content-wrapper-custom {
+                padding: 0 !important;
+            }
+
+            .card {
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+            }
+
+            #invoice-print {
+                border: none !important;
+                box-shadow: none !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                padding: 0 !important;
+            }
+
+            body {
+                background-color: #fff !important;
+            }
         }
 
-        .content-wrapper-custom {
-            padding: 0 !important;
-        }
-
-        .card {
-            box-shadow: none !important;
-            border: none !important;
-            padding: 0 !important;
-        }
-
-        #invoice-print {
-            border: none !important;
-            box-shadow: none !important;
-            width: 100% !important;
-            max-width: 100% !important;
-        }
-
-        body {
-            background-color: #fff !important;
-        }
-
-        }
-
-       
         #invoice-print table th, #invoice-print table td {
             border: 1px solid #333 !important;
         }

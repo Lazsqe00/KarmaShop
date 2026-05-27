@@ -50,6 +50,7 @@ namespace KarmaShop.Controllers
 
                     MaSanPhamNavigation = new SanPham
                     {
+                        MaDongSanPham = sp.MaDongSanPham,
                         TenSanPham = sp.TenSanPham,
                         AnhDaiDien = sp.AnhDaiDien
                     },

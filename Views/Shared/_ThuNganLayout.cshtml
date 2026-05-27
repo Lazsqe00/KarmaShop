@@ -184,8 +184,9 @@
             <img src="/karma-master/img/logo.png" alt="Logo" onerror="this.src='https://placehold.co/120x40?text=KARMA'" />
         </a>
         <div>
-            <a class="btn btn-link text-secondary text-decoration-none" asp-controller="Account" asp-action="Login">
-                <i class="mdi mdi-logout me-1 text-primary"></i> Đăng xuất
+            <a class="nav-menu-link" href="@Url.Action("Logout", "Account", new { area = "" })">
+                <span>Đăng xuất</span>
+                <i class="mdi mdi-logout menu-icon text-primary"></i>
             </a>
         </div>
     </nav>

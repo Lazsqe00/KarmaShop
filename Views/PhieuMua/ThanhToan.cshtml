@@ -2,9 +2,12 @@
 @{
     ViewData["Title"] = "Thanh Toán";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    
+
     var cart = ViewBag.Cart as List<KarmaShop.Models.ChiTietPhieuMua>;
     var tongTamTinh = ViewBag.TongTien ?? 0;
+    var hangKH = ViewBag.HangThanhVien ?? "Thành Viên";
+    var giamHang = ViewBag.GiamGiaHang ?? 0;
+    var tongPhaiTraDauKy = tongTamTinh - giamHang;
 }
 
 <section class="banner-area organic-breadcrumb">
@@ -29,14 +32,16 @@
 
                 <form asp-action="ThanhToan" asp-controller="PhieuMua" method="post">
                     @Html.AntiForgeryToken()
-                    
+
                     <input type="hidden" asp-for="MaKhachHang" />
-                    <input type="hidden" asp-for="TongTien" id="hiddenThanhTien" />
+                    <input type="hidden" asp-for="TongTien" id="hiddenThanhTien" value="@tongPhaiTraDauKy" />
 
                     <div class="row">
-                        
                         <div class="col-lg-7">
-                            <h4>Thông tin nhận hàng</h4>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h4>Thông tin nhận hàng</h4>
+                                <span class="badge bg-info text-white px-3 py-2" style="font-size: 13px;">Hạng: @hangKH</span>
+                            </div>
                             <hr />
 
                             <div class="form-group">
@@ -67,38 +72,36 @@
                             </div>
 
                             <div class="payment-method-section mt-4">
-                                <h4>Phương thức thanh toán</h4>
+                                <h4>Phương thức thanh toán <span class="text-danger">*</span></h4>
                                 <hr />
                                 @if (ViewBag.PhuongThucTT != null)
                                 {
                                     foreach (var pttt in (List<KarmaShop.Models.PhuongThucThanhToan>)ViewBag.PhuongThucTT)
                                     {
-                                        <div class="payment_item d-flex align-items-center mb-2">
+                                        <div class="payment_item d-flex align-items-center mb-2 p-2 border rounded custom-radio-wrapper">
                                             <input type="radio" asp-for="MaPttt" value="@pttt.MaPttt" id="pttt_@pttt.MaPttt" required checked="@(pttt.MaPttt == 1)" />
-                                            <label for="pttt_@pttt.MaPttt" class="ml-2 mb-0">@pttt.TenPttt</label>
+                                            <label for="pttt_@pttt.MaPttt" class="ml-3 mb-0 fw-medium w-100 style-label">@pttt.TenPttt</label>
                                         </div>
                                     }
                                 }
                             </div>
 
-                           
                             <div class="form-group mt-4">
-                                <label>Mã giảm giá (nếu có)</label>
-                                <div class="voucher-input">
-                                    <input type="text" asp-for="MaVoucher" id="MaVoucher" class="form-control" placeholder="Nhập mã voucher" autocomplete="off" />
-                                    <button type="button" class="btn btn-outline-primary" id="btnApDung">Áp dụng</button>
+                                <label>Mã giảm giá Voucher (nếu có)</label>
+                                <div class="input-group">
+                                    <input type="text" asp-for="MaVoucher" id="MaVoucher" class="form-control border-end-0" placeholder="Nhập mã voucher tại đây..." autocomplete="off" />
+                                    <button type="button" class="btn btn-primary px-4" id="btnApDung">Áp dụng</button>
                                 </div>
-                                <div id="voucherMsg" class="mt-2"></div>
+                                <div id="voucherMsg" class="mt-2 small"></div>
                             </div>
 
-                            <button type="submit" class="btn btn-success btn-checkout">
+                            <button type="submit" class="btn btn-success btn-checkout shadow">
                                 XÁC NHẬN ĐẶT HÀNG
                             </button>
                         </div>
 
-                        
                         <div class="col-lg-5">
-                            <div class="order-summary">
+                            <div class="order-summary shadow-sm">
                                 <h4>Đơn hàng (@(cart?.Count ?? 0) sản phẩm)</h4>
                                 <hr />
 
@@ -106,17 +109,19 @@
                                 {
                                     foreach (var item in cart)
                                     {
-                                        
                                         <div class="product-item">
-                                            <img src="~/img/products/@item.MaSanPhamNavigation?.AnhDaiDien" alt="Sản phẩm" />
+                                            <img src="@Url.Content("~/img/"
+                                                         + item.MaSanPhamNavigation?.MaDongSanPham
+                                                         + "/Avatar/"
+                                                         + item.MaSanPhamNavigation?.AnhDaiDien)"
+                                         alt="Sản phẩm"
+                                         onerror="this.src='/images/default-shoe.png'" />
                                             <div style="flex:1">
-                                                <strong>@item.MaSanPhamNavigation?.TenSanPham</strong><br />
-                                                <small>
-                                                    Size: @item.MaSize | SL: @item.SoLuong
-                                                </small>
+                                                <strong class="text-dark">@item.MaSanPhamNavigation?.TenSanPham</strong><br />
+                                                <small class="text-secondary">Size: @item.MaSize | SL: @item.SoLuong</small>
                                             </div>
                                             <div class="text-right">
-                                                <strong>@((item.DonGia * item.SoLuong)?.ToString("#,##0"))₫</strong>
+                                                <span class="fw-bold">@((item.DonGia * item.SoLuong)?.ToString("#,##0"))₫</span>
                                             </div>
                                         </div>
                                     }
@@ -124,19 +129,24 @@
 
                                 <hr />
 
-                                <div class="d-flex justify-content-between">
-                                    <strong>Tạm tính</strong>
-                                    <strong id="tamTinhText">@tongTamTinh.ToString("#,##0")₫</strong>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-secondary">Tạm tính:</span>
+                                    <span class="fw-bold">@tongTamTinh.ToString("#,##0")₫</span>
                                 </div>
 
-                                <div class="d-flex justify-content-between mt-2" id="giamGiaRow" style="display: none;">
-                                    <strong>Giảm giá Voucher</strong>
-                                    <strong id="giamGiaText" class="text-success"></strong>
+                                <div class="d-flex justify-content-between mb-2" id="hangKhachRow" style="display: @(giamHang > 0 ? "flex" : "none");">
+                                    <span class="text-secondary">Chiết khấu hạng (@hangKH):</span>
+                                    <span class="text-success fw-bold" id="hangKhachText">-@giamHang.ToString("#,##0")₫</span>
                                 </div>
 
-                                <div class="d-flex justify-content-between mt-3 total-price">
-                                    <strong>Tổng thanh toán</strong>
-                                    <strong id="thanhTienDisplay">@tongTamTinh.ToString("#,##0")₫</strong>
+                                <div class="d-flex justify-content-between mb-2" id="giamGiaRow" style="display: none;">
+                                    <span class="text-secondary">Giảm giá từ Voucher:</span>
+                                    <span id="giamGiaText" class="text-success fw-bold"></span>
+                                </div>
+
+                                <div class="d-flex justify-content-between mt-3 pt-3 border-top total-price-wrapper">
+                                    <strong class="text-dark fs-5">Tổng thanh toán:</strong>
+                                    <strong id="thanhTienDisplay" class="total-price">@tongPhaiTraDauKy.ToString("#,##0")₫</strong>
                                 </div>
                             </div>
                         </div>
@@ -152,29 +162,33 @@
         document.getElementById('btnApDung').addEventListener('click', function () {
             const voucherCode = document.getElementById('MaVoucher').value.trim();
             const tamTinh = @tongTamTinh;
+            const giamHang = @giamHang;
 
             if (!voucherCode) {
-                showVoucherMessage("Vui lòng nhập mã voucher", "danger");
+                showVoucherMessage("Vui lòng nhập mã voucher trước khi bấm áp dụng!", "danger");
                 return;
             }
 
             $.ajax({
-                url: '/PhieuMua/KiemTraVoucher', 
+                url: '/PhieuMua/TinhToanGiamGia',
                 type: 'POST',
                 data: {
                     maVoucher: voucherCode,
-                    tongTamTinh: tamTinh
+                    tongTamTinh: tamTinh,
+                    giamGiaHang: giamHang
                 },
                 success: function (response) {
                     if (response.success) {
-                        
-                        document.getElementById('giamGiaRow').style.display = 'flex';
-                        document.getElementById('giamGiaText').textContent = '-' + response.giamGia.toLocaleString('vi-VN') + '₫';
+                        // Hiển thị dòng giảm giá Voucher công khai
+                        if(response.giamVoucher > 0) {
+                            document.getElementById('giamGiaRow').style.display = 'flex';
+                            document.getElementById('giamGiaText').textContent = '-' + response.giamVoucher.toLocaleString('vi-VN') + '₫';
+                        } else {
+                            document.getElementById('giamGiaRow').style.display = 'none';
+                        }
 
-                        
+                        // Cập nhật giá trị hiển thị và input ẩn để gửi lên Server dữ liệu sạch
                         document.getElementById('thanhTienDisplay').textContent = response.thanhTienMoi.toLocaleString('vi-VN') + '₫';
-
-                        
                         document.getElementById('hiddenThanhTien').value = response.thanhTienMoi;
 
                         showVoucherMessage(response.message, "success");
@@ -188,30 +202,38 @@
 
         function showVoucherMessage(text, type) {
             const msgElement = document.getElementById('voucherMsg');
-            msgElement.innerHTML = `<span class="text-${type}">${text}</span>`;
+            msgElement.innerHTML = `<span class="text-${type} fw-semibold">${text}</span>`;
         }
 
         function resetVoucherDisplay() {
             document.getElementById('giamGiaRow').style.display = 'none';
-            document.getElementById('thanhTienDisplay').textContent = '@tongTamTinh.ToString("#,##0")₫';
-            document.getElementById('hiddenThanhTien').value = '@tongTamTinh';
+            document.getElementById('thanhTienDisplay').textContent = '@tongPhaiTraDauKy.ToString("#,##0")₫';
+            document.getElementById('hiddenThanhTien').value = '@tongPhaiTraDauKy';
         }
     </script>
 }
 
 <style>
-    
+    .custom-radio-wrapper {
+        transition: background-color 0.2s, border-color 0.2s;
+        cursor: pointer;
+    }
+
+        .custom-radio-wrapper:hover {
+            background-color: #f8f9fa;
+            border-color: #6e8efb !important;
+        }
+
+    .style-label {
+        cursor: pointer;
+    }
+
     .payment_item input[type="radio"] {
         width: 18px;
         height: 18px;
         cursor: pointer;
     }
 
-    .payment_item label {
-        cursor: pointer;
-        font-weight: 500;
-    }
-    
     .checkout-container {
         max-width: 1100px;
         margin: 40px auto;
@@ -239,25 +261,25 @@
     }
 
         .product-item img {
-            width: 70px;
-            height: 70px;
+            width: 60px;
+            height: 60px;
             object-fit: cover;
-            border-radius: 10px;
+            border-radius: 8px;
             margin-right: 15px;
         }
 
     .total-price {
-        font-size: 26px;
+        font-size: 24px;
         color: #e74c3c;
         font-weight: 700;
     }
 
     .btn-checkout {
         width: 100%;
-        padding: 16px;
-        font-size: 18px;
+        padding: 14px;
+        font-size: 16px;
         font-weight: 600;
-        border-radius: 14px;
+        border-radius: 10px;
         background: linear-gradient(135deg, #28a745, #218838);
         border: none;
         margin-top: 25px;

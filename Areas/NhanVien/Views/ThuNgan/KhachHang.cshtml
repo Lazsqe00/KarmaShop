@@ -3,11 +3,45 @@
     Layout = "_ThuNganLayout";
 }
 
-<div class="d-flex align-items-center mb-4">
-    <div class="bg-gradient-primary-custom text-white d-flex align-items-center justify-content-center rounded-3 me-3" style="width: 45px; height: 45px; shadow: 0 4px 10px rgba(0,0,0,0.15)">
-        <i class="mdi mdi-account-group fs-4"></i>
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div class="d-flex align-items-center">
+        <div class="bg-gradient-primary-custom text-white d-flex align-items-center justify-content-center rounded-3 me-3" style="width: 45px; height: 45px; box-shadow: 0 4px 10px rgba(0,0,0,0.15)">
+            <i class="mdi mdi-account-group fs-4"></i>
+        </div>
+        <h3 class="fw-bold mb-0 text-dark">Quản lý Khách hàng</h3>
     </div>
-    <h3 class="fw-bold mb-0 text-dark">Quản lý Khách hàng</h3>
+    <button class="btn btn-primary fw-bold px-3 py-2" data-bs-toggle="modal" data-bs-target="#modalThemKhachHang" style="border-radius: 8px;">
+        <i class="mdi mdi-account-plus me-1"></i> Thêm khách hàng
+    </button>
+</div>
+
+<div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
+    <div class="card-body p-3">
+        <form method="get" action="@Url.Action("KhachHang")" class="row g-2 align-items-center">
+            <div class="col-md-5">
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-0"><i class="mdi mdi-magnify text-muted"></i></span>
+                    <input type="text" name="search" value="@ViewBag.CurrentSearch" class="form-control bg-light border-0" placeholder="Tìm kiếm">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <select name="hang" class="form-select bg-light border-0">
+                    <option value="">-- Tất cả hạng thành viên --</option>
+                    <option value="Thành Viên" selected="@(ViewBag.CurrentHang == "Thành Viên")">Hạng Thành Viên</option>
+                    <option value="Bạc" selected="@(ViewBag.CurrentHang == "Bạc")">Hạng Bạc </option>
+                    <option value="Vàng" selected="@(ViewBag.CurrentHang == "Vàng")">Hạng Vàng</option>
+                    <option value="Bạch Kim" selected="@(ViewBag.CurrentHang == "Bạch Kim")">Hạng Bạch Kim</option>
+                    <option value="Kim Cương" selected="@(ViewBag.CurrentHang == "Kim Cương")">Hạng Kim Cương</option>
+                </select>
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+                <button type="submit" class="btn btn-primary w-100 fw-bold">
+                    <i class="mdi mdi-filter-variant me-1"></i> Lọc
+                </button>
+                <a href="@Url.Action("KhachHang")" class="btn btn-light w-50 text-secondary">Xóa</a>
+            </div>
+        </form>
+    </div>
 </div>
 
 <div class="card border-0 shadow-sm" style="border-radius: 15px;">
@@ -19,6 +53,7 @@
                         <th class="ps-3">Mã KH</th>
                         <th>Họ và tên</th>
                         <th>Số điện thoại</th>
+                        <th>Hạng Thành Viên</th>
                         <th>Email</th>
                         <th class="text-end pe-3">Thao tác</th>
                     </tr>
@@ -26,6 +61,13 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
+                        decimal soTienTichLuy = item.TongChi ?? 0;
+                        string hangHienTai = "Thành Viên";
+                        if (soTienTichLuy >= 8000000) hangHienTai = "Kim Cương";
+                        else if (soTienTichLuy >= 5000000) hangHienTai = "Bạch Kim";
+                        else if (soTienTichLuy >= 3000000) hangHienTai = "Vàng";
+                        else if (soTienTichLuy >= 500000) hangHienTai = "Bạc";
+
                         <tr>
                             <td class="ps-3 fw-bold text-primary">@($"KH{item.MaKhachHang:D2}")</td>
                             <td>
@@ -37,10 +79,35 @@
                                 </div>
                             </td>
                             <td><i class="mdi mdi-phone-outline me-1 text-muted"></i>@item.SoDienThoai</td>
+                            <td>
+                                @if (hangHienTai == "Kim Cương")
+                                {
+                                    <span class="badge bg-danger text-white fw-bold"><i class="mdi mdi-diamond me-1"></i>Kim Cương</span>
+                                }
+                                else if (hangHienTai == "Bạch Kim")
+                                {
+
+                                    <span class="badge bg-info text-dark fw-bold"><i class="mdi mdi-medal me-1"></i>Bạch Kim</span>
+                                }
+                                else if (hangHienTai == "Vàng")
+                                {
+
+                                    <span class="badge bg-warning text-dark fw-bold"><i class="mdi mdi-crown me-1"></i>Vàng</span>
+                                }
+                                else if (hangHienTai == "Bạc")
+                                {
+
+                                    <span class="badge bg-secondary text-white fw-bold"><i class="mdi mdi-award me-1"></i>Bạc</span>
+                                }
+                                else
+                                {
+
+                                    <span class="badge bg-light text-secondary fw-bold">Thành Viên</span>
+                                }
+                            </td>
                             <td class="text-muted">@item.Email</td>
                             <td class="text-end pe-3">
-                                <a href="@Url.Action("ChiTietKhachHang", "ThuNgan", new { area = "NhanVien", id = item.MaKhachHang })"
-                                   class="btn btn-sm btn-gradient-primary-custom px-3 fw-bold" style="border-radius: 5px; font-size: 0.8rem;">
+                                <a href="@Url.Action("ChiTietKhachHang", "ThuNgan", new { area = "NhanVien", id = item.MaKhachHang })" class="btn btn-sm btn-gradient-primary-custom px-3 fw-bold" style="border-radius: 5px; font-size: 0.8rem;">
                                     <i class="mdi mdi-eye-outline me-1"></i> Hồ sơ
                                 </a>
                             </td>
@@ -48,6 +115,46 @@
                     }
                 </tbody>
             </table>
+
+            @if (ViewBag.TotalPages > 1)
+            {
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                            <a class="page-link" href="@Url.Action("KhachHang", new { page = ViewBag.CurrentPage - 1, search = ViewBag.CurrentSearch, hang = ViewBag.CurrentHang })">«</a>
+                        </li>
+                        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("KhachHang", new { page = i, search = ViewBag.CurrentSearch, hang = ViewBag.CurrentHang })">@i</a>
+                            </li>
+                        }
+                        <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                            <a class="page-link" href="@Url.Action("KhachHang", new { page = ViewBag.CurrentPage + 1, search = ViewBag.CurrentSearch, hang = ViewBag.CurrentHang })">»</a>
+                        </li>
+                    </ul>
+                </nav>
+            }
         </div>
     </div>
 </div>
+
+@section styles {
+    <style>
+        .bg-gradient-primary-custom {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+        }
+
+        .btn-gradient-primary-custom {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            border: none;
+            color: white;
+        }
+
+            .btn-gradient-primary-custom:hover {
+                opacity: 0.9;
+                color: white;
+                transform: translateY(-1px);
+            }
+    </style>
+}

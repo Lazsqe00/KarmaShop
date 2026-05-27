@@ -1,40 +1,76 @@
 ﻿@model IEnumerable<KarmaShop.Models.SanPham>
 @{
     Layout = "_ThuNganLayout";
+    int currentPage = ViewBag.CurrentPage ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 1;
 }
 
-
 <div class="d-flex align-items-center mb-4">
-    <div class="bg-gradient-primary-custom text-white d-flex align-items-center justify-content-center rounded-3 me-3" style="width: 40px; height: 40px; shadow: 0 4px 10px rgba(0,0,0,0.15)">
+    <div class="bg-gradient-primary-custom text-white d-flex align-items-center justify-content-center rounded-3 me-3" style="width: 40px; height: 40px; box-shadow: 0 4px 10px rgba(0,0,0,0.15)">
         <i class="mdi mdi-magnify fs-4"></i>
     </div>
-    <h3 class="fw-bold mb-0 text-dark" style="font-size: 1.5rem;">Tra cứu thông tin sản phẩm</h3>
+    <h3 class="fw-bold mb-0 text-dark" style="font-size: 1.5rem;">Tra cứu thông tin sản phẩm nâng cao</h3>
 </div>
-
 
 <div class="card border-0 shadow-sm mb-4" style="border-radius: 10px;">
     <div class="card-body p-4">
-        <form method="get" class="row g-2 align-items-center">
-            <div class="col-md-10">
+        <form method="get" action="@Url.Action("Index")" class="row g-3 align-items-center">
+
+            <div class="col-lg-4 col-md-6">
+                <label class="form-label small text-muted fw-bold mb-1">Từ khóa / Mã SP</label>
                 <div class="input-group">
                     <span class="input-group-text bg-light border-0"><i class="mdi mdi-magnify text-muted"></i></span>
-                    <input type="text" name="keyword" class="form-control border-0 bg-light py-2" style="font-size: 0.9rem;" placeholder="Tìm tên hoặc mã giày..." value="@Context.Request.Query["keyword"]">
+                    <input type="text" name="keyword" class="form-control border-0 bg-light py-2" style="font-size: 0.9rem;" placeholder="Tìm tên hoặc mã giày..." value="@ViewBag.Keyword">
                 </div>
             </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-gradient-primary-custom w-100 py-2 fw-semibold" style="font-size: 0.9rem; border-radius: 6px;">Tìm kiếm</button>
+
+            <div class="col-lg-2 col-md-6">
+                <label class="form-label small text-muted fw-bold mb-1">Phân loại</label>
+                <select name="maLoai" class="form-select border-0 bg-light py-2" style="font-size: 0.9rem;">
+                    <option value="">-- Tất cả loại --</option>
+                    @foreach (var loai in ViewBag.Loais)
+                    {
+                        <!option value="@loai.MaLoai" @(ViewBag.CurrentMaLoai == loai.MaLoai ? "selected" : "")>@loai.TenLoai</!option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-lg-2 col-md-6">
+                <label class="form-label small text-muted fw-bold mb-1">Màu sắc</label>
+                <select name="maMau" class="form-select border-0 bg-light py-2" style="font-size: 0.9rem;">
+                    <option value="">-- Tất cả màu --</option>
+                    @foreach (var mau in ViewBag.Maus)
+                    {
+                        <!option value="@mau.MaMau" @(ViewBag.CurrentMaMau == mau.MaMau ? "selected" : "")>@mau.TenMau</!option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-lg-2 col-md-6">
+                <label class="form-label small text-muted fw-bold mb-1">Kích cỡ (Size)</label>
+                <select name="sizeName" class="form-select border-0 bg-light py-2" style="font-size: 0.9rem;">
+                    <option value="">-- Tất cả size --</option>
+                    @foreach (var size in ViewBag.Sizes)
+                    {
+                        <!option value="@size" @(ViewBag.CurrentSizeName == size ? "selected" : "")>@size</!option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-lg-2 col-md-12 d-flex gap-2 align-self-end">
+                <button type="submit" class="btn btn-gradient-primary-custom w-100 py-2 fw-semibold" style="font-size: 0.9rem; border-radius: 6px; background: linear-gradient(to right, #4e73df, #224abe); color:#fff;">Lọc</button>
+                <a href="@Url.Action("Index")" class="btn btn-light py-2 px-3 border" style="font-size: 0.9rem; border-radius: 6px;" title="Xóa bộ lọc"><i class="mdi mdi-refresh"></i></a>
             </div>
         </form>
     </div>
 </div>
-
 
 @if (Model == null || !Model.Any())
 {
     <div class="card border-0 shadow-sm text-center py-5">
         <div class="card-body">
             <i class="mdi mdi-package-variant-closed text-muted mb-3" style="font-size: 4rem; display:block;"></i>
-            <p class="text-muted mb-0">Không tìm thấy sản phẩm nào trong hệ thống.</p>
+            <p class="text-muted mb-0">Không tìm thấy sản phẩm nào phù hợp với bộ lọc.</p>
         </div>
     </div>
 }
@@ -45,17 +81,19 @@ else
         {
             <div class="col">
                 <div class="card h-100 border-0 shadow-sm p-3 transition-card" style="border-radius: 10px; background: #fff;">
-
-                    <!-- Khung ảnh nền nhạt -->
                     <div class="rounded p-4 mb-3 text-center position-relative" style="background-color: #f8f9fa;">
                         <span class="badge bg-dark position-absolute top-0 start-0 m-2 font-weight-normal" style="font-size: 0.75rem;">@($"SP{item.MaSanPham:D2}")</span>
-                        <img src="/images/@item.AnhDaiDien" style="height: 120px; width:100%; object-fit: contain;" onerror="this.src='/images/default-shoe.png'">
+                        <img src="/img/@item.MaDongSanPham/Avatar/@item.AnhDaiDien" style="height: 120px; width:100%; object-fit: contain;" onerror="this.src='/images/default-shoe.png'">
                     </div>
 
-                    <!-- Thông tin chi tiết -->
-                    <h6 class="fw-bold text-dark mb-2 text-truncate" title="@item.TenSanPham" style="font-size: 0.95rem;">@item.TenSanPham</h6>
+                    <h6 class="fw-bold text-dark mb-1 text-truncate" title="@item.TenSanPham" style="font-size: 0.95rem;">@item.TenSanPham</h6>
 
-                    <div class="d-flex justify-content-between align-items-center mt-auto pt-2">
+                    <div class="mb-2 d-flex gap-2">
+                        <small class="badge bg-light text-secondary border">Màu: @(item.MaMauNavigation?.TenMau ?? "N/A")</small>
+                        <small class="badge bg-light text-secondary border">Size: @(item.SanPhamSizes != null ? string.Join(", ", item.SanPhamSizes.Select(z => z.MaSizeNavigation?.TenSize).Where(n => n != null)) : "Hết")</small>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top">
                         <span class="text-danger fw-bold" style="font-size: 1.05rem;">
                             @string.Format("{0:N0}₫", item.MaDongSanPhamNavigation?.GiaBan ?? 0)
                         </span>
@@ -65,14 +103,41 @@ else
             </div>
         }
     </div>
+
+    @if (totalPages > 1)
+    {
+        <nav class="d-flex justify-content-center mt-5">
+            <ul class="pagination pagination-sm gap-1">
+                <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                    <a class="page-link border-0 shadow-sm rounded" href="@Url.Action("Index", new { page = currentPage - 1, keyword = ViewBag.Keyword, maLoai = ViewBag.CurrentMaLoai, maMau = ViewBag.CurrentMaMau, sizeName = ViewBag.CurrentSizeName })">
+                        <i class="mdi mdi-chevron-left"></i>
+                    </a>
+                </li>
+
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    <li class="page-item @(currentPage == i ? "active" : "")">
+                        <a class="page-link border-0 shadow-sm rounded px-3 @(currentPage == i ? "bg-primary text-white" : "text-dark bg-white")"
+                           href="@Url.Action("Index", new { page = i, keyword = ViewBag.Keyword, maLoai = ViewBag.CurrentMaLoai, maMau = ViewBag.CurrentMaMau, sizeName = ViewBag.CurrentSizeName })">
+                            @i
+                        </a>
+                    </li>
+                }
+
+                <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                    <a class="page-link border-0 shadow-sm rounded" href="@Url.Action("Index", new { page = currentPage + 1, keyword = ViewBag.Keyword, maLoai = ViewBag.CurrentMaLoai, maMau = ViewBag.CurrentMaMau, sizeName = ViewBag.CurrentSizeName })">
+                        <i class="mdi mdi-chevron-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    }
 }
 
-<!-- Modal Chi tiết -->
-<div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="productDetailModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0" style="border-radius: 12px; overflow: hidden;">
             <div id="modalBodyContent">
-                <!-- Ajax nội dung trả về -->
             </div>
         </div>
     </div>
@@ -84,7 +149,7 @@ else
             console.log("Đang gọi chi tiết cho ID: " + id);
             $.get('/NhanVien/ThuNgan/ChiTietSanPham/' + id, function (data) {
                 $('#modalBodyContent').html(data);
-                $('#productModal').modal('show');
+                $('#productDetailModal').modal('show');
             }).fail(function (xhr) {
                 console.error(xhr.responseText);
                 alert("Lỗi: Không tìm thấy hệ thống chi tiết hoặc dữ liệu!");

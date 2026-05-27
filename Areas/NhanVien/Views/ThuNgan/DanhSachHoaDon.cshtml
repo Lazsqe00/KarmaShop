@@ -13,9 +13,7 @@
             <small class="text-muted fw-bold">QUẢN LÝ GIAO DỊCH HỆ THỐNG</small>
         </div>
     </div>
-    <button class="btn btn-outline-primary btn-sm py-2 px-3 shadow-sm fw-bold" onclick="window.print()">
-        <i class="mdi mdi-printer me-1"></i> In biểu mẫu
-    </button>
+    
 </div>
 
 <div class="row g-3 mb-4">
@@ -76,12 +74,9 @@
                     <tr class="text-dark">
                         <th class="text-center" style="width: 5%;">STT</th>
                         <th class="text-center" style="width: 10%;">Mã hoá đơn</th>
-
                         <th style="width: 15%;">Thời gian lập</th>
                         <th class="text-center" style="width: 12%;">Mã khách hàng</th>
-
                         <th style="width: 23%;">Họ tên khách hàng</th>
-
                         <th class="text-end" style="width: 12%;">Tổng hoá đơn</th>
                         <th class="text-center" style="width: 13%;">Phương thức</th>
                         <th class="text-center" style="width: 10%;">Trạng thái</th>
@@ -93,6 +88,13 @@
                     }
                     @foreach (var item in Model)
                     {
+                        // Xử lý tính toán lại số tiền hiển thị nếu TongTien lưu trong DB bị trống hoặc bằng 0
+                        decimal hienThiTongTien = item.TongTien ?? 0;
+                        if (hienThiTongTien == 0 && item.ChiTietPhieuMuas != null)
+                        {
+                            hienThiTongTien = (decimal)item.ChiTietPhieuMuas.Sum(ct => (ct.SoLuong ?? 0) * (ct.DonGia ?? 0));
+                        }
+
                         <tr>
                             <td class="text-center text-muted fw-bold">@i</td>
                             <td class="text-center fw-bold text-primary">@($"HD{item.MaPhieuMua:D2}")</td>
@@ -108,9 +110,11 @@
                             <td class="fw-semibold text-dark text-truncate" style="max-width: 180px;">
                                 @item.MaKhachHangNavigation?.TenKhachHang
                             </td>
+
                             <td class="text-end fw-bold text-danger">
-                                @string.Format("{0:N0}₫", item.TongTien ?? 0)
+                                @string.Format("{0:N0}₫", hienThiTongTien)
                             </td>
+
                             <td class="text-center">
                                 <small class="fw-bold text-secondary text-truncate d-block">
                                     <i class="mdi mdi-wallet-outline me-1"></i>@item.MaPtttNavigation?.TenPttt
@@ -141,9 +145,8 @@
 
 @section styles {
     <style>
-        
         .custom-table {
-            table-layout: fixed; 
+            table-layout: fixed;
             width: 100%;
         }
 
@@ -167,7 +170,6 @@
                 border-bottom: 1px solid #f2f2f2;
             }
 
-        
         .status-success {
             background-color: #e8fadf;
             color: #71dd37;
@@ -189,7 +191,6 @@
             width: 110px;
         }
 
-        
         .card-hover-effect {
             transition: all 0.3s ease;
         }
@@ -199,7 +200,6 @@
                 box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
             }
 
-       
         @@media print {
             .sidebar-wrapper, .navbar-custom, .bg-gradient-primary-custom, .btn, .nav-section-title, .card-header {
                 display: none !important;

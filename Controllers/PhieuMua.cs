@@ -34,9 +34,27 @@ namespace KarmaShop.Controllers
 
             decimal total = cart.Sum(item => (item.DonGia ?? 0) * (item.SoLuong ?? 0));
 
+            
+            decimal tongChi = kh?.TongChi ?? 0;
+            string hangThanhVien = "Thành Viên";
+            decimal phanTramGiamHang = 0;
+
+            if (tongChi >= 8000000) { hangThanhVien = "Kim Cương"; phanTramGiamHang = 0.12m; }
+            else if (tongChi >= 5000000) { hangThanhVien = "Bạch Kim"; phanTramGiamHang = 0.10m; }
+            else if (tongChi >= 3000000) { hangThanhVien = "Vàng"; phanTramGiamHang = 0.05m; }
+            else if (tongChi >= 500000) { hangThanhVien = "Bạc"; phanTramGiamHang = 0m; }
+
+            
+            decimal giamGiaHang = 0;
+            if (hangThanhVien == "Vàng" && total >= 350000) giamGiaHang = total * phanTramGiamHang;
+            else if (hangThanhVien == "Bạch Kim" && total >= 550000) giamGiaHang = total * phanTramGiamHang;
+            else if (hangThanhVien == "Kim Cương" && total >= 800000) giamGiaHang = total * phanTramGiamHang;
+
             ViewBag.Cart = cart;
             ViewBag.TongTien = total;
             ViewBag.KhachHang = kh;
+            ViewBag.HangThanhVien = hangThanhVien;
+            ViewBag.GiamGiaHang = giamGiaHang;
             ViewBag.PhuongThucTT = _orderRepo.GetPhuongThucThanhToans();
             ViewBag.DanhSachVoucher = _voucherRepo.GetActiveVouchers();
 
@@ -47,37 +65,45 @@ namespace KarmaShop.Controllers
                 DiaChiGiaoHang = kh?.DiaChi,
                 EmailNguoiNhan = kh?.Email,
                 MaKhachHang = kh?.MaKhachHang,
-                TongTien = total
+                TongTien = total - giamGiaHang // Tạm tính sau khi trừ chiết khấu hạng thành viên
             };
 
             return View(phieuMua);
         }
 
         [HttpPost]
-        public JsonResult KiemTraVoucher(string maVoucher, decimal tongTamTinh)
+        public JsonResult TinhToanGiamGia(string maVoucher, decimal tongTamTinh, decimal giamGiaHang)
         {
-            var voucher = _voucherRepo.GetVoucherByCode(maVoucher);
+            decimal giamGiaVoucher = 0;
+            string msg = "Không áp dụng voucher.";
+            bool status = true;
 
-            if (voucher == null)
+            if (!string.IsNullOrEmpty(maVoucher))
             {
-                return Json(new { success = false, message = "Voucher không tồn tại hoặc hết hạn" });
+                var voucher = _voucherRepo.GetVoucherByCode(maVoucher);
+                if (voucher == null)
+                {
+                    return Json(new { success = false, message = "Voucher không tồn tại hoặc hết hạn!" });
+                }
+                giamGiaVoucher = (voucher.GiamToiDa ?? 0);
+                msg = $"Áp dụng thành công! Giảm {giamGiaVoucher:#,##0}₫ từ Voucher.";
             }
 
-            decimal giamGia = (voucher.GiamToiDa ?? 0);
-            decimal thanhTienMoi = Math.Max(0, tongTamTinh - giamGia);
+            decimal tongThanhToanMoi = Math.Max(0, tongTamTinh - giamGiaHang - giamGiaVoucher);
 
             return Json(new
             {
-                success = true,
-                giamGia = giamGia,
-                thanhTienMoi = thanhTienMoi,
-                message = $"Áp dụng thành công! Giảm {giamGia:#,##0}₫"
+                success = status,
+                giamHang = giamGiaHang,
+                giamVoucher = giamGiaVoucher,
+                thanhTienMoi = tongThanhToanMoi,
+                message = msg
             });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult ThanhToan(PhieuMua model) 
+        public IActionResult ThanhToan(PhieuMua model)
         {
             var cart = _cartRepo.GetCartItems();
             if (!cart.Any()) return RedirectToAction("Index", "Home");
@@ -114,7 +140,6 @@ namespace KarmaShop.Controllers
 
         public IActionResult XacNhan(int id)
         {
-            
             var donHang = _orderRepo.GetOrder(id);
             return View(donHang);
         }
