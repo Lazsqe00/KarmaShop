@@ -13,7 +13,41 @@
             <small class="text-muted fw-bold">QUẢN LÝ GIAO DỊCH HỆ THỐNG</small>
         </div>
     </div>
-    
+</div>
+
+<div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
+    <div class="card-body p-3">
+        <form method="get" action="@Url.Action("DanhSachHoaDon")" class="row g-2 align-items-center">
+            <div class="col-md-4">
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0"><i class="mdi mdi-magnify text-muted"></i></span>
+                    <input type="text" name="search" value="@Context.Request.Query["search"]" class="form-control bg-light border-start-0 ps-0" placeholder="Nhập mã hóa đơn hoặc tên khách hàng...">
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <select name="status" class="form-select bg-light">
+                    <option value="">-- Tất cả trạng thái --</option>
+                    <!option value="Đã thanh toán" @(Context.Request.Query["status"] == "Đã thanh toán" ? "selected" : "")>Đã thanh toán</!option>
+                    <!option value="Chờ thanh toán" @(Context.Request.Query["status"] == "Chờ thanh toán" ? "selected" : "")>Chờ thanh toán</!option>
+                    <!option value="Đã hủy" @(Context.Request.Query["status"] == "Đã hủy" ? "selected" : "")>Đã hủy</!option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <input type="date" name="date" value="@Context.Request.Query["date"]" class="form-control bg-light">
+            </div>
+
+            <div class="col-md-2 d-flex gap-2">
+                <button type="submit" class="btn btn-primary w-100 fw-bold text-white" style="background: linear-gradient(to right, #da8cff, #9a55ff); border: none;">
+                    Lọc
+                </button>
+                <a href="@Url.Action("DanhSachHoaDon")" class="btn btn-light border w-100 fw-bold text-secondary text-center d-flex align-items-center justify-content-center" style="text-decoration: none;">
+                    Xóa
+                </a>
+            </div>
+        </form>
+    </div>
 </div>
 
 <div class="row g-3 mb-4">
@@ -88,7 +122,6 @@
                     }
                     @foreach (var item in Model)
                     {
-                        // Xử lý tính toán lại số tiền hiển thị nếu TongTien lưu trong DB bị trống hoặc bằng 0
                         decimal hienThiTongTien = item.TongTien ?? 0;
                         if (hienThiTongTien == 0 && item.ChiTietPhieuMuas != null)
                         {

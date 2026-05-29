@@ -257,17 +257,41 @@ public class ThuNganController : Controller
 
     public async Task<IActionResult> DanhSachHoaDon(string search, string status, DateOnly? date)
     {
+       
+        var baseQuery = _context.PhieuMuas.AsQueryable();
+
+        ViewBag.Tong = await baseQuery.CountAsync();
+        ViewBag.DaTT = await baseQuery.CountAsync(x => x.TinhTrang == "Đã thanh toán");
+        ViewBag.ChoTT = await baseQuery.CountAsync(x => x.TinhTrang == "Chờ thanh toán");
+        ViewBag.DaHuy = await baseQuery.CountAsync(x => x.TinhTrang == "Đã hủy");
+
+       
         var query = _context.PhieuMuas
             .Include(p => p.MaKhachHangNavigation)
             .Include(p => p.MaPtttNavigation)
             .Include(p => p.ChiTietPhieuMuas)
             .AsQueryable();
 
+        
         if (!string.IsNullOrEmpty(search))
         {
-            query = query.Where(p => p.MaPhieuMua.ToString() == search ||
-                                     p.MaKhachHangNavigation.TenKhachHang.Contains(search));
+            search = search.Trim();
+
+            
+            if (search.StartsWith("HD", StringComparison.OrdinalIgnoreCase) && int.TryParse(search.Substring(2), out int maPhieu))
+            {
+                query = query.Where(p => p.MaPhieuMua == maPhieu);
+            }
+            else if (int.TryParse(search, out int maGoc)) 
+            {
+                query = query.Where(p => p.MaPhieuMua == maGoc);
+            }
+            else 
+            {
+                query = query.Where(p => p.MaKhachHangNavigation.TenKhachHang.Contains(search));
+            }
         }
+
         if (!string.IsNullOrEmpty(status)) query = query.Where(p => p.TinhTrang == status);
         if (date.HasValue) query = query.Where(p => p.NgayDat == date);
 
@@ -280,11 +304,6 @@ public class ThuNganController : Controller
                 item.TongTien = item.ChiTietPhieuMuas.Sum(ct => (ct.SoLuong ?? 0) * (ct.DonGia ?? 0));
             }
         }
-
-        ViewBag.Tong = list.Count;
-        ViewBag.DaTT = list.Count(x => x.TinhTrang == "Đã thanh toán");
-        ViewBag.ChoTT = list.Count(x => x.TinhTrang == "Chờ thanh toán");
-        ViewBag.DaHuy = list.Count(x => x.TinhTrang == "Đã hủy");
 
         return View(list);
     }
