@@ -1,6 +1,17 @@
 ﻿@model KarmaShop.Models.KhachHang
 @{
     Layout = "_ThuNganLayout";
+
+    // Phân loại hạng dựa theo mốc tiền tích lũy mới
+    decimal soTienTichLuy = Model.TongChi ?? 0;
+    string hangHienTai = "Thành Viên";
+    string mauBadge = "bg-light text-secondary";
+    string iconHang = "mdi-account-card-details";
+
+    if (soTienTichLuy >= 8000000) { hangHienTai = "Kim Cương"; mauBadge = "bg-danger text-white"; iconHang = "mdi-diamond"; }
+    else if (soTienTichLuy >= 5000000) { hangHienTai = "Bạch Kim"; mauBadge = "bg-info text-dark"; iconHang = "mdi-medal"; }
+    else if (soTienTichLuy >= 3000000) { hangHienTai = "Vàng"; mauBadge = "bg-warning text-dark"; iconHang = "mdi-crown"; }
+    else if (soTienTichLuy >= 500000) { hangHienTai = "Bạc"; mauBadge = "bg-secondary text-white"; iconHang = "mdi-award"; }
 }
 
 <div class="d-flex align-items-center mb-4">
@@ -12,15 +23,19 @@
 
 <div class="row g-4">
     <div class="col-lg-4">
-        <div class="card border-0 shadow-sm" style="border-radius: 15px;">
+        <div class="card border-0 shadow-sm mb-4" style="border-radius: 15px;">
             <div class="card-body p-4 text-center">
                 <div class="mx-auto mb-3 position-relative" style="width: 100px;">
                     <div class="bg-gradient-primary-custom rounded-circle d-flex align-items-center justify-content-center mx-auto shadow" style="width: 100px; height: 100px;">
                         <i class="mdi mdi-account fs-1 text-white"></i>
                     </div>
                 </div>
-                <h4 class="fw-bold text-dark mb-1">@Model.TenKhachHang</h4>
-                <p class="badge bg-soft-primary text-primary px-3 py-2 mb-4">Khách hàng thân thiết</p>
+                <h4 class="fw-bold text-dark mb-2">@Model.TenKhachHang</h4>
+
+                <p class="badge @mauBadge px-3 py-2 fs-6 mb-2 fw-bold">
+                    <i class="mdi @iconHang me-1"></i>Hạng @hangHienTai
+                </p>
+                <small class="text-muted d-block mb-4">Tích lũy chi tiêu: <strong class="text-success">@string.Format("{0:N0}₫", soTienTichLuy)</strong></small>
 
                 <div class="text-start border-top pt-4">
                     <div class="d-flex align-items-center mb-3">
@@ -52,6 +67,39 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm" style="border-radius: 15px;">
+            <div class="card-body p-4">
+                <h5 class="fw-bold text-dark mb-3"><i class="mdi mdi-gift-outline me-2 text-primary"></i>Ưu đãi hạng @hangHienTai</h5>
+                <ul class="ps-3 mb-0 text-secondary small" style="line-height: 1.8;">
+                    @if (hangHienTai == "Thành Viên")
+                    {
+                        <li><i class="mdi mdi-check-circle-outline text-success me-1"></i>Voucher miễn phí vận chuyển.</li>
+                    }
+                    else if (hangHienTai == "Bạc")
+                    {
+                        <li><i class="mdi mdi-check-circle-outline text-success me-1"></i>Hưởng đầy đủ ưu đãi hạng Thành Viên.</li>
+                        <li><i class="mdi mdi-check-circle-outline text-success me-1"></i>Mã giảm giá độc quyền dịp lễ lớn.</li>
+                    }
+                    else if (hangHienTai == "Vàng")
+                    {
+                        <li><i class="mdi mdi-check-circle-outline text-success me-1"></i>Hưởng đầy đủ ưu đãi hạng Bạc.</li>
+                        <li><i class="mdi mdi-check-circle-outline text-success me-1"></i><strong>Giảm trực tiếp 5%</strong> đối với đơn từ 350.000đ.</li>
+                    }
+                    else if (hangHienTai == "Bạch Kim")
+                    {
+                        <li><i class="mdi mdi-check-circle-outline text-success me-1"></i>Hưởng đầy đủ ưu đãi hạng Vàng.</li>
+                        <li><i class="mdi mdi-check-circle-outline text-success me-1"></i><strong>Giảm trực tiếp 10%</strong> đối với đơn từ 550.000đ.</li>
+                    }
+                    else if (hangHienTai == "Kim Cương")
+                    {
+                        <li><i class="mdi mdi-check-circle-outline text-success me-1"></i>Hưởng đầy đủ ưu đãi hạng Bạch Kim.</li>
+                        <li><i class="mdi mdi-check-circle-outline text-success me-1"></i><strong>Giảm trực tiếp 12%</strong> đối với đơn từ 800.000đ.</li>
+                        <li><i class="mdi mdi-check-circle-outline text-success me-1"></i>Voucher giảm giá 20% giá trị sản phẩm trong dịp sinh nhật.</li>
+                    }
+                </ul>
             </div>
         </div>
     </div>

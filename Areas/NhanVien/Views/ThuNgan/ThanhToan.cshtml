@@ -3,14 +3,12 @@
     Layout = "_ThuNganLayout";
 }
 
-
 <div class="d-flex align-items-center mb-4">
     <div class="bg-gradient-primary-custom text-white d-flex align-items-center justify-content-center rounded-3 me-3" style="width: 40px; height: 40px; box-shadow: 0 4px 10px rgba(0,0,0,0.15)">
         <i class="mdi mdi-credit-card fs-4"></i>
     </div>
     <h3 class="fw-bold mb-0 text-dark" style="font-size: 1.5rem;">Thanh toán & Cập nhật</h3>
 </div>
-
 
 @if (ViewBag.DonChoDuyet > 0)
 {
@@ -20,8 +18,7 @@
     </div>
 }
 
-
-<div class="card border-0 shadow-sm" style="border-radius: 10px; background: #fff;">
+<div class="card border-0 shadow-sm mb-4" style="border-radius: 10px; background: #fff;">
     <div class="card-body p-4">
         <h5 class="card-title fw-bold text-dark mb-4" style="font-size: 1.1rem;">Hóa đơn chờ thanh toán</h5>
 
@@ -31,7 +28,8 @@
                     <tr>
                         <th class="ps-3">Mã HD</th>
                         <th>Khách hàng</th>
-                        <th>Tổng tiền</th>
+                        <th>Hình thức</th>
+                        <th>Tổng tiền hàng</th>
                         <th>Ngày đặt</th>
                         <th class="text-end pe-3">Thao tác</th>
                     </tr>
@@ -39,11 +37,35 @@
                 <tbody style="font-size: 0.9rem; color: #4a5568;">
                     @if (Model != null && Model.Any())
                     {
-                        @foreach (var item in Model)
+                        foreach (var item in Model)
                         {
+                            var jsonData = Json.Serialize(new
+                            {
+                                maHD = item.MaPhieuMua,
+                                ngay = item.NgayDat?.ToString("dd/MM/yyyy"),
+                                tenKH = item.MaKhachHangNavigation?.TenKhachHang ?? "Khách vãng lai",
+                                sdt = item.MaKhachHangNavigation?.SoDienThoai ?? "Chưa có",
+                                diachi = item.MaKhachHangNavigation?.DiaChi ?? "Chưa có",
+                                tongChi = item.MaKhachHangNavigation?.TongChi ?? 0,
+                                pttt = item.MaPtttNavigation?.TenPttt ?? "Tiền mặt",
+                                chiTiet = item.ChiTietPhieuMuas.Select(ct => new
+                                {
+                                    tenSP = ct.MaSanPhamNavigation?.TenSanPham,
+                                    dongSP = ct.MaSanPhamNavigation?.MaDongSanPhamNavigation?.TenDongSanPham ?? "Chưa rõ",
+                                    loai = ct.MaSanPhamNavigation?.MaDongSanPhamNavigation?.MaLoaiNavigation?.TenLoai ?? "Chưa rõ",
+                                    mauSac = ct.MaSanPhamNavigation?.MaMauNavigation?.TenMau ?? "Chưa rõ",
+                                    size = ct.MaSizeNavigation?.TenSize ?? (ct.MaSize != null ? ct.MaSize.ToString() : "Chưa rõ"),
+                                    gia = ct.DonGia ?? ct.MaSanPhamNavigation?.MaDongSanPhamNavigation?.GiaBan ?? 0,
+                                    sl = ct.SoLuong ?? 0,
+                                    maDongSP = ct.MaSanPhamNavigation?.MaDongSanPham,
+                                    anhDaiDien = ct.MaSanPhamNavigation?.AnhDaiDien
+                                })
+                            });
+
                             <tr>
                                 <td class="fw-bold text-primary ps-3">@($"HD{item.MaPhieuMua:D2}")</td>
-                                <td class="fw-semibold text-dark">@item.MaKhachHangNavigation?.TenKhachHang</td>
+                                <td class="fw-semibold text-dark">@(item.MaKhachHangNavigation?.TenKhachHang ?? "Khách vãng lai")</td>
+                                <td><span class="badge bg-light text-dark border">@(item.MaPtttNavigation?.TenPttt ?? "Tiền mặt")</span></td>
                                 <td class="fw-bold text-danger">@string.Format("{0:N0}₫", item.TongTien ?? 0)</td>
                                 <td>
                                     <span class="text-muted">
@@ -51,14 +73,14 @@
                                     </span>
                                 </td>
                                 <td class="text-end pe-3">
-                                    <button class="btn btn-sm btn-gradient-success-custom me-1 fw-semibold"
+                                    <button class="btn btn-sm btn-gradient-success-custom me-1 fw-semibold btn-open-modal"
                                             style="font-size: 0.8rem; border-radius: 4px;"
-                                            onclick="updateStt(@item.MaPhieuMua, 'Đã thanh toán')">
-                                        <i class="mdi mdi-check-circle-outline me-1"></i>Xác nhận tiền
+                                            data-invoice='@jsonData'>
+                                        <i class="mdi mdi-printer me-1"></i>Xử lý thanh toán
                                     </button>
-                                    <button class="btn btn-sm btn-outline-danger fw-semibold"
+                                    <button class="btn btn-sm btn-outline-danger fw-semibold btn-cancel-order"
                                             style="font-size: 0.8rem; border-radius: 4px;"
-                                            onclick="updateStt(@item.MaPhieuMua, 'Đã hủy')">
+                                            data-id="@item.MaPhieuMua">
                                         <i class="mdi mdi-close-circle-outline me-1"></i>Hủy
                                     </button>
                                 </td>
@@ -68,7 +90,7 @@
                     else
                     {
                         <tr>
-                            <td colspan="5" class="text-center text-muted py-4">
+                            <td colspan="6" class="text-center text-muted py-4">
                                 <i class="mdi mdi-clipboard-text-off-outline fs-3 d-block mb-2"></i>
                                 Không có hóa đơn nào đang chờ thanh toán.
                             </td>
@@ -80,19 +102,118 @@
     </div>
 </div>
 
+<div class="modal fade" id="invoiceModal" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 15px;">
+            <div class="modal-header bg-light border-0 py-3 position-relative">
+                <h4 class="modal-title fw-bold text-dark w-100 text-center text-uppercase mb-0" style="letter-spacing: 1px;">Thanh Toán Hóa Đơn</h4>
+                <button type="button" class="btn-close position-absolute end-0 me-3" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="text-center mb-3">
+                    <p class="text-muted fw-bold small mb-1" id="lblModalNgay">Ngày... Tháng... Năm...</p>
+                    <div class="d-flex justify-content-center gap-4 small text-secondary">
+                        <span>Số hóa đơn: <b class="text-primary" id="lblModalSoHD">...</b></span>
+                        <span>Trạng thái: <span class="badge bg-warning text-dark px-2" style="font-size:11px">Chờ thanh toán</span></span>
+                    </div>
+                </div>
+
+                <div class="bg-light p-3 rounded-3 mb-4 border">
+                    <div class="row g-2">
+                        <div class="col-12 border-bottom pb-2">
+                            <span class="text-secondary fw-bold small d-block mb-1">Họ tên khách hàng:</span>
+                            <span class="fw-bold text-dark fs-6" id="lblModalTenKH">...</span>
+                            <span class="badge bg-info text-white ms-2" id="lblModalHangKH">Thành Viên</span>
+                        </div>
+                        <div class="col-12 border-bottom pb-2">
+                            <span class="text-secondary fw-bold small d-block mb-1">Địa chỉ nhận hàng:</span>
+                            <span class="text-dark fw-medium" id="lblModalDiaChi">...</span>
+                        </div>
+                        <div class="col-12 border-bottom pb-2">
+                            <span class="text-secondary fw-bold small d-block mb-1">Số điện thoại:</span>
+                            <span class="text-dark fw-bold" id="lblModalSdt">...</span>
+                        </div>
+                        <div class="col-12">
+                            <span class="text-secondary fw-bold small d-block mb-1">Hình thức thanh toán:</span>
+                            <span class="badge bg-secondary text-white" id="lblModalPttt">...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive border rounded mb-3">
+                    <table class="table table-bordered align-middle mb-0" id="modalProductTable">
+                        <thead class="bg-light text-dark small fw-bold text-center">
+                            <tr>
+                                <th style="width: 5%">STT</th>
+                                <th style="width: 10%">Ảnh</th>
+                                <th style="width: 20%">Tên sản phẩm</th>
+                                <th style="width: 15%">Dòng sản phẩm</th>
+                                <th style="width: 10%">Màu sắc</th>
+                                <th style="width: 8%">Size</th>
+                                <th style="width: 10%">Đơn giá</th>
+                                <th style="width: 5%">Số lượng</th>
+                                <th style="width: 12%">Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="8" class="text-end fw-bold bg-white text-secondary py-2">Tổng tiền hàng:</td>
+                                <td class="text-end fw-bold text-dark py-2 pe-3" id="lblModalTongTienHang">0₫</td>
+                            </tr>
+                            <tr>
+                                <td colspan="8" class="text-end fw-bold bg-white text-secondary py-2">Chiết khấu giảm giá hạng:</td>
+                                <td class="text-end fw-bold text-success py-2 pe-3" id="lblModalChietKhau">-0₫</td>
+                            </tr>
+                            <tr class="bg-light">
+                                <td colspan="8" class="text-end fw-bold text-dark py-3 fs-5">Tổng tiền thanh toán:</td>
+                                <td class="text-end fw-bold text-danger py-3 fs-5 pe-3" id="lblModalTongThanhToan">0₫</td>
+                            </tr>
+                            <tr>
+                                <td colspan="8" class="text-end fw-bold bg-white text-primary py-2 align-middle">Tiền khách hàng đưa:</td>
+                                <td class="py-1 pe-3 bg-white">
+                                    <div class="input-group ms-auto" style="max-width: 200px;">
+                                        <input type="number" id="txtModalKhachDua" class="form-control border-primary text-end fw-bold text-primary py-1" placeholder="0" oninput="calculateRefund()">
+                                        <span class="input-group-text bg-primary text-white border-primary py-1 px-2">₫</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="8" class="text-end fw-bold bg-white text-secondary py-2">Tiền trả lại khách:</td>
+                                <td class="text-end fw-bold text-dark py-2 pe-3 fs-5" id="lblModalTienThua">0₫</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer bg-light border-0 p-3 d-flex justify-content-end gap-2">
+                <button type="button" class="btn btn-outline-secondary px-4 fw-semibold" data-bs-dismiss="modal">ĐÓNG BẢNG</button>
+                <button type="button" class="btn btn-gradient-success-custom px-5 fw-bold" onclick="submitPayment()">
+                    <i class="mdi mdi-check-circle me-1"></i> XÁC NHẬN THANH TOÁN
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section styles {
     <style>
+        .bg-gradient-primary-custom {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+        }
+
         .btn-gradient-success-custom {
-            background: linear-gradient(to right, #84d9d2, #07cdae);
+            background: linear-gradient(to right, #00b09b, #96c93d);
             border: none;
             color: white;
-            transition: opacity 0.2s;
+            transition: transform 0.2s, opacity 0.2s;
         }
 
             .btn-gradient-success-custom:hover {
                 opacity: 0.9;
                 color: white;
+                transform: translateY(-1px);
             }
 
         .table-light {
@@ -106,15 +227,190 @@
             .table tbody tr:hover {
                 background-color: #fcfaff !important;
             }
+
+        #modalProductTable thead th {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            vertical-align: middle;
+        }
+
+        #modalProductTable td {
+            font-size: 13.5px;
+        }
     </style>
 }
 
 @section Scripts {
     <script>
-        function updateStt(id, stt) {
-            if(confirm('Xác nhận cập nhật trạng thái đơn hàng này?')){
-                $.post('/NhanVien/ThuNgan/CapNhatDonHang', { id: id, trangThai: stt }, () => location.reload());
+        let currentOrderTotal = 0;
+        let activeOrderId = 0;
+        let activePttt = "";
+
+        // Hàm escape HTML
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        // Bắt sự kiện click mở modal
+        $(document).on('click', '.btn-open-modal', function () {
+            let data = $(this).data('invoice');
+            openInvoiceModal(data);
+        });
+
+        // Bắt sự kiện click hủy đơn
+        $(document).on('click', '.btn-cancel-order', function () {
+            let id = $(this).data('id');
+            cancelOrder(id);
+        });
+
+        function openInvoiceModal(data) {
+            activeOrderId = data.maHD;
+            activePttt = data.pttt ? data.pttt.toLowerCase() : "tiền mặt";
+
+            if(data.ngay) {
+                let parts = data.ngay.split('/');
+                $("#lblModalNgay").text(`Ngày ${parts[0]} Tháng ${parts[1]} Năm ${parts[2]}`);
             }
+
+            $("#lblModalSoHD").text("HD" + String(data.maHD).padStart(2, '0'));
+            $("#lblModalTenKH").text(escapeHtml(data.tenKH));
+            $("#lblModalDiaChi").text(escapeHtml(data.diachi));
+            $("#lblModalSdt").text(escapeHtml(data.sdt));
+            $("#lblModalPttt").text(escapeHtml(data.pttt));
+
+            let tc = parseFloat(data.tongChi) || 0;
+            let hang = "Thành Viên";
+            if (tc >= 8000000) hang = "Kim Cương";
+            else if (tc >= 5000000) hang = "Bạch Kim";
+            else if (tc >= 3000000) hang = "Vàng";
+            else if (tc >= 500000) hang = "Bạc";
+
+            $("#lblModalHangKH").text(hang);
+
+            let h = "";
+            let tongTienHang = 0;
+
+            data.chiTiet.forEach((it, i) => {
+                let thanhTien = it.sl * it.gia;
+                tongTienHang += thanhTien;
+
+                // Tạo đường dẫn ảnh theo đúng cấu trúc từ giỏ hàng
+                let imageUrl = '/images/default-shoe.png';
+                if (it.maDongSP && it.anhDaiDien) {
+                    imageUrl = `/img/${it.maDongSP}/Avatar/${it.anhDaiDien}`;
+                }
+
+                h += `
+                    <tr>
+                        <td class="text-center fw-bold">${i + 1}</td>
+                        <td class="text-center">
+                            <img src="${imageUrl}"
+                                 width="50" height="50"
+                                 class="rounded shadow-sm"
+                                 style="object-fit: cover;"
+                                 onerror="this.src='/images/default-shoe.png'">
+                        </td>
+                        <td class="fw-bold text-dark">${escapeHtml(it.tenSP)}</td>
+                        <td class="text-center text-muted small">${escapeHtml(it.dongSP)}<br><small class="text-secondary">(${escapeHtml(it.loai)})</small></td>
+                        <td class="text-center"><span class="fw-medium">${escapeHtml(it.mauSac)}</span></td>
+                        <td class="text-center fw-bold text-secondary">${escapeHtml(it.size)}</td>
+                        <td class="text-end">${it.gia.toLocaleString()}₫</td>
+                        <td class="text-center fw-bold">${it.sl}</td>
+                        <td class="text-end fw-bold text-dark">${thanhTien.toLocaleString()}₫</td>
+                    </tr>`;
+            });
+
+            $("#modalProductTable tbody").html(h);
+
+            let chietKhau = 0;
+            if (hang === "Vàng" && tongTienHang >= 350000) chietKhau = tongTienHang * 0.05;
+            else if (hang === "Bạch Kim" && tongTienHang >= 550000) chietKhau = tongTienHang * 0.10;
+            else if (hang === "Kim Cương" && tongTienHang >= 800000) chietKhau = tongTienHang * 0.12;
+
+            currentOrderTotal = tongTienHang - chietKhau;
+
+            $("#lblModalTongTienHang").text(tongTienHang.toLocaleString() + "₫");
+            $("#lblModalChietKhau").text("-" + chietKhau.toLocaleString() + "₫");
+            $("#lblModalTongThanhToan").text(currentOrderTotal.toLocaleString() + "₫");
+
+            // Xử lý nhập tiền theo phương thức thanh toán
+            if (activePttt.includes("tiền mặt") || activePttt.includes("cod")) {
+                $("#txtModalKhachDua").val("").prop("disabled", false);
+                $("#lblModalTienThua").text("0₫").removeClass("text-success fw-bold").addClass("text-secondary");
+            } else {
+                $("#txtModalKhachDua").val(currentOrderTotal).prop("disabled", true);
+                $("#lblModalTienThua").text("0₫ (Đã thanh toán)").addClass("text-success fw-bold").removeClass("text-secondary text-danger");
+            }
+
+            var myModal = new bootstrap.Modal(document.getElementById('invoiceModal'));
+            myModal.show();
+        }
+
+        function calculateRefund() {
+            let khachDua = parseFloat($("#txtModalKhachDua").val()) || 0;
+            let tienThua = khachDua - currentOrderTotal;
+
+            if (tienThua < 0) {
+                $("#lblModalTienThua").html(`Còn thiếu: ${Math.abs(tienThua).toLocaleString()}₫`).removeClass("text-success fw-bold").addClass("text-danger");
+            } else {
+                $("#lblModalTienThua").html(`${tienThua.toLocaleString()}₫`).addClass("text-success fw-bold").removeClass("text-danger");
+            }
+        }
+
+        function submitPayment() {
+            let khachDua = parseFloat($("#txtModalKhachDua").val()) || 0;
+
+            // Nếu là tiền mặt thì kiểm tra, còn không thì bỏ qua
+            if ((activePttt.includes("tiền mặt") || activePttt.includes("cod")) && khachDua < currentOrderTotal) {
+                return Swal.fire("Thiếu tiền", "Số tiền khách đưa chưa đủ để hoàn tất thanh toán!", "warning");
+            }
+
+            $.post('/NhanVien/ThuNgan/CapNhatDonHang', { id: activeOrderId, trangThai: 'Đã thanh toán' })
+            .done(function(res) {
+                if(res.success){
+                    Swal.fire("Thành công", res.message, "success").then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire("Thất bại", res.message, "error");
+                }
+            })
+            .fail(function() {
+                Swal.fire("Lỗi hệ thống", "Không thể gửi yêu cầu lên máy chủ. Hãy kiểm tra lại Route!", "error");
+            });
+        }
+
+        function cancelOrder(id) {
+            Swal.fire({
+                title: 'Hủy đơn hàng?',
+                text: "Bạn chắc chắn muốn hủy bỏ phiếu mua này không?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Đúng, hủy đơn!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post('/NhanVien/ThuNgan/CapNhatDonHang', { id: id, trangThai: 'Đã hủy' })
+                    .done(function(res) {
+                        if(res.success){
+                            Swal.fire("Đã hủy đơn", res.message, "success").then(() => location.reload());
+                        } else {
+                            Swal.fire("Thất bại", res.message, "error");
+                        }
+                    })
+                    .fail(function() {
+                        Swal.fire("Lỗi", "Không thể kết nối đến máy chủ!", "error");
+                    });
+                }
+            });
         }
     </script>
 }

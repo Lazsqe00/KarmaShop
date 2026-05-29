@@ -51,12 +51,26 @@ namespace KarmaShop.Controllers
 
             decimal total = cart.Sum(item => (item.DonGia ?? 0) * (item.SoLuong ?? 0));
 
+            decimal tongChi = kh?.TongChi ?? 0;
+            string hangThanhVien = "Thành Viên";
+            decimal phanTramGiamHang = 0;
+
+            if (tongChi >= 8000000) { hangThanhVien = "Kim Cương"; phanTramGiamHang = 0.12m; }
+            else if (tongChi >= 5000000) { hangThanhVien = "Bạch Kim"; phanTramGiamHang = 0.10m; }
+            else if (tongChi >= 3000000) { hangThanhVien = "Vàng"; phanTramGiamHang = 0.05m; }
+            else if (tongChi >= 500000) { hangThanhVien = "Bạc"; phanTramGiamHang = 0m; }
+
+            decimal giamGiaHang = 0;
+            if (hangThanhVien == "Vàng" && total >= 350000) giamGiaHang = total * phanTramGiamHang;
+            else if (hangThanhVien == "Bạch Kim" && total >= 550000) giamGiaHang = total * phanTramGiamHang;
+            else if (hangThanhVien == "Kim Cương" && total >= 800000) giamGiaHang = total * phanTramGiamHang;
+
             var defaultAddress = _orderRepo.GetDefaultAddress(kh.MaKhachHang);
 
             var phieuMua = new PhieuMua
             {
                 MaKhachHang = kh.MaKhachHang,
-                TongTien = total,
+                TongTien = total - giamGiaHang,
                 NgayDat = DateOnly.FromDateTime(DateTime.Now),
                 TinhTrang = "Chờ xác nhận",
 
@@ -69,32 +83,51 @@ namespace KarmaShop.Controllers
             ViewBag.Cart = cart;
             ViewBag.TongTien = total;
             ViewBag.KhachHang = kh;
+            ViewBag.HangThanhVien = hangThanhVien;
+            ViewBag.GiamGiaHang = giamGiaHang;
             ViewBag.PhuongThucTT = _orderRepo.GetPhuongThucThanhToans();
-            ViewBag.DefaultAddress = defaultAddress;  
+            ViewBag.DefaultAddress = defaultAddress;
+            ViewBag.DanhSachVoucher = _voucherRepo.GetActiveVouchers();
 
             return View(phieuMua);
         }
 
         [HttpPost]
-        public JsonResult KiemTraVoucher(string maVoucher, decimal tongTamTinh)
+        public JsonResult TinhToanGiamGia(string maVoucher, decimal tongTamTinh, decimal giamGiaHang)
         {
-            var voucher = _voucherRepo.GetVoucherByCode(maVoucher);
-            if (voucher == null || voucher.SoLuong <= 0)
-            {
-                return Json(new { success = false, message = "Voucher không tồn tại hoặc đã hết hạn" });
-            }
-            
-            decimal phanTram = (voucher.GiamToiDa ?? 0);
-            decimal giamGia = Math.Round(tongTamTinh * phanTram / 100, 0);
+            decimal giamGiaVoucher = 0;
+            string msg = "Không áp dụng voucher.";
+            bool status = true;
 
-            decimal thanhTienMoi = Math.Max(0, tongTamTinh - giamGia);
+            if (!string.IsNullOrWhiteSpace(maVoucher))
+            {
+                var voucher = _voucherRepo.GetVoucherByCode(maVoucher);
+                if (voucher == null)
+                {
+                    return Json(new { success = false, message = "Voucher không tồn tại hoặc hết hạn!" });
+                }
+
+                if (string.Equals(voucher.LoaiGiamGia, "Phần trăm", StringComparison.OrdinalIgnoreCase))
+                {
+                    giamGiaVoucher = Math.Round(tongTamTinh * (voucher.GiamToiDa / 100m), 0);
+                    msg = $"Áp dụng thành công! Giảm {voucher.GiamToiDa:#,##0.##}% ({giamGiaVoucher:#,##0}₫) từ Voucher.";
+                }
+                else
+                {
+                    giamGiaVoucher = voucher.GiamToiDa;
+                    msg = $"Áp dụng thành công! Giảm {giamGiaVoucher:#,##0}₫ từ Voucher.";
+                }
+            }
+
+            decimal tongThanhToanMoi = Math.Max(0, tongTamTinh - giamGiaHang - giamGiaVoucher);
 
             return Json(new
             {
-                success = true,
-                giamGia = giamGia,
-                thanhTienMoi = thanhTienMoi,
-                message = $"Áp dụng thành công! Giảm {phanTram:#,##0.##}% ({giamGia:#,##0}₫)"
+                success = status,
+                giamHang = giamGiaHang,
+                giamVoucher = giamGiaVoucher,
+                thanhTienMoi = tongThanhToanMoi,
+                message = msg
             });
         }
 

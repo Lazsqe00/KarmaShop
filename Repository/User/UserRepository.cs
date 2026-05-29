@@ -15,8 +15,7 @@ namespace KarmaShop.Repository.User
         public TaiKhoan? GetUser(string email, string password)
         {
             return db.TaiKhoans.FirstOrDefault(t => t.Email == email
-            && t.MatKhau == password
-            && t.LoaiTaiKhoan == 0);
+            && t.MatKhau == password);
         }
 
         public bool CheckEmailExists(string email)

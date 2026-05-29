@@ -9,7 +9,7 @@ USE QuanLyBanGiay;
 GO
 
 /* ===============================
-   VOUCHER
+   VOUCHER (Đã sửa VARCHAR(50))
    =============================== */
 CREATE TABLE Voucher (
     MaVoucher VARCHAR(50) NOT NULL PRIMARY KEY,
@@ -23,7 +23,7 @@ CREATE TABLE Voucher (
 );
 
 /* ===============================
-   SIZE
+   SIZE 
    =============================== */
 CREATE TABLE Size (
     MaSize INT IDENTITY PRIMARY KEY,
@@ -31,7 +31,7 @@ CREATE TABLE Size (
 );
 
 /* ===============================
-   MAU
+   MAU 
    =============================== */
 CREATE TABLE Mau (
     MaMau INT IDENTITY PRIMARY KEY,
@@ -47,7 +47,7 @@ CREATE TABLE Loai (
 );
 
 /* ===============================
-   DONG SAN PHAM
+   DONG SAN PHAM 
    =============================== */
 CREATE TABLE DongSanPham (
     MaDongSanPham INT IDENTITY PRIMARY KEY,
@@ -59,7 +59,7 @@ CREATE TABLE DongSanPham (
 );
 
 /* ===============================
-   SAN PHAM
+   SAN PHAM 
    =============================== */
 CREATE TABLE SanPham (
     MaSanPham INT IDENTITY PRIMARY KEY,
@@ -74,7 +74,7 @@ CREATE TABLE SanPham (
 );
 
 /* ===============================
-   SAN PHAM - SIZE
+   SAN PHAM - SIZE 
    =============================== */
 CREATE TABLE SanPhamSize (
     MaSanPham INT,
@@ -86,7 +86,7 @@ CREATE TABLE SanPhamSize (
 );
 
 /* ===============================
-   TAI KHOAN
+   TAI KHOAN 
    =============================== */
 CREATE TABLE TaiKhoan (
     Email VARCHAR(100) PRIMARY KEY,
@@ -95,7 +95,7 @@ CREATE TABLE TaiKhoan (
 );
 
 /* ===============================
-   KHACH HANG
+   KHACH HANG 
    =============================== */
 CREATE TABLE KhachHang (
     MaKhachHang INT IDENTITY PRIMARY KEY,
@@ -106,12 +106,11 @@ CREATE TABLE KhachHang (
     GioiTinh NVARCHAR(10),
     NgaySinh DATE,
     TongChi DECIMAL(18,2),
-	FOREIGN KEY (Email) REFERENCES TaiKhoan(Email)
+    FOREIGN KEY (Email) REFERENCES TaiKhoan(Email)
 );
 
-
 /* ===============================
-   NHAN VIEN
+   NHAN VIEN 
    =============================== */
 CREATE TABLE NhanVien (
     MaNhanVien INT IDENTITY PRIMARY KEY,
@@ -121,11 +120,11 @@ CREATE TABLE NhanVien (
     SoDienThoai VARCHAR(15),
     GioiTinh NVARCHAR(10),
     NgaySinh DATE,
-	FOREIGN KEY (Email) REFERENCES TaiKhoan(Email)
+    FOREIGN KEY (Email) REFERENCES TaiKhoan(Email)
 );
 
 /* ===============================
-   PHUONG THUC THANH TOAN
+   PHUONG THUC THANH TOAN 
    =============================== */
 CREATE TABLE PhuongThucThanhToan (
     MaPTTT INT IDENTITY PRIMARY KEY,
@@ -133,15 +132,15 @@ CREATE TABLE PhuongThucThanhToan (
 );
 
 /* ===============================
-   GIO HANG
+   GIO HANG (Đã đồng bộ MaVoucher VARCHAR(50))
    =============================== */
 CREATE TABLE PhieuMua (
     MaPhieuMua INT IDENTITY PRIMARY KEY,
     NgayDat DATE,
     MaKhachHang INT,
     MaNhanVien INT,   
-	MaPTTT INT,
-    MaVoucher NVARCHAR(20),
+    MaPTTT INT,
+    MaVoucher VARCHAR(50),
     TinhTrang NVARCHAR(50),
     GhiChu NVARCHAR(MAX),
     TongTien DECIMAL(18,2),
@@ -152,11 +151,11 @@ CREATE TABLE PhieuMua (
     FOREIGN KEY (MaKhachHang) REFERENCES KhachHang(MaKhachHang),
     FOREIGN KEY (MaNhanVien) REFERENCES NhanVien(MaNhanVien),
     FOREIGN KEY (MaVoucher) REFERENCES Voucher(MaVoucher),
-	FOREIGN KEY (MaPTTT) REFERENCES PhuongThucThanhToan(MaPTTT)
+    FOREIGN KEY (MaPTTT) REFERENCES PhuongThucThanhToan(MaPTTT)
 );
 
 /* ===============================
-   CHI TIET GIO HANG
+   CHI TIET GIO HANG 
    =============================== */
 CREATE TABLE ChiTietPhieuMua (
     MaPhieuMua INT,
@@ -170,14 +169,13 @@ CREATE TABLE ChiTietPhieuMua (
     FOREIGN KEY (MaSize) REFERENCES Size(MaSize)
 );
 
-
 /* ===============================
-   VOUCHER_KHACHHANG 
+   VOUCHER_KHACHHANG (Đã đồng bộ MaVoucher VARCHAR(50))
    =============================== */
-   CREATE TABLE ViVoucher (
+CREATE TABLE ViVoucher (
     MaLuuVoucher INT IDENTITY PRIMARY KEY, 
     MaKhachHang INT,
-    MaVoucher NVARCHAR(20),
+    MaVoucher VARCHAR(50),
     TrangThaiSuDung BIT DEFAULT 0, 
     NgayNhan DATETIME DEFAULT GETDATE(),
     NgaySuDung DATETIME NULL, 
@@ -187,12 +185,11 @@ CREATE TABLE ChiTietPhieuMua (
     FOREIGN KEY (MaPhieuMua) REFERENCES PhieuMua(MaPhieuMua) 
 );
 
-
 /* ===============================
-   CHÈN DỮ LIỆU TÀI KHOẢN
+   CHÈN DỮ LIỆU TÀI KHOẢN (Đã gom đủ tất cả các Email)
    =============================== */
 INSERT INTO TaiKhoan (Email, MatKhau, LoaiTaiKhoan) VALUES
--- 20 khách hàng đầu tiên (LoaiTaiKhoan = 0)
+-- Nhóm khách hàng 1
 ('vuvannam@gmail.com', '123456', 0),
 ('nguyenthihanh@gmail.com', '123456', 0),
 ('buivanthang@gmail.com', '123456', 0),
@@ -212,29 +209,8 @@ INSERT INTO TaiKhoan (Email, MatKhau, LoaiTaiKhoan) VALUES
 ('vovanduc@gmail.com', '123456', 0),
 ('nguyenthivan@gmail.com', '123456', 0),
 ('tranvanhai@gmail.com', '123456', 0),
-('lethinhung@gmail.com', '123456', 0);
-GO
-
-INSERT INTO TaiKhoan (Email, MatKhau, LoaiTaiKhoan) VALUES
--- 10 nhân viên (LoaiTaiKhoan = 1)
-('nguyenvanhung@gmail.com', 'nvh123', 1),
-('tranthimai@gmail.com', 'ttm123', 1),
-('levancuong@gmail.com', 'lvc123', 1),
-('phamthilan@gmail.com', 'ptl123', 1),
-('hoangvantuan@gmail.com', 'hvt123', 1),
-('dothihuong@gmail.com', 'dth123', 1),
-('vuvanminh@gmail.com', 'vvm123', 1),
-('nguyenthingoc@gmail.com', 'ntn123', 1),
-('buivanphuc@gmail.com', 'bvp123', 1),
-('lethithuy@gmail.com', 'ltt123', 1);
-GO
-
-INSERT INTO TaiKhoan (Email, MatKhau, LoaiTaiKhoan) VALUES
-('admin@gmail.com', '123', 2);
-GO
-
-INSERT INTO TaiKhoan (Email, MatKhau, LoaiTaiKhoan) VALUES
--- 20 khách hàng tiếp theo (LoaiTaiKhoan = 0)
+('lethinhung@gmail.com', '123456', 0),
+-- Nhóm khách hàng 2
 ('nguyenvanbinh@gmail.com', '123456', 0),
 ('tranthihuyen@gmail.com', '123456', 0),
 ('phamvandung@gmail.com', '123456', 0),
@@ -254,11 +230,24 @@ INSERT INTO TaiKhoan (Email, MatKhau, LoaiTaiKhoan) VALUES
 ('phamvanquang@gmail.com', '123456', 0),
 ('hoangthivan@gmail.com', '123456', 0),
 ('nguyenvanphat@gmail.com', '123456', 0),
-('lethidiep@gmail.com', '123456', 0);
+('lethidiep@gmail.com', '123456', 0),
+-- Nhóm nhân viên
+('nguyenvanhung@gmail.com', 'nvh123', 1),
+('tranthimai@gmail.com', 'ttm123', 1),
+('levancuong@gmail.com', 'lvc123', 1),
+('phamthilan@gmail.com', 'ptl123', 1),
+('hoangvantuan@gmail.com', 'hvt123', 1),
+('dothihuong@gmail.com', 'dth123', 1),
+('vuvanminh@gmail.com', 'vvm123', 1),
+('nguyenthingoc@gmail.com', 'ntn123', 1),
+('buivanphuc@gmail.com', 'bvp123', 1),
+('lethithuy@gmail.com', 'ltt123', 1),
+-- Admin
+('admin@gmail.com', '123', 2);
 GO
 
 /* ===============================
-   CHÈN DỮ LIỆU KHÁCH HÀNG
+   CHÈN DỮ LIỆU KHÁCH HÀNG 
    =============================== */
 INSERT INTO KhachHang (TenKhachHang, Email, SoDienThoai, DiaChi, GioiTinh, NgaySinh, TongChi)
 VALUES
@@ -281,11 +270,7 @@ VALUES
 (N'Võ Văn Đức', 'vovanduc@gmail.com', '0989999999', N'Quảng Ngãi', N'Nam', '1992-09-09', 9100000),
 (N'Nguyễn Thị Vân', 'nguyenthivan@gmail.com', '0991111111', N'Hà Nam', N'Nữ', '1998-11-11', 4800000),
 (N'Trần Văn Hải', 'tranvanhai@gmail.com', '0992222222', N'Bình Định', N'Nam', '1995-12-12', 6700000),
-(N'Lê Thị Nhung', 'lethinhung@gmail.com', '0993333333', N'Thái Bình', N'Nữ', '1997-01-15', 5900000);
-GO
-
-INSERT INTO KhachHang (TenKhachHang, Email, SoDienThoai, DiaChi, GioiTinh, NgaySinh, TongChi)
-VALUES
+(N'Lê Thị Nhung', 'lethinhung@gmail.com', '0993333333', N'Thái Bình', N'Nữ', '1997-01-15', 5900000),
 (N'Nguyễn Văn Bình', 'nguyenvanbinh@gmail.com', '0994444444', N'Hà Nội', N'Nam', '1993-02-10', 7200000),
 (N'Trần Thị Huyền', 'tranthihuyen@gmail.com', '0995555555', N'TP.HCM', N'Nữ', '1998-03-18', 5100000),
 (N'Phạm Văn Dũng', 'phamvandung@gmail.com', '0996666666', N'Bắc Giang', N'Nam', '1991-06-06', 8600000),
@@ -309,13 +294,13 @@ VALUES
 GO
 
 /* ===============================
-   CHÈN DỮ LIỆU NHÂN VIÊN
+   CHÈN DỮ LIỆU NHÂN VIÊN 
    =============================== */
 INSERT INTO NhanVien (TenNhanVien, Email, DiaChi, SoDienThoai, GioiTinh, NgaySinh)
 VALUES
 (N'Nguyễn Văn Hùng', 'nguyenvanhung@gmail.com', N'Hà Nội', '0901112233', N'Nam', '1990-01-15'),
 (N'Trần Thị Mai', 'tranthimai@gmail.com', N'TP.HCM', '0902223344', N'Nữ', '1992-03-22'),
-(N'Lê Văn Cường', 'levancuong@gmail.com', N'Đà Nẵng', '0903334455', N'Nam', '1988-07-10'),
+(N'Lê Văn Cường', 'levancuong@gmail.com', N'Đà Nẵng', '0903334455', N'Nam', '1888-07-10'),
 (N'Phạm Thị Lan', 'phamthilan@gmail.com', N'Hải Phòng', '0904445566', N'Nữ', '1995-11-05'),
 (N'Hoàng Văn Tuấn', 'hoangvantuan@gmail.com', N'Cần Thơ', '0905556677', N'Nam', '1991-04-18'),
 (N'Đỗ Thị Hương', 'dothihuong@gmail.com', N'Bắc Ninh', '0906667788', N'Nữ', '1993-09-30'),
@@ -325,16 +310,19 @@ VALUES
 (N'Lê Thị Thúy', 'lethithuy@gmail.com', N'Quảng Ninh', '0911112233', N'Nữ', '1996-12-20');
 GO
 
-
+/* ===============================
+   CHÈN DỮ LIỆU PHƯƠNG THỨC THANH TOÁN
+   =============================== */
 INSERT INTO PhuongThucThanhToan (TenPTTT) VALUES
 (N'COD'),
 (N'VNPAY'),
 (N'MoMo'),
 (N'Chuyển khoản');
+GO
 
-
-
-
+/* ===============================
+   CÁC BẢNG ĐỊA CHÍ HÀNH CHÍNH & PHỤ TRỢ
+   =============================== */
 CREATE TABLE TinhThanh (
     MaTinh VARCHAR(20) PRIMARY KEY,
     TenTinh NVARCHAR(100) NOT NULL
@@ -362,7 +350,7 @@ CREATE TABLE Sodiachi (
     MaKhachHang INT NOT NULL,
     Tennguoinhan NVARCHAR(100) NOT NULL,
     Sdtnguoinhan VARCHAR(15) NOT NULL,
-    Diachi NVARCHAR(255) NOT NULL,     
+    Diachi NVARCHAR(255) NOT NULL,      
     MaPhuong VARCHAR(20) NOT NULL,      
     MaQuan VARCHAR(20) NOT NULL,        
     MaTinh VARCHAR(20) NOT NULL,        
@@ -379,9 +367,8 @@ CREATE TABLE YeuThich (
     Email VARCHAR(100) NOT NULL,
     MaSanPham INT NOT NULL,
     NgayThem DATETIME DEFAULT GETDATE(),
-    
     FOREIGN KEY (Email) REFERENCES TaiKhoan(Email),
     FOREIGN KEY (MaSanPham) REFERENCES SanPham(MaSanPham),
-    
     CONSTRAINT UQ_YeuThich UNIQUE (Email, MaSanPham)
 );
+GO

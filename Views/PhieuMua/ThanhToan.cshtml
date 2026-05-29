@@ -34,13 +34,13 @@
                     <input type="hidden" asp-for="MaKhachHang" />
                     <input type="hidden" asp-for="TongTien" id="hiddenThanhTien" />
 
-                    <div class="row">                    
+                    <div class="row">
                         <div class="col-lg-7">
                             <h4>Thông tin nhận hàng</h4>
                             <hr />
 
                             @if (defaultAddress != null)
-                            {                              
+                            {
                                 <input type="hidden" asp-for="TenNguoiNhan" value="@defaultAddress.Tennguoinhan" />
                                 <input type="hidden" asp-for="SoDienThoaiNguoiNhan" value="@defaultAddress.Sdtnguoinhan" />
                                 <input type="hidden" asp-for="DiaChiGiaoHang" value="@defaultAddress.Diachi" />
@@ -78,8 +78,8 @@
                             <div class="form-group">
                                 <label>Ghi chú đơn hàng</label>
                                 <textarea asp-for="GhiChu" class="form-control" rows="3" placeholder="Lưu ý cho người giao hàng..."></textarea>
-                            </div>                         
-                                                                                    
+                            </div>
+
                         </div>
                         <!-- ==================== TÓM TẮT ĐƠN HÀNG ==================== -->
                         <div class="col-lg-5">
@@ -161,13 +161,12 @@
                                            class="form-control" placeholder="Nhập mã voucher" autocomplete="off" />
                                     <button type="button" class="btn btn-outline-primary" id="btnApDung">Áp dụng</button>
                                 </div>
-         
+
                                 <button type="button" class="btn btn-link text-primary mt-2 p-0" id="btnSuggestVoucher">
                                     <i class="fas fa-gift"></i> Xem voucher gợi ý cho bạn
                                 </button>
 
                                 <div id="voucherSuggestions" class="voucher-suggestions mt-3" style="display: none;">
-                                  
                                 </div>
 
                                 <div id="voucherMsg" class="mt-2"></div>
@@ -298,5 +297,4 @@
         });
     </script>
 }
-
 

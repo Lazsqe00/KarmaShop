@@ -5,14 +5,14 @@
         <div class="bg-gradient-primary-custom text-white d-flex align-items-center justify-content-center rounded-circle me-2" style="width: 32px; height: 32px; background: linear-gradient(to right, #4e73df, #224abe);">
             <i class="mdi mdi-information-outline fs-5 text-white"></i>
         </div>
-        <h5 class="fw-bold mb-0 text-dark">Thông tin sản phẩm</h5>
+        <h5 class="fw-bold mb-0 text-dark">Thông tin sản phẩm quầy</h5>
     </div>
     <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 
 <div class="modal-body p-4">
     <div class="text-center mb-4 bg-light rounded-4 p-3 shadow-sm" style="background-color: #f8f9fa !important; border: 1px solid #eee;">
-        <img src="/images/@Model.AnhDaiDien"
+        <img src="/img/@Model.MaDongSanPham/Avatar/@Model.AnhDaiDien"
              style="max-height: 220px; width: 100%; object-fit: contain;"
              class="img-fluid"
              onerror="this.src='/images/default-shoe.png'">
@@ -25,11 +25,11 @@
         </span>
     </div>
 
-    <div class="row g-3">
+    <div class="row g-3 mb-3">
         <div class="col-6">
             <div class="p-3 border rounded-3 bg-white text-center">
                 <small class="text-muted d-block mb-1 fw-bold">GIÁ BÁN</small>
-                <h5 class="text-danger fw-bold mb-0">@string.Format("{0:N0}₫", Model.MaDongSanPhamNavigation?.GiaBan ?? 0)</h5>
+                <h5 class="text-danger fw-bold mb-0">@string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:#,##0} ₫", Model.MaDongSanPhamNavigation?.GiaBan ?? 0)</h5>
             </div>
         </div>
 
@@ -37,12 +37,60 @@
             <div class="p-3 border rounded-3 bg-white text-center">
                 <small class="text-muted d-block mb-1 fw-bold">PHÂN LOẠI</small>
                 <h6 class="text-dark fw-bold mb-0">
-                    
                     @(Model.MaDongSanPhamNavigation?.MaLoaiNavigation?.TenLoai ?? "Đang cập nhật")
                 </h6>
             </div>
         </div>
+    </div>
 
+    <div id="slton-modal" class="mb-3" style="display:none;">
+        <h6 style="color:#BA861E;" class="fw-bold mb-0 text-center">
+            <i class="mdi mdi-clock-alert-outline fs-5 me-1"></i> Kho tại quầy còn ít hàng!
+        </h6>
+    </div>
+
+    <div class="row g-2 mb-3">
+        <div class="col-12">
+            <span class="text-muted fw-semibold d-block mb-1"><i class="mdi mdi-format-size me-1"></i>Chọn Size khách mua:</span>
+        </div>
+
+        @{
+            // Chuyển đổi chuẩn danh sách đã sắp xếp từ Controller sang List để xử lý đồng bộ ổn định
+            var danhSachSize = Model.SanPhamSizes?.ToList() ?? new List<KarmaShop.Models.SanPhamSize>();
+            // Tạo mảng số lượng tồn đồng bộ mượt mà với JavaScript không bị lỗi định dạng dữ liệu
+            var mangSoLuongTon = danhSachSize.Select(sz => sz.SoLuong ?? 0).ToList();
+        }
+
+        @if (danhSachSize.Any())
+        {
+            for (int i = 0; i < danhSachSize.Count; i++)
+            {
+                var item = danhSachSize[i];
+                bool coHang = (item.SoLuong ?? 0) > 0;
+                string boxClass = coHang ? "box-kho-modal" : "box-kho-modal kho-disable-modal";
+                string onclickAttr = coHang ? $"updateModalSizeIndex(this, {i}, {item.MaSize})" : "";
+                string tenHiểnThiSize = item.MaSizeNavigation?.TenSize ?? item.MaSize.ToString();
+
+                <div class="col-3">
+                    <div class="@boxClass" onclick="@onclickAttr">
+                        @tenHiểnThiSize
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <small class="text-danger">Sản phẩm này trong kho tạm thời hết size.</small>
+            </div>
+        }
+
+        <div class="col-12 mt-1">
+            <small id="sizeError-modal" class="text-danger fw-bold" style="visibility:hidden;">Vui lòng chọn size giày!</small>
+        </div>
+    </div>
+
+    <div class="row g-3">
         <div class="col-12">
             <div class="p-3 border rounded-3 bg-white">
                 <div class="d-flex justify-content-between align-items-center mb-2">
@@ -50,7 +98,6 @@
                         <i class="mdi mdi-factory text-muted fs-4 me-2"></i>
                         <span class="text-muted fw-semibold">Thương hiệu</span>
                     </div>
-                    
                     <span class="fw-bold text-dark">Eric Shoes Nha Trang</span>
                 </div>
                 <div class="d-flex justify-content-between align-items-center pt-2 border-top">
@@ -65,18 +112,124 @@
     </div>
 </div>
 
-<div class="modal-footer border-0 pt-0">
+<div class="modal-footer border-0 pt-0 flex-column gap-2">
+    
     <button type="button" class="btn btn-light fw-bold w-100 py-2 shadow-sm" data-bs-dismiss="modal" style="border-radius: 8px;">ĐÓNG</button>
 </div>
 
-<style>
-    .bg-soft-primary {
-        background-color: #eef2ff;
-        color: #4e73df;
+<script>
+
+    (function () {
+        var elements = document.getElementsByClassName("box-kho-modal");
+        for (var i = 0; i < elements.length; ++i) {
+            elements[i].classList.remove("active");
+        }
+        var addToCartBtn = document.getElementById("AddToCart-Modal");
+        if (addToCartBtn) {
+            addToCartBtn.removeAttribute("data-masize");
+        }
+        var sltonDiv = document.getElementById("slton-modal");
+        if (sltonDiv) sltonDiv.style.display = "none";
+
+        var sizeErr = document.getElementById("sizeError-modal");
+        if (sizeErr) sizeErr.style.visibility = "hidden";
+    })();
+
+    function updateModalSizeIndex(element, index, maSize) {
+        document.getElementById("sizeError-modal").style.visibility = "hidden";
+
+
+        var arrayTontai = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(mangSoLuongTon));
+        var sltonDiv = document.getElementById("slton-modal");
+
+        if (arrayTontai[index] < 10 && arrayTontai[index] > 0) {
+            sltonDiv.style.display = "block";
+        } else {
+            sltonDiv.style.display = "none";
+        }
+
+        var elements = document.getElementsByClassName("box-kho-modal");
+        for (var i = 0; i < elements.length; ++i) {
+            elements[i].classList.remove("active");
+        }
+        element.classList.add("active");
+
+        var addToCartBtn = document.getElementById("AddToCart-Modal");
+        addToCartBtn.setAttribute("data-masize", maSize);
     }
 
-    .modal-content {
-        border-radius: 15px;
-        border: none;
+    function XacNhanThemTuModal(event) {
+        event.preventDefault();
+
+        var link = document.getElementById("AddToCart-Modal");
+        var maSize = link.getAttribute("data-masize");
+        if (!maSize || maSize === "null" || maSize === "") {
+            document.getElementById("sizeError-modal").style.visibility = "visible";
+            return;
+        }
+
+        var productId = @Model.MaSanPham;
+
+        if (typeof themVaoHoaDonTaiQuay === "function") {
+            themVaoHoaDonTaiQuay(productId, parseInt(maSize));
+        } else if (typeof parent.themVaoHoaDonTaiQuay === "function") {
+            parent.themVaoHoaDonTaiQuay(productId, parseInt(maSize));
+        }
+
+        var modalEl = document.getElementById('productDetailModal') || event.target.closest('.modal');
+        if (modalEl) {
+            var modalInstance = bootstrap.Modal.getInstance(modalEl);
+            if (modalInstance) {
+                modalInstance.hide();
+            } else {
+              
+                $(modalEl).modal('hide');
+            }
+        }
     }
+</script>
+
+<style>
+    .box-kho-modal {
+        border: 2px solid #dee2e6;
+        border-radius: 6px;
+        padding: 6px;
+        cursor: pointer;
+        color: #212529;
+        font-weight: 600;
+        font-size: 14px;
+        text-align: center;
+        transition: all 0.2s ease-in-out;
+    }
+
+        .box-kho-modal:hover {
+            border-color: #4e73df;
+            color: #4e73df;
+        }
+
+        .box-kho-modal.active {
+            border-color: #224abe;
+            background-color: #eef2ff;
+            color: #224abe;
+        }
+
+    .kho-disable-modal {
+        opacity: 0.4;
+        pointer-events: none;
+        background-color: #e9ecef;
+        border-color: #dee2e6;
+        text-decoration: line-through;
+    }
+
+    .btn-add-cart-custom {
+        background: linear-gradient(to right, #4e73df, #224abe);
+        border: none;
+        border-radius: 8px;
+        color: white !important;
+        transition: opacity 0.2s;
+    }
+
+        .btn-add-cart-custom:hover {
+            opacity: 0.9;
+        }
 </style>

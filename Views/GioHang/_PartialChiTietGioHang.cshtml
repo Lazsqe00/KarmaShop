@@ -29,9 +29,12 @@
                         <div class="media">
                             <div class="d-flex">
                                 <a href="@Url.Action("HienThiSanPham", "SanPham", new { id = cartItem.MaSanPham })">
-                                    
+
                                     <img class="imageProduct"
-                                         src="@Url.Content("~/img/" + cartItem.MaSanPhamNavigation?.MaDongSanPhamNavigation?.MaDongSanPham + "/Avatar/" + cartItem.MaSanPhamNavigation?.AnhDaiDien)"
+                                         src="@Url.Content("~/img/"
+                                                 + cartItem.MaSanPhamNavigation?.MaDongSanPham
+                                                 + "/Avatar/"
+                                                 + cartItem.MaSanPhamNavigation?.AnhDaiDien)"
                                          alt="Hình sản phẩm"
                                          style="max-width:100px;" />
                                 </a>
