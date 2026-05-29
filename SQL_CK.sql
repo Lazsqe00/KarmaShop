@@ -14,11 +14,13 @@ GO
 CREATE TABLE Voucher (
     MaVoucher VARCHAR(50) NOT NULL PRIMARY KEY,
     SoLuong INT NOT NULL,
+    LoaiGiamGia NVARCHAR(20) NULL, 
+    HangApDung NVARCHAR(50) NULL,  
     GiamToiDa DECIMAL(18, 2) NOT NULL,
-    GiaTriToiThieu DECIMAL(18, 2) NOT NULL DEFAULT 0, 
+    GiaTriToiThieu DECIMAL(18, 2) NOT NULL DEFAULT 0,
     NgayTao DATE NOT NULL,
     NgayHetHan DATE NOT NULL
-); 
+);
 
 /* ===============================
    SIZE
