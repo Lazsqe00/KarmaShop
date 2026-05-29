@@ -59,6 +59,42 @@ namespace KarmaShop.Repository.User
                       .Sum(p => (decimal?)p.TongTien) ?? 0;
         }
 
+        public List<PhieuMua> GetOrderHistory(string email)
+        {
+            return db.PhieuMuas
+                     .Include(p => p.MaKhachHangNavigation)
+                     .Where(p => p.MaKhachHangNavigation.Email == email)
+                     .OrderByDescending(p => p.NgayDat)
+                     .ToList();
+        }
 
+        public PhieuMua? GetOrderDetail(int id, string email)
+        {
+            return db.PhieuMuas
+                .Include(p => p.MaKhachHangNavigation)
+                .Include(p => p.MaPtttNavigation)
+                .Include(p => p.MaVoucherNavigation)
+                .Include(p => p.ChiTietPhieuMuas)
+                    .ThenInclude(ct => ct.MaSanPhamNavigation)
+                        .ThenInclude(sp => sp.MaDongSanPhamNavigation)
+                .Include(p => p.ChiTietPhieuMuas)
+                    .ThenInclude(ct => ct.MaSanPhamNavigation)
+                        .ThenInclude(sp => sp.MaMauNavigation)
+                .Include(p => p.ChiTietPhieuMuas)
+                    .ThenInclude(ct => ct.MaSizeNavigation)
+                .FirstOrDefault(p => p.MaPhieuMua == id
+                                  && p.MaKhachHangNavigation.Email == email);
+        }
+
+        public List<Sodiachi> GetAddressBook(string email)
+        {
+            return db.Sodiachis
+                     .Include(s => s.MaTinhNavigation)
+                     .Include(s => s.MaQuanNavigation)
+                     .Include(s => s.MaPhuongNavigation)
+                     .Where(s => s.MaKhachHangNavigation.Email == email)
+                     .OrderByDescending(s => s.IsDefault)
+                     .ToList();
+        }
     }
 }

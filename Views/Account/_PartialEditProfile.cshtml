@@ -1,0 +1,83 @@
+﻿@model KarmaShop.Models.KhachHang
+
+<div class="modal fade" id="editProfileModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Chỉnh sửa thông tin cá nhân</h5>            
+            </div>
+            <div class="modal-body">
+                <form id="editProfileForm">
+                    <input type="hidden" id="email" value="@Model.Email" />
+
+                    <div class="mb-3">
+                        <label class="form-label">Họ tên</label>
+                        <input type="text" class="form-control" id="tenKhachHang" value="@Model.TenKhachHang" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Số điện thoại</label>
+                        <input type="text" class="form-control" id="soDienThoai" value="@Model.SoDienThoai" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Giới tính</label>
+                        <select class="form-select" id="gioiTinh">
+                            <option value="Nam" selected="@(Model.GioiTinh == "Nam")">Nam</option>
+                            <option value="Nữ" selected="@(Model.GioiTinh == "Nữ")">Nữ</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Ngày sinh</label>
+                        <input type="date" class="form-control" id="ngaySinh" 
+                               value="@(Model.NgaySinh?.ToString("yyyy-MM-dd"))">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary rounded-pill px-4 btn-cancel" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="primary-btn-small" id="btnSaveProfile">Lưu thay đổi</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#btnEditProfile').click(function () {
+            $('#editProfileModal').modal('show');
+        });
+
+        $('#btnSaveProfile').click(function () {
+            var formData = {
+                TenKhachHang: $('#tenKhachHang').val(),
+                SoDienThoai: $('#soDienThoai').val(),
+                GioiTinh: $('#gioiTinh').val(),
+                NgaySinh: $('#ngaySinh').val()
+            };
+
+            $.ajax({
+                url: '/Account/UpdateProfile',
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        alert("Cập nhật thông tin thành công!");
+                        $('#editProfileModal').modal('hide');
+                        location.reload(); 
+                    } else {
+                        alert(response.message || "Cập nhật thất bại");
+                    }
+                },
+                error: function () {
+                    alert("Có lỗi xảy ra. Vui lòng thử lại!");
+                }
+            });
+        });
+
+        $('.btn-cancel').click(function () {
+        $('#editProfileModal').modal('hide');
+    });
+    });
+</script>

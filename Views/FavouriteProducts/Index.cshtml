@@ -1,0 +1,85 @@
+﻿@model List<KarmaShop.Models.ViewModels.FavouriteProductsItem>
+
+@{
+    ViewData["Title"] = "Favourite Products";
+}
+
+<!-- Breadcrumb -->
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1>Favourite Products</h1>
+                <nav class="d-flex align-items-center">
+                    <a asp-action="Index" asp-controller="Home">Home</a>
+                    <span class="lnr lnr-arrow-right"></span>
+                    <a>Favourite</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cart_area">
+    <div class="container">
+        <div class="cart_inner">
+            @if (TempData["Message"] != null)
+            {
+                <div class="alert alert-success">@TempData["Message"]</div>
+            }
+
+            <section class="lattest-product-area pb-40 category-list">
+                <h1 class="mb-4">Your Favorite Products (@Model.Count())</h1>
+
+                @if (!Model.Any())
+                {
+                    <div class="alert alert-info text-center py-5">
+                        <h5>Bạn chưa có sản phẩm yêu thích nào.</h5>
+                        <a asp-action="SanPhamTheoLoai" asp-controller="SanPham" class="btn btn-primary">Xem sản phẩm</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="row">
+                        @foreach (var favPro in Model)
+                        {
+                            <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+                                <div class="single-product">
+                                    <a asp-action="HienThiSanpham" asp-controller="SanPham" asp-route-madongsanpham="@favPro.Madongsp" asp-route-masp="@favPro.Id">
+                                        <img class="img-fluid" src="~/img/@favPro.Madongsp/Avatar/@favPro.Hinhanh" alt="@favPro.Tensp"
+                                             style="width:100%; height:250px; object-fit:cover;">
+                                    </a>
+                                    <div class="product-details">
+                                        <h5>@favPro.Tensp</h5>
+                                        <div class="price">
+                                            @if (favPro.Phantramgiam > 0)
+                                            {
+                                                var priceSale = favPro.Gia * (1 - favPro.Phantramgiam / 100);
+                                                <h5>
+                                                    @priceSale?.ToString("#,##0") ₫
+                                                    <span style="text-decoration:line-through; color:#ccc">
+                                                        @favPro.Gia.ToString("#,##0") ₫
+                                                    </span>
+                                                </h5>
+                                            }
+                                            else
+                                            {
+                                                <h5>@favPro.Gia.ToString("#,##0") ₫</h5>
+                                            }
+                                        </div>
+                                    </div>
+                                    <a href="javascript:void(0)"
+                                       onclick="if(confirm('Xóa khỏi danh sách yêu thích?')) location.href='@Url.Action("RemoveFavouriteProduct", "FavouriteProducts", new { id = favPro.Id })'"
+                                       class="genric-btn radius"
+                                       style="width:100%; margin-top:10px; background:#7058FA; border:1px solid #7058FA; color:white;">
+                                        Remove
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </section>
+        </div>
+    </div>
+</section>

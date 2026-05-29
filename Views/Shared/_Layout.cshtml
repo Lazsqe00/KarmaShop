@@ -30,9 +30,12 @@
     <link rel="stylesheet" href="~/karma-master/css/magnific-popup.css">
     <link rel="stylesheet" href="~/karma-master/css/main.css">
     <link rel="stylesheet" href="~/karma-master/css/site.css">
+    <link rel="stylesheet" href="~/karma-master/css/profile-user.css">
+    <link rel="stylesheet" href="~/karma-master/css/tracking-order.css">
+    <link rel="stylesheet" href="~/karma-master/css/checkout.css">
+    <link rel="stylesheet" href="~/karma-master/css/comfirm-checkout.css">
 
 
-    
     <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
@@ -93,6 +96,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="@Url.Action("SanPhamTheoLoai", "SanPham")">Shopping</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="@Url.Action("Index", "TrackingOrder")">Order Tracking</a>
+                            </li>
                             <li class="nav-item submenu dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                     @if (Context.Session.GetString("Email") == null)
@@ -129,7 +135,7 @@
 
                         <ul class="nav navbar-nav navbar-right">
                             <li class="nav-item"><a href="@Url.Action("ChiTietGioHang", "GioHang_65130478")" class="cart"><span class="ti-bag"></span></a></li>
-                            <li class="nav-item"><a href="#" class="heart"><span class="ti-heart"></span></a></li>
+                            <li class="nav-item"><a href="@Url.Action("Index", "FavouriteProducts")" class="heart"><span class="ti-heart"></span></a></li>
                             <li class="nav-item"><a href="#" class="search" id="searchToggle" title="Tìm kiếm"><span class="ti-search"></span></a></li>
                         </ul>
                     </div>

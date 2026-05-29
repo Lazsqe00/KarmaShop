@@ -31,7 +31,7 @@
                                 <a href="@Url.Action("HienThiSanPham", "SanPham", new { id = cartItem.MaSanPham })">
                                     
                                     <img class="imageProduct"
-                                         src="@Url.Content("~/img/products/" + cartItem.MaSanPhamNavigation?.AnhDaiDien)"
+                                         src="@Url.Content("~/img/" + cartItem.MaSanPhamNavigation?.MaDongSanPhamNavigation?.MaDongSanPham + "/Avatar/" + cartItem.MaSanPhamNavigation?.AnhDaiDien)"
                                          alt="Hình sản phẩm"
                                          style="max-width:100px;" />
                                 </a>
@@ -94,7 +94,7 @@
                         <a class="btn btn-secondary" href="@Url.Action("Index", "Home")">
                             Continue shopping
                         </a>
-                        <a class="btn btn-primary ml-2" href="@Url.Action("ThanhToan", "PhieuMua")">
+                        <a class="primary-btn ml-2" href="@Url.Action("ThanhToan", "PhieuMua")" style="text-transform: none;">
                             Checkout
                         </a>
                     </div>

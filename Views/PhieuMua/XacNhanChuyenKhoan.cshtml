@@ -1,0 +1,134 @@
+﻿@model KarmaShop.Models.PhieuMua
+
+@{
+    ViewData["Title"] = "Xác Nhận Chuyển Khoản";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1>Xác Nhận Thanh Toán</h1>
+
+                <nav class="d-flex align-items-center">
+                    <a href="/">Trang chủ</a>
+                    <span class="lnr lnr-arrow-right"></span>
+                    <a>Chuyển khoản</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container mt-4 mb-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+
+            <div class="card shadow-lg payment-card">
+                <div class="card-body p-5">
+                    <div class="bank-info p-4">
+
+                        <h5 class="text-center mb-4">
+                            <i class="fas fa-university me-2"></i>
+                            Thông tin chuyển khoản
+                        </h5>
+
+                        <hr />
+
+                        <div class="row align-items-center">
+                            <div class="col-md-7">
+                                <p>
+                                    <strong>Ngân hàng:</strong>
+                                    Vietinbank
+                                </p>
+
+                                <p>
+                                    <strong>Số tài khoản:</strong>
+                                    102881524363
+                                </p>
+
+                                <p>
+                                    <strong>Chủ tài khoản:</strong>
+                                    CÔNG TY TNHH KARMA SHOP
+                                </p>
+
+                                <p>
+                                    <strong>Số tiền cần chuyển:</strong>
+                                    <span class="money-text">
+                                        @Model.TongTien?.ToString("#,##0") ₫
+                                    </span>
+                                </p>
+
+                                <p>
+                                    <strong>Nội dung chuyển khoản:</strong><br />
+
+                                    <span class="transfer-content">
+                                        SEVQR KMHD@(Model.MaPhieuMua)
+                                    </span>
+                                </p>
+
+                                <div class="note-box">
+                                    <i class="fas fa-exclamation-circle me-1"></i>
+                                    Vui lòng chuyển đúng số tiền và nội dung chuyển khoản
+                                    để hệ thống xác nhận đơn hàng nhanh chóng.
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-5 text-center">
+
+                                <img src="https://img.vietqr.io/image/ICB-102881524363-compact2.png?amount=@((int)Model.TongTien)&addInfo=SEVQR%20KMHD@(Model.MaPhieuMua)&accountName=NGUYEN%20XUAN%20KI%20DIEU"
+                                     alt="QR Code"
+                                     class="img-fluid qr-img" />
+
+                                <p class="mt-3 mb-0">
+                                    <small class="text-muted">
+                                        Quét mã QR để thanh toán
+                                    </small>
+                                </p>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var orderId = parseInt('@Model.MaPhieuMua');
+
+        if (!orderId) {
+            console.error("Lỗi: Không lấy được mã đơn hàng");
+            return;
+        }
+
+        console.log("🔍 Đang theo dõi đơn hàng #" + orderId);
+
+        var checkInterval = setInterval(function () {
+            $.ajax({
+                url: '/PhieuMua/KiemTraTrangThaiDonHang',
+                type: 'GET',
+                data: { id: orderId },
+                success: function (res) {
+                    console.log("Trạng thái:", res);
+
+                    if (res && res.isPaid === true) {
+                        clearInterval(checkInterval);
+                        console.log("✅ Thanh toán thành công - Chuyển hướng...");
+                        window.location.href = '/PhieuMua/XacNhan?id=' + orderId;
+                    }
+                },
+                error: function (xhr) {
+                    console.error("Lỗi AJAX:", xhr.status, xhr.responseText);
+                }
+            });
+        }, 1500); 
+    });
+</script>

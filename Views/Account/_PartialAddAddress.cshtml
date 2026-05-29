@@ -1,0 +1,139 @@
+﻿@model KarmaShop.Models.Sodiachi
+
+<div class="modal fade" id="addAddressModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thêm địa chỉ mới</h5>
+            </div>
+            <div class="modal-body">
+                <form id="addAddressForm">
+                    <div class="mb-3">
+                        <label class="form-label">Họ tên người nhận</label>
+                        <input type="text" class="form-control" id="hotenAdd" name="Tennguoinhan" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Số điện thoại</label>
+                        <input type="text" class="form-control" id="sdtAdd" name="Sdtnguoinhan" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Địa chỉ chi tiết</label>
+                        <input type="text" class="form-control" id="diachiAdd" name="Diachi" required>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Tỉnh/Thành phố</label>
+                            <select class="form-select" id="selectTinhAdd" name="MaTinh" required>
+                                <option value="">Chọn Tỉnh</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Quận/Huyện</label>
+                            <select class="form-select" id="selectQuanAdd" name="MaQuan" required>
+                                <option value="">Chọn Quận</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Phường/Xã</label>
+                            <select class="form-select" id="selectPhuongAdd" name="MaPhuong" required>
+                                <option value="">Chọn Phường</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-check mt-3">
+                        <input class="form-check-input" type="checkbox" id="isDefaultAdd" name="IsDefault">
+                        <label class="form-check-label">Đặt làm địa chỉ mặc định</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary rounded-pill px-4 btn-cancel" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="primary-btn-small" id="btnSaveAddress">Lưu địa chỉ</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function loadTinhAdd() {
+        $.get('/Account/GetTinhThanh', function (data) {
+            var select = $('#selectTinhAdd');
+            select.empty();
+            select.append('<option value="">Chọn Tỉnh</option>');
+            $.each(data, function (i, item) {
+                select.append($('<option>', { value: item.value, text: item.text }));
+            });
+        });
+    }
+
+    $(document).ready(function () {
+        // Cascade Quận
+        $('#selectTinhAdd').change(function () {
+            var maTinh = $(this).val();
+            if (!maTinh) return;
+            $.get('/Account/GetQuanByTinh', { maTinh: maTinh }, function (data) {
+                var select = $('#selectQuanAdd');
+                select.empty();
+                select.append('<option value="">Chọn Quận</option>');
+                $.each(data, function (i, item) {
+                    select.append($('<option>', { value: item.value, text: item.text }));
+                });
+            });
+        });
+
+        // Cascade Phường
+        $('#selectQuanAdd').change(function () {
+            var maQuan = $(this).val();
+            if (!maQuan) return;
+            $.get('/Account/GetPhuongByQuan', { maQuan: maQuan }, function (data) {
+                var select = $('#selectPhuongAdd');
+                select.empty();
+                select.append('<option value="">Chọn Phường</option>');
+                $.each(data, function (i, item) {
+                    select.append($('<option>', { value: item.value, text: item.text }));
+                });
+            });
+        });
+
+        // Lưu địa chỉ
+        $('#btnSaveAddress').click(function () {
+            var formData = {
+                Tennguoinhan: $('#hotenAdd').val(),
+                Sdtnguoinhan: $('#sdtAdd').val(),
+                Diachi: $('#diachiAdd').val(),
+                MaTinh: $('#selectTinhAdd').val(),
+                MaQuan: $('#selectQuanAdd').val(),
+                MaPhuong: $('#selectPhuongAdd').val(),
+                IsDefault: $('#isDefaultAdd').is(':checked')
+            };
+
+            $.ajax({
+                url: '/Account/AddAddress',
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        alert("Thêm địa chỉ thành công!");
+                        $('#addAddressModal').modal('hide');                       
+                        if (typeof loadAddressBook === "function") {
+                            loadAddressBook();
+                        } else {
+                            location.reload();
+                        }
+                    } else {
+                        alert(response.message || "Thêm thất bại");
+                    }
+                },
+                error: function () {
+                    alert("Có lỗi xảy ra khi thêm địa chỉ");
+                }
+            });
+        });
+
+            $('.btn-cancel').click(function () {
+        $('#addAddressModal').modal('hide');
+    });
+    });
+</script>

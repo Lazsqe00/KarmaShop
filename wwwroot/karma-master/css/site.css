@@ -75,6 +75,10 @@ body {
     background: linear-gradient(90deg, #7058FA 0%, #8A7CFF 100%) !important;
 }
 
+.primary-btn-small {
+    background: linear-gradient(90deg, #7058FA 0%, #8A7CFF 100%) !important;
+}
+
 .gradient-bg-reverse, #search_input_box{
         background: linear-gradient(270deg, #8A7CFF 0%, #7058FA 100%);
 }

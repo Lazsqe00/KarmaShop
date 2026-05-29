@@ -1,0 +1,131 @@
+﻿@model KarmaShop.Models.KhachHang
+@{
+    ViewData["Title"] = "User Profile";
+}
+
+<!-- Breadcrumb -->
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1>User Profile</h1>
+                <nav class="d-flex align-items-center">
+                    <a asp-action="Index" asp-controller="Home">Home</a>
+                    <span class="lnr lnr-arrow-right"></span>
+                    <a>User profile</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container mt-4" style="margin-bottom:20px">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-lg-3 my-lg-0 my-md-1">
+            <div id="sidebar" class="bg-purple">
+                <div class="h4 text-white">Account</div>
+                <ul>
+                    <li class="active" id="liProfile">
+                        <a id="profileClick" class="text-decoration-none d-flex align-items-start" style="cursor:pointer;">
+                            <div class="far fa-user pt-2 me-3 mr-2"></div>
+                            <div class="d-flex flex-column">
+                                <div class="link">My Profile</div>
+                                <div class="link-desc">Change your profile details & password</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li id="liOrder">
+                        <a id="orderClick" class="text-decoration-none d-flex align-items-start" style="cursor:pointer;">
+                            <div class="fas fa-box-open pt-2 me-3 mr-2"></div>
+                            <div class="d-flex flex-column">
+                                <div class="link">My Orders</div>
+                                <div class="link-desc">View & Manage orders</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li id="liAddress">
+                        <a id="addressClick" class="text-decoration-none d-flex align-items-start" style="cursor:pointer;">
+                            <div class="far fa-address-book pt-2 me-3 mr-2"></div>
+                            <div class="d-flex flex-column">
+                                <div class="link">Address Book</div>
+                                <div class="link-desc">View & Manage Addresses</div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-lg-9 my-lg-0 my-1">
+            <div id="main-content" class="bg-white border">
+                @await Html.PartialAsync("_PartialProfile", Model)
+            </div>
+        </div>
+    </div>
+</div>
+@await Html.PartialAsync("_PartialEditProfile", Model)
+<script>
+    $(document).ready(function () {
+        function loadContent(url, activeLi) {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (response) {
+                    $('#main-content').html(response);
+                    $('#sidebar li').removeClass('active');
+                    $(activeLi).addClass('active');
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseText);
+                    alert('Lỗi khi tải dữ liệu');
+                }
+            });
+        }
+        $('#profileClick').click(function () {
+            loadContent('/Account/ProfilePartial', '#liProfile');
+        });
+
+        $('#orderClick').click(function () {
+            loadContent('/Account/OrderHistory', '#liOrder');
+        });
+        $('#addressClick').click(function () {
+            loadContent('/Account/AddressBook', '#liAddress');
+        });
+        $(document).on('click', '#btnEditProfile', function () {
+            $('#editProfileModal').modal('show');
+        });
+        $(document).on('click', '#btnSaveProfile', function () {
+            var formData = {
+                TenKhachHang: $('#tenKhachHang').val(),
+                SoDienThoai: $('#soDienThoai').val(),
+                GioiTinh: $('#gioiTinh').val(),
+                NgaySinh: $('#ngaySinh').val()
+            };
+
+            $.ajax({
+                url: '/Account/UpdateProfile',
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        alert("Cập nhật thông tin thành công!");
+                        $('#editProfileModal').modal('hide');
+                        loadContent('/Account/ProfilePartial', '#liProfile');
+
+                    } else {
+                        alert(response.message || "Cập nhật thất bại");
+                    }
+                },
+
+                error: function () {
+
+                    alert("Có lỗi xảy ra. Vui lòng thử lại!");
+                }
+            });
+
+        });
+
+    });
+</script>

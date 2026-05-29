@@ -25,5 +25,7 @@ public partial class KhachHang
 
     public virtual ICollection<PhieuMua> PhieuMuas { get; set; } = new List<PhieuMua>();
 
+    public virtual ICollection<Sodiachi> Sodiachis { get; set; } = new List<Sodiachi>();
+
     public virtual ICollection<ViVoucher> ViVouchers { get; set; } = new List<ViVoucher>();
 }

@@ -76,11 +76,12 @@
                         </div>
                     </div>
 
-                    <!-- Nút thêm giỏ hàng -->
                     <div class="card_area d-flex align-items-center mt-4">
-                        <a id="AddToCart" class="primary-btn" onclick="NotChooseSize(event)" href="#">Thêm vào giỏ hàng</a>
-                        <a class="icon_btn ml-3" href="#">
-                            <i class="lnr lnr-heart"></i>
+                        <a id="AddToCart" class="primary-btn" onclick="NotChooseSize(event)" href="#">
+                            Thêm vào giỏ hàng
+                        </a>
+                        <a id="btnAddFavourite" class="icon_btn ml-3" style="cursor:pointer;" title="Thêm vào yêu thích">
+                            <i class="lnr lnr-heart" id="heartIcon"></i>
                         </a>
                     </div>
                 </div>
@@ -229,6 +230,38 @@
 
             window.location.href = addToCartUrl;
         }
+
+        $('#btnAddFavourite').click(function () {
+            var isLoggedIn = '@(Context.Session.GetString("Email") != null ? "true" : "false")';
+
+            if (isLoggedIn === "false") {
+                if (confirm("Bạn cần đăng nhập để thêm vào yêu thích. Chuyển đến trang đăng nhập?")) {
+                    var currentUrl = window.location.href;
+                    window.location.href = '@Url.Action("Login", "Account")'
+                                         + '?backToPage=' + encodeURIComponent(currentUrl);
+                }
+                return;
+            }
+
+            var maSanPham = @ViewBag.CurrentMaSP;   
+
+            $.ajax({
+                url: '/FavouriteProducts/AddToFavourite',
+                type: 'POST',
+                data: { maSanPham: maSanPham },
+                success: function (response) {
+                    if (response.success) {
+                        alert("Đã thêm vào danh sách yêu thích ❤️");
+                        $('#heartIcon').addClass('text-danger'); 
+                    } else {
+                        alert(response.message || "Có lỗi xảy ra");
+                    }
+                },
+                error: function () {
+                    alert("Có lỗi xảy ra. Vui lòng thử lại!");
+                }
+            });
+        });
     </script>
 }
 

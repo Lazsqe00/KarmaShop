@@ -1,0 +1,97 @@
+﻿@model List<KarmaShop.Models.Sodiachi>
+
+<div class="mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-2">       
+        <h3 class="fw-bolder text-dark mb-0" style="font-family: 'Roboto', sans-serif;">        
+            <i class="lnr lnr-book me-2 text-purple"></i>
+            Sổ địa chỉ
+        </h3>
+        <button class="primary-btn" id="btnAddAddress">
+            <i class="fas fa-plus"></i> Thêm địa chỉ mới
+        </button>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center">Bạn chưa có địa chỉ nào. Hãy thêm địa chỉ mới.</div>
+    }
+    else
+    {
+        @foreach (var sdc in Model)
+        {
+            <div class="mb-3 border p-3 rounded">
+                <div class="row">
+                    <div class="col-md-9">
+                        @if (sdc.IsDefault == true)
+                        {
+                            <span class="badge bg-success mb-2">Mặc định</span>
+                        }
+                        <p class="mb-1"><strong>Tên người nhận: @sdc.Tennguoinhan</strong></p>
+                        <p class="text-muted">Số điện thoại: @sdc.Sdtnguoinhan</p>
+
+                        <p class="mb-1">Địa chỉ chi tiết: @sdc.Diachi</p>
+
+                        <p class="mb-1">
+                           Phường/Xã: @sdc.MaPhuongNavigation?.TenPhuong
+                        </p>
+
+                        <p class="mb-1">
+                            Quận/Huyện: @sdc.MaQuanNavigation?.TenQuan
+                        </p>
+                        <p class="mb-1">
+                            Tỉnh/Thành phố: @sdc.MaTinhNavigation?.TenTinh
+                        </p>
+
+                    </div>
+                    <div class="col-md-3 d-flex justify-content-end align-items-center gap-3">
+                        <div class="primary-btn-small deleteButtonAddress" value="@sdc.Masodiachi">
+                            Xóa
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+<div id="partialUpdate"></div>
+
+<partial name="_PartialAddAddress" model="new KarmaShop.Models.Sodiachi()" />
+
+<script>
+    $(document).ready(function () {
+        $('#btnAddAddress').off('click').on('click', function () {
+            $('#addAddressModal').modal('show');
+            if (typeof loadTinhAdd === "function") {
+                loadTinhAdd();
+            }
+        });
+       
+        $(document).off('click', '.deleteButtonAddress').on('click', '.deleteButtonAddress', function () {
+            var maSoDiaChi = $(this).val(); 
+            
+            if (confirm("Bạn có chắc chắn muốn xóa địa chỉ này không?")) {
+                $.ajax({
+                    url: '/Account/DeleteAddress', 
+                    type: 'POST',
+                    data: { id: maSoDiaChi },
+                    success: function (response) {
+                        if (response.success) {
+                            alert(response.message || "Xóa địa chỉ thành công!");                     
+                            if (typeof loadAddressBook === "function") {
+                                loadAddressBook();
+                            } else {
+                                location.reload(); 
+                            }
+                        } else {
+                            alert(response.message || "Xóa thất bại, vui lòng thử lại.");
+                        }
+                    },
+                    error: function () {
+                        alert("Đã xảy ra lỗi kết nối với hệ thống!");
+                    }
+                });
+            }
+        });
+    });
+</script>

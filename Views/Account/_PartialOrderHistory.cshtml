@@ -1,0 +1,97 @@
+﻿@model IEnumerable<KarmaShop.Models.PhieuMua>
+
+<div class="mb-4">
+    <h3 class="fw-bolder text-dark mb-0" style="font-family: 'Roboto', sans-serif;">       
+        Lịch sử đơn hàng
+    </h3>
+    <div class="text-muted mb-3">Tổng cộng: <strong>@Model.Count()</strong> đơn hàng</div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center py-4">Bạn chưa có đơn hàng nào.</div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-12 mb-3">
+                    <div class="card order-card shadow-sm">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-2">
+                                    <strong class="text-purple">#@item.MaPhieuMua</strong>
+                                </div>
+                                <div class="col-md-3">
+                                    <small class="text-muted">Ngày đặt:</small><br>
+                                    <strong>@item.NgayDat?.ToString("dd/MM/yyyy")</strong>   <!-- ĐÃ SỬA -->
+                                </div>
+                                <div class="col-md-2">
+                                    <small class="text-muted">Tổng tiền:</small><br>
+                                    <strong class="text-danger">@item.TongTien?.ToString("N0") ₫</strong>
+                                </div>
+                                <div class="col-md-3">
+                                    <span class="badge-status
+                                                @(item.TinhTrang == "Đã giao hàng" ? "status-hoanthanh" :
+                                                                                    item.TinhTrang == "Đang giao hàng" ? "status-danggiao" :
+                                                                                    item.TinhTrang == "Từ chối" ? "status-tuchoi" : "status-cho")">
+                                @item.TinhTrang
+                            </span>
+                        </div>
+                        <div class="col-md-2 text-end">
+                            <button class="btn btn-sm btn-outline-purple view-detail"
+                                    data-id="@item.MaPhieuMua">
+                                Xem chi tiết
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                }
+        </div>
+    }
+</div>
+
+<div class="modal fade" id="orderDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Chi tiết đơn hàng</h5>
+            </div>
+            <div class="modal-body" id="orderDetailBody"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).on('click', '.view-detail', function () {
+
+        var maPhieu = $(this).data('id');
+
+        $.ajax({
+            url: '/Account/OrderDetail',
+            type: 'GET',
+            data: { id: maPhieu },
+
+            success: function (response) {
+
+                $('#orderDetailBody').html(response);
+
+                var modal = new bootstrap.Modal(
+                    document.getElementById('orderDetailModal')
+                );
+
+                modal.show();
+            },
+
+            error: function (xhr) {
+
+                console.log(xhr.responseText);
+
+                alert("Lỗi tải chi tiết đơn hàng");
+            }
+        });
+
+    });
+</script>
