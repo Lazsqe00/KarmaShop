@@ -1,0 +1,36 @@
+    .voucher-suggestions {
+        background: #f8f9fa;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 12px;
+        max-height: 320px;
+        overflow-y: auto;
+    }
+
+    .voucher-item {
+        padding: 10px 12px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+        background: white;
+        border: 1px solid #eee;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .voucher-item:hover {
+            border-color: #28a745;
+            background: #f0fff0;
+        }
+
+        .voucher-item.active {
+            border-color: #28a745;
+            background: #e8f5e8;
+        }
+
+    .product-item img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 6px;
+        margin-right: 10px;
+    }

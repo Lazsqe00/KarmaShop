@@ -6,6 +6,6 @@ namespace KarmaShop.Repository.PhieuThu
     {
         List<Voucher> GetActiveVouchers();
         Voucher GetVoucherByCode(string maVoucher);
-        void GiamSoLuongVoucher(string maVoucher);
+        bool GiamSoLuongVoucher(string maVoucher);
     }
 }

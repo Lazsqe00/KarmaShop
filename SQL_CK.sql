@@ -12,12 +12,13 @@ GO
    VOUCHER
    =============================== */
 CREATE TABLE Voucher (
-    MaVoucher NVARCHAR(20) PRIMARY KEY, 
+    MaVoucher VARCHAR(50) NOT NULL PRIMARY KEY,
     SoLuong INT NOT NULL,
-    GiamToiDa DECIMAL(5,2), 
-    NgayTao DATE,
-    NgayHetHan DATE
-);
+    GiamToiDa DECIMAL(18, 2) NOT NULL,
+    GiaTriToiThieu DECIMAL(18, 2) NOT NULL DEFAULT 0, 
+    NgayTao DATE NOT NULL,
+    NgayHetHan DATE NOT NULL
+); 
 
 /* ===============================
    SIZE
@@ -380,6 +381,5 @@ CREATE TABLE YeuThich (
     FOREIGN KEY (Email) REFERENCES TaiKhoan(Email),
     FOREIGN KEY (MaSanPham) REFERENCES SanPham(MaSanPham),
     
-    -- Không cho phép thêm trùng lặp
     CONSTRAINT UQ_YeuThich UNIQUE (Email, MaSanPham)
 );

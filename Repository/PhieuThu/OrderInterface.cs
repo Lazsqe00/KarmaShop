@@ -13,5 +13,8 @@ namespace KarmaShop.Repository.PhieuThu
         void CommitTransaction();
         void RollbackTransaction();
         void SaveOrder(PhieuMua order, List<ChiTietPhieuMua> cartItems);
+
+        Sodiachi GetDefaultAddress(int maKhachHang);
+        PhuongThucThanhToan GetPhuongThucThanhToanById(int maPTTT); 
     }
 }

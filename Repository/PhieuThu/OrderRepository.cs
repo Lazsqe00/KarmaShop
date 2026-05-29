@@ -18,7 +18,7 @@ namespace KarmaShop.Repositories
         public KhachHang GetKhachHangByEmail(string email) => _db.KhachHangs.FirstOrDefault(x => x.Email == email);
         public List<PhuongThucThanhToan> GetPhuongThucThanhToans() => _db.PhuongThucThanhToans.ToList();
 
-        public PhieuMua GetOrder(int id)
+        public PhieuMua? GetOrder(int id)
         {
             return _db.PhieuMuas
                 .Include(p => p.ChiTietPhieuMuas)
@@ -57,6 +57,19 @@ namespace KarmaShop.Repositories
             }
 
             _db.SaveChanges();
+        }
+        public Sodiachi? GetDefaultAddress(int maKhachHang)
+        {
+            return _db.Sodiachis
+                .Include(s => s.MaPhuongNavigation)
+                .Include(s => s.MaQuanNavigation)
+                .Include(s => s.MaTinhNavigation)
+                .FirstOrDefault(s => s.MaKhachHang == maKhachHang && s.IsDefault == true);
+        }
+        public PhuongThucThanhToan? GetPhuongThucThanhToanById(int maPTTT)
+        {
+            return _db.PhuongThucThanhToans
+                           .FirstOrDefault(p => p.MaPttt == maPTTT);
         }
     }
 }

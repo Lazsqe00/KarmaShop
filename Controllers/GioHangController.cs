@@ -20,6 +20,15 @@ namespace KarmaShop.Controllers
         public IActionResult ChiTietGioHang()
         {
             var cart = _cartRepo.GetCartItems();
+
+            foreach (var item in cart)
+            {
+                var sp = _productRepo.GetProduct(item.MaSanPham).Result;
+
+                item.MaSanPhamNavigation = sp;
+                item.MaSanPhamNavigation.MaDongSanPhamNavigation = sp.MaDongSanPhamNavigation;
+            }
+
             return View(cart);
         }
 

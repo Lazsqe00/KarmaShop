@@ -392,7 +392,10 @@ public partial class QuanLyBanGiayContext : DbContext
             entity.ToTable("Voucher");
 
             entity.Property(e => e.MaVoucher).HasMaxLength(20);
-            entity.Property(e => e.GiamToiDa).HasColumnType("decimal(5, 2)");
+            entity.Property(e => e.GiaTriToiThieu).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.GiamToiDa).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.HangApDung).HasMaxLength(50);
+            entity.Property(e => e.LoaiGiamGia).HasMaxLength(20);
         });
 
         modelBuilder.Entity<YeuThich>(entity =>

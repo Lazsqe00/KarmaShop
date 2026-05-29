@@ -53,7 +53,6 @@
     <Folder Include="Data\" />
     <Folder Include="wwwroot\img\Avatar\" />
     <Folder Include="wwwroot\img\ChiTietAnh\" />
-    <Folder Include="Models\" />
   </ItemGroup>
 
   <ItemGroup>

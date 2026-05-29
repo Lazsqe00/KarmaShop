@@ -15,20 +15,24 @@ namespace KarmaShop.Repository.PhieuThu
                 .ToList();
         }
 
-        public Voucher GetVoucherByCode(string maVoucher)
+        public Voucher? GetVoucherByCode(string maVoucher)
         {
             var today = DateOnly.FromDateTime(DateTime.Now);
             return _db.Vouchers.FirstOrDefault(v => v.MaVoucher == maVoucher
                 && v.NgayTao <= today && v.NgayHetHan >= today && v.SoLuong > 0);
         }
 
-        public void GiamSoLuongVoucher(string maVoucher)
+        public bool GiamSoLuongVoucher(string maVoucher)
         {
             var v = _db.Vouchers.FirstOrDefault(x => x.MaVoucher == maVoucher);
-            if (v != null && v.SoLuong > 0)
-            {
-                v.SoLuong -= 1;
-            }
+
+            if (v == null || v.SoLuong <= 0)
+                return false;
+
+            v.SoLuong -= 1;
+            _db.SaveChanges();
+
+            return true;
         }
     }
 }

@@ -9,11 +9,17 @@ public partial class Voucher
 
     public int SoLuong { get; set; }
 
-    public decimal? GiamToiDa { get; set; }
+    public decimal GiamToiDa { get; set; }
 
     public DateOnly? NgayTao { get; set; }
 
     public DateOnly? NgayHetHan { get; set; }
+
+    public decimal GiaTriToiThieu { get; set; }
+
+    public string? LoaiGiamGia { get; set; }
+
+    public string? HangApDung { get; set; }
 
     public virtual ICollection<PhieuMua> PhieuMuas { get; set; } = new List<PhieuMua>();
 
