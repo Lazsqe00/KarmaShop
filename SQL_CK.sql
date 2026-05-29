@@ -315,8 +315,6 @@ GO
    =============================== */
 INSERT INTO PhuongThucThanhToan (TenPTTT) VALUES
 (N'COD'),
-(N'VNPAY'),
-(N'MoMo'),
 (N'Chuyển khoản');
 GO
 
