@@ -3,6 +3,21 @@
     Layout = "_ThuNganLayout";
 }
 
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="mdi mdi-check-circle me-2"></i> @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="mdi mdi-alert-circle me-2"></i> @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
 <div class="d-flex align-items-center justify-content-between mb-4">
     <div class="d-flex align-items-center">
         <div class="bg-gradient-primary-custom text-white d-flex align-items-center justify-content-center rounded-3 me-3" style="width: 45px; height: 45px; box-shadow: 0 4px 10px rgba(0,0,0,0.15)">
@@ -86,22 +101,18 @@
                                 }
                                 else if (hangHienTai == "Bạch Kim")
                                 {
-
                                     <span class="badge bg-info text-dark fw-bold"><i class="mdi mdi-medal me-1"></i>Bạch Kim</span>
                                 }
                                 else if (hangHienTai == "Vàng")
                                 {
-
                                     <span class="badge bg-warning text-dark fw-bold"><i class="mdi mdi-crown me-1"></i>Vàng</span>
                                 }
                                 else if (hangHienTai == "Bạc")
                                 {
-
                                     <span class="badge bg-secondary text-white fw-bold"><i class="mdi mdi-award me-1"></i>Bạc</span>
                                 }
                                 else
                                 {
-
                                     <span class="badge bg-light text-secondary fw-bold">Thành Viên</span>
                                 }
                             </td>
@@ -139,6 +150,58 @@
     </div>
 </div>
 
+<div class="modal fade" id="modalThemKhachHang" tabindex="-1" aria-labelledby="modalThemKhachHangLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow" style="border-radius: 12px;">
+            <div class="modal-header bg-light border-0 py-3">
+                <h5 class="modal-title fw-bold text-dark" id="modalThemKhachHangLabel">
+                    <i class="mdi mdi-account-plus text-primary me-2"></i>Thêm khách hàng mới
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="@Url.Action("LuuKhachHang", "ThuNgan", new { area = "NhanVien" })"
+                  method="post">
+                @Html.AntiForgeryToken()
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-secondary">Họ và tên <span class="text-danger">*</span></label>
+                        <input type="text" name="TenKhachHang" class="form-control" placeholder="Nhập họ và tên khách hàng" required />
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-7 mb-3">
+                            <label class="form-label small fw-bold text-secondary">Số điện thoại <span class="text-danger">*</span></label>
+                            <input type="tel" name="SoDienThoai" class="form-control" placeholder="Nhập số điện thoại" required />
+                        </div>
+                        <div class="col-md-5 mb-3">
+                            <label class="form-label small fw-bold text-secondary">Giới tính</label>
+                            <select name="GioiTinh" class="form-select">
+                                <option value="Nam">Nam</option>
+                                <option value="Nữ">Nữ</option>
+                                <option value="Khác">Khác</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-secondary">Email (Nếu có)</label>
+                        <input type="email" name="Email" class="form-control" placeholder="example@gmail.com" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-secondary">Địa chỉ</label>
+                        <input type="text" name="DiaChi" class="form-control" placeholder="Nhập số nhà, tên đường, tỉnh/thành..." />
+                    </div>
+                </div>
+                <div class="modal-footer border-0 bg-light py-3" style="border-radius: 0 0 12px 12px;">
+                    <button type="button" class="btn btn-light fw-bold text-secondary px-4" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary fw-bold px-4">Lưu lại</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @section styles {
     <style>
         .bg-gradient-primary-custom {
@@ -155,6 +218,18 @@
                 opacity: 0.9;
                 color: white;
                 transform: translateY(-1px);
+            }
+
+        /* CSS form trong modal */
+        .modal-content .form-control, .modal-content .form-select {
+            border-radius: 8px;
+            padding: 0.6rem 0.75rem;
+            border: 1px solid #dee2e6;
+        }
+
+            .modal-content .form-control:focus, .modal-content .form-select:focus {
+                box-shadow: 0 0 0 0.25rem rgba(110, 142, 251, 0.25);
+                border-color: #6e8efb;
             }
     </style>
 }

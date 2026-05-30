@@ -168,9 +168,16 @@ namespace KarmaShop.Controllers
                     ? _orderRepo.GetPhuongThucThanhToanById(model.MaPttt.Value)
                     : null;
 
-                model.TinhTrang = (pttt != null && pttt.TenPttt.Contains("Chuyển khoản", StringComparison.OrdinalIgnoreCase))
-                    ? "Chờ thanh toán"
-                    : "Chờ xác nhận";
+                if (pttt != null && pttt.TenPttt.Contains("Chuyển khoản", StringComparison.OrdinalIgnoreCase))
+                {
+                    
+                    model.TinhTrang = "Đã thanh toán";
+                }
+                else
+                {
+                    
+                    model.TinhTrang = "Chờ thanh toán";
+                }
 
                 // Xử lý voucher
                 if (!string.IsNullOrEmpty(model.MaVoucher))
@@ -223,7 +230,6 @@ namespace KarmaShop.Controllers
 
             ViewBag.MaDonHang = donHang.MaPhieuMua;
             ViewBag.TongTien = donHang.TongTien;
-
             return View(donHang);
         }
 

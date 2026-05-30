@@ -43,10 +43,12 @@
         </div>
     </div>
 
-    <div id="slton-modal" class="mb-3" style="display:none;">
-        <h6 style="color:#BA861E;" class="fw-bold mb-0 text-center">
-            <i class="mdi mdi-clock-alert-outline fs-5 me-1"></i> Kho tại quầy còn ít hàng!
-        </h6>
+    <div class="mb-3">
+        <div id="slton-modal" class="p-2 rounded text-center" style="display:none; background-color: #fff9db; border: 1px solid #ffe066;">
+            <h6 style="color:#BA861E;" class="fw-bold mb-0">
+                <i class="mdi mdi-clock-alert-outline fs-5 me-1"></i> Kho tại quầy còn ít hàng!
+            </h6>
+        </div>
     </div>
 
     <div class="row g-2 mb-3">
@@ -55,9 +57,7 @@
         </div>
 
         @{
-            // Chuyển đổi chuẩn danh sách đã sắp xếp từ Controller sang List để xử lý đồng bộ ổn định
             var danhSachSize = Model.SanPhamSizes?.ToList() ?? new List<KarmaShop.Models.SanPhamSize>();
-            // Tạo mảng số lượng tồn đồng bộ mượt mà với JavaScript không bị lỗi định dạng dữ liệu
             var mangSoLuongTon = danhSachSize.Select(sz => sz.SoLuong ?? 0).ToList();
         }
 
@@ -86,20 +86,14 @@
         }
 
         <div class="col-12 mt-1">
-            <small id="sizeError-modal" class="text-danger fw-bold" style="visibility:hidden;">Vui lòng chọn size giày!</small>
+            <small id="sizeError-modal" class="text-danger fw-bold" style="visibility:hidden;"><i class="mdi mdi-alert-circle-outline me-1"></i>Vui lòng chọn size giày!</small>
         </div>
     </div>
 
     <div class="row g-3">
         <div class="col-12">
             <div class="p-3 border rounded-3 bg-white">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <div class="d-flex align-items-center">
-                        <i class="mdi mdi-factory text-muted fs-4 me-2"></i>
-                        <span class="text-muted fw-semibold">Thương hiệu</span>
-                    </div>
-                    <span class="fw-bold text-dark">Eric Shoes Nha Trang</span>
-                </div>
+                
                 <div class="d-flex justify-content-between align-items-center pt-2 border-top">
                     <div class="d-flex align-items-center">
                         <i class="mdi mdi-palette-outline text-muted fs-4 me-2"></i>
@@ -112,13 +106,15 @@
     </div>
 </div>
 
-<div class="modal-footer border-0 pt-0 flex-column gap-2">
-    
-    <button type="button" class="btn btn-light fw-bold w-100 py-2 shadow-sm" data-bs-dismiss="modal" style="border-radius: 8px;">ĐÓNG</button>
+
+<div class="modal-footer border-0 pt-0 d-flex flex-column gap-2">
+    <button type="button" id="AddToCart-Modal" class="btn btn-add-cart-custom w-100 py-2.5 fw-bold text-uppercase shadow" onclick="XacNhanThemTuModal(event)">
+        <i class="mdi mdi-cart-plus me-1"></i> Thêm vào hóa đơn
+    </button>
+    <button type="button" class="btn btn-light fw-bold w-100 py-2 border text-secondary" data-bs-dismiss="modal" style="border-radius: 8px;">ĐÓNG</button>
 </div>
 
 <script>
-
     (function () {
         var elements = document.getElementsByClassName("box-kho-modal");
         for (var i = 0; i < elements.length; ++i) {
@@ -138,7 +134,6 @@
     function updateModalSizeIndex(element, index, maSize) {
         document.getElementById("sizeError-modal").style.visibility = "hidden";
 
-
         var arrayTontai = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(mangSoLuongTon));
         var sltonDiv = document.getElementById("slton-modal");
 
@@ -155,10 +150,12 @@
         element.classList.add("active");
 
         var addToCartBtn = document.getElementById("AddToCart-Modal");
-        addToCartBtn.setAttribute("data-masize", maSize);
+        if (addToCartBtn) {
+            addToCartBtn.setAttribute("data-masize", maSize);
+        }
     }
 
-    function XacNhanThemTuModal(event) {
+        function XacNhanThemTuModal(event) {
         event.preventDefault();
 
         var link = document.getElementById("AddToCart-Modal");
@@ -170,22 +167,23 @@
 
         var productId = @Model.MaSanPham;
 
-        if (typeof themVaoHoaDonTaiQuay === "function") {
-            themVaoHoaDonTaiQuay(productId, parseInt(maSize));
-        } else if (typeof parent.themVaoHoaDonTaiQuay === "function") {
-            parent.themVaoHoaDonTaiQuay(productId, parseInt(maSize));
+        
+        var pendingItems = JSON.parse(localStorage.getItem("pendingOrderItems") || "[]");
+        var existing = pendingItems.find(function(x) {
+            return x.MaSanPham === productId && x.MaSize === parseInt(maSize);
+        });
+        if (existing) {
+            existing.SoLuong += 1;
+        } else {
+            pendingItems.push({
+                MaSanPham: productId,
+                MaSize: parseInt(maSize)
+            });
         }
+        localStorage.setItem("pendingOrderItems", JSON.stringify(pendingItems));
 
-        var modalEl = document.getElementById('productDetailModal') || event.target.closest('.modal');
-        if (modalEl) {
-            var modalInstance = bootstrap.Modal.getInstance(modalEl);
-            if (modalInstance) {
-                modalInstance.hide();
-            } else {
-              
-                $(modalEl).modal('hide');
-            }
-        }
+        
+        window.location.href = '/NhanVien/ThuNgan/LapHoaDon';
     }
 </script>
 
@@ -193,7 +191,7 @@
     .box-kho-modal {
         border: 2px solid #dee2e6;
         border-radius: 6px;
-        padding: 6px;
+        padding: 8px 6px;
         cursor: pointer;
         color: #212529;
         font-weight: 600;
@@ -226,10 +224,12 @@
         border: none;
         border-radius: 8px;
         color: white !important;
-        transition: opacity 0.2s;
+        transition: all 0.2s ease;
     }
 
         .btn-add-cart-custom:hover {
-            opacity: 0.9;
+            opacity: 0.95;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(34, 74, 190, 0.3) !important;
         }
 </style>

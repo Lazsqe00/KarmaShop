@@ -28,7 +28,16 @@ public class ThuNganController : Controller
         if (!string.IsNullOrEmpty(keyword))
         {
             keyword = keyword.Trim();
-            query = query.Where(s => s.TenSanPham.Contains(keyword) || s.MaSanPham.ToString() == keyword);
+
+      
+            if (int.TryParse(keyword, out int maTimKiem))
+            {
+                query = query.Where(s => s.TenSanPham.Contains(keyword) || s.MaSanPham == maTimKiem);
+            }
+            else
+            {
+                query = query.Where(s => s.TenSanPham.Contains(keyword));
+            }
         }
 
         if (maLoai.HasValue)
@@ -45,9 +54,8 @@ public class ThuNganController : Controller
         if (!string.IsNullOrEmpty(sizeName))
         {
             query = query.Where(s => s.SanPhamSizes.Any(sz => sz.MaSizeNavigation != null &&
-                                                              sz.MaSizeNavigation.TenSize == sizeName));
+                                                             sz.MaSizeNavigation.TenSize == sizeName));
         }
-
 
         int totalItems = await query.CountAsync();
         int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
@@ -79,24 +87,56 @@ public class ThuNganController : Controller
         if (soTien >= 500000) return "Bạc";
         return "Thành Viên";
     }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> LuuKhachHang(KhachHang kh)
     {
-        if (ModelState.IsValid)
+       
+        ModelState.Remove("PhieuMuas");
+        ModelState.Remove("TongChi");
+
+        
+        var existing = await _context.KhachHangs
+            .FirstOrDefaultAsync(k => k.SoDienThoai == kh.SoDienThoai);
+
+        if (existing != null)
         {
-          
-            if (kh.TongChi == null)
-            {
-                kh.TongChi = 0;
-            }
-
-            _context.KhachHangs.Add(kh);
-            await _context.SaveChangesAsync();
-
+            TempData["Error"] = "Số điện thoại đã tồn tại!";
             return RedirectToAction("KhachHang");
         }
 
+        if (!ModelState.IsValid)
+        {
+            TempData["Error"] = "Vui lòng điền đầy đủ thông tin bắt buộc!";
+            return RedirectToAction("KhachHang");
+        }
+        if (!string.IsNullOrEmpty(kh.Email))
+        {
+            var taiKhoan = await _context.TaiKhoans
+                .FirstOrDefaultAsync(t => t.Email == kh.Email);
+
+            if (taiKhoan == null)
+            {
+                taiKhoan = new TaiKhoan
+                {
+                    Email = kh.Email,
+                    MatKhau = "123456",
+                    LoaiTaiKhoan = 0
+                };
+
+                _context.TaiKhoans.Add(taiKhoan);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+
+        kh.TongChi = 0;
+
+        _context.KhachHangs.Add(kh);
+        await _context.SaveChangesAsync();
+
+        TempData["Success"] = "Thêm khách hàng thành công!";
         return RedirectToAction("KhachHang");
     }
     [HttpGet]
@@ -343,6 +383,7 @@ public class ThuNganController : Controller
         
         ViewBag.DonChoDuyet = await _context.PhieuMuas.CountAsync(x => x.TinhTrang == "Chờ duyệt");
 
+        
         var list = await _context.PhieuMuas
             .Where(x => x.TinhTrang == "Chờ thanh toán")
             .Include(p => p.MaKhachHangNavigation)
@@ -351,11 +392,12 @@ public class ThuNganController : Controller
                 .ThenInclude(ct => ct.MaSanPhamNavigation)
                     .ThenInclude(sp => sp.MaDongSanPhamNavigation)
                         .ThenInclude(dsp => dsp.MaLoaiNavigation)
-                .Include(p => p.ChiTietPhieuMuas)
-                    .ThenInclude(ct => ct.MaSanPhamNavigation)
-                        .ThenInclude(sp => sp.MaMauNavigation) 
-                .Include(p => p.ChiTietPhieuMuas)
-                    .ThenInclude(ct => ct.MaSizeNavigation)
+            .Include(p => p.ChiTietPhieuMuas)
+                .ThenInclude(ct => ct.MaSanPhamNavigation)
+                    .ThenInclude(sp => sp.MaMauNavigation)
+            .Include(p => p.ChiTietPhieuMuas)
+                .ThenInclude(ct => ct.MaSizeNavigation)
+            .OrderByDescending(p => p.NgayDat)
             .ToListAsync();
 
         return View(list);

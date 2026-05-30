@@ -15,7 +15,6 @@
         <div class="card border-0 shadow-sm" style="border-radius: 12px;">
             <div class="card-body p-4">
                 <h5 class="fw-bold mb-4 text-center text-dark" style="letter-spacing: 0.5px;">THÔNG TIN KHÁCH HÀNG</h5>
-
                 <div class="row g-3">
                     <div class="col-12">
                         <label class="small fw-bold text-secondary mb-1">Họ tên khách hàng:</label>
@@ -29,17 +28,14 @@
                             }
                         </select>
                     </div>
-
                     <div class="col-12">
                         <label class="small fw-bold text-secondary mb-1">Địa chỉ nhận hàng:</label>
                         <input type="text" id="DiaChiKH" class="form-control border-0 bg-light py-2" placeholder="Hệ thống tự điền..." readonly>
                     </div>
-
                     <div class="col-12">
                         <label class="small fw-bold text-secondary mb-1">Số điện thoại:</label>
                         <input type="text" id="SdtKH" class="form-control border-0 bg-light py-2" placeholder="Hệ thống tự điền..." readonly>
                     </div>
-
                     <div class="col-12">
                         <label class="small fw-bold text-secondary mb-1">Hình thức thanh toán:</label>
                         <select id="MaPttt" class="form-select border-0 bg-light py-2">
@@ -64,11 +60,9 @@
                             <option value="">-- Chọn sản phẩm cần bán --</option>
                             @foreach (var s in (ViewBag.SanPhams as IEnumerable<KarmaShop.Models.SanPham>) ?? new List<KarmaShop.Models.SanPham>())
                             {
-                                
                                 var sizeListJson = s.SanPhamSizes != null
                                 ? System.Text.Json.JsonSerializer.Serialize(s.SanPhamSizes.Select(sz => new { id = sz.MaSize, name = sz.MaSizeNavigation?.TenSize }).Where(x => x.name != null))
                                 : "[]";
-
                                 <option value="@s.MaSanPham"
                                         data-price="@s.MaDongSanPhamNavigation?.GiaBan"
                                         data-name="@s.TenSanPham"
@@ -109,27 +103,24 @@
                         <tr>
                             <th style="width: 5%">STT</th>
                             <th style="width: 10%">Ảnh sản phẩm</th>
-                            <th style="width: 25%">Tên sản phẩm</th>
-                            <th style="width: 15%">Đồng sản phẩm</th>
-                            <th style="width: 10%">Màu sắc</th>
+                            <th style="width: 30%">Tên sản phẩm</th>
+                            <th style="width: 12%">Màu sắc</th>
                             <th style="width: 8%">Size</th>
-                            <th style="width: 10%">Đơn giá</th>
-                            <th style="width: 7%">Số lượng</th>
+                            <th style="width: 12%">Đơn giá</th>
+                            <th style="width: 8%">Số lượng</th>
                             <th style="width: 10%">Thành tiền</th>
                             <th style="width: 5%">Xóa</th>
                         </tr>
                     </thead>
-                    <tbody>
-                    </tbody>
+                    <tbody></tbody>
                     <tfoot>
                         <tr class="bg-light">
-                            <td colspan="8" class="text-end fw-bold text-dark py-3 fs-5">Tổng tiền hàng:</td>
+                            <td colspan="7" class="text-end fw-bold text-dark py-3 fs-5">Tổng tiền hàng:</td>
                             <td colspan="2" class="text-end fw-bold text-danger py-3 fs-5 pe-4" id="lblTongTienHang">0₫</td>
                         </tr>
                     </tfoot>
                 </table>
             </div>
-
             <div class="card-footer bg-white p-4 border-top d-flex justify-content-end gap-2">
                 <button class="btn btn-outline-secondary px-4 fw-bold" onclick="location.reload()">HỦY ĐƠN</button>
                 <button class="btn btn-gradient-success-custom px-5 fw-bold" onclick="saveOrder()">
@@ -140,136 +131,188 @@
     </div>
 </div>
 
-<script>
-    let orderItems = [];
+@section Scripts {
+    <script>
+        let orderItems = [];
 
-    function updateSizeDropdown() {
-        const selectedOpt = $("#MaSP option:selected");
-        const sizeDropdown = $("#Size");
+        function themVaoHoaDonTaiQuay(maSanPham, maSize) {
+            var targetOption = document.querySelector('#MaSP option[value="' + maSanPham + '"]');
+            if (!targetOption) {
+                alert("Không tìm thấy sản phẩm mã " + maSanPham + " trong danh sách!");
+                return;
+            }
+            var tenSp  = targetOption.getAttribute("data-name");
+            var price  = parseFloat(targetOption.getAttribute("data-price")) || 0;
+            var mauSac = targetOption.getAttribute("data-mau");
+            var img    = targetOption.getAttribute("data-img");
+            var sizesRaw = targetOption.getAttribute("data-sizes");
+            var sizes  = [];
+            try { sizes = JSON.parse(sizesRaw); } catch(e) {}
 
-        sizeDropdown.html('<option value="">-- Chọn Size --</option>');
+            var targetSize = sizes.find(function(s) { return s.id == maSize; });
+            var tenSize = targetSize ? targetSize.name : maSize.toString();
 
-        if (selectedOpt.val() !== "") {
-            const sizes = selectedOpt.data("sizes");
-            if (sizes && sizes.length > 0) {
-                sizes.forEach(sz => {
-                    sizeDropdown.append(`<option value="${sz.id}">${sz.name}</option>`);
-                });
+            var existing = orderItems.find(function(x) { return x.MaSanPham === maSanPham && x.MaSize === maSize; });
+            if (existing) {
+                existing.SoLuong += 1;
             } else {
-                sizeDropdown.html('<option value="">-- Hết size --</option>');
+                orderItems.push({
+                    MaSanPham: maSanPham,
+                    TenSP:     tenSp,
+                    MauSac:    mauSac,
+                    Img:       img,
+                    MaSize:    maSize,
+                    TenSize:   tenSize,
+                    SoLuong:   1,
+                    GiaBan:    price
+                });
+            }
+            renderOrder();
+        }
+        window.themVaoHoaDonTaiQuay = themVaoHoaDonTaiQuay;
+
+        function updateSizeDropdown() {
+            var sel = document.getElementById("MaSP");
+            var opt = sel.options[sel.selectedIndex];
+            var sizeDropdown = document.getElementById("Size");
+            sizeDropdown.innerHTML = '<option value="">-- Chọn Size --</option>';
+            if (opt && opt.value !== "") {
+                var sizes = [];
+                try { sizes = JSON.parse(opt.getAttribute("data-sizes")); } catch(e) {}
+                if (sizes && sizes.length > 0) {
+                    sizes.forEach(function(sz) {
+                        sizeDropdown.innerHTML += '<option value="' + sz.id + '">' + sz.name + '</option>';
+                    });
+                } else {
+                    sizeDropdown.innerHTML = '<option value="">-- Hết size --</option>';
+                }
             }
         }
-    }
 
-    function updateCustomerInfo() {
-        const selectedOpt = $("#MaKhachHang option:selected");
-        if (selectedOpt.val() !== "") {
-            $("#SdtKH").val(selectedOpt.data("sdt") || "Chưa có");
-            $("#DiaChiKH").val(selectedOpt.data("diachi") || "Chưa có");
-        } else {
-            $("#SdtKH").val("");
-            $("#DiaChiKH").val("");
+        function updateCustomerInfo() {
+            var sel = document.getElementById("MaKhachHang");
+            var opt = sel.options[sel.selectedIndex];
+            if (opt && opt.value !== "") {
+                document.getElementById("SdtKH").value   = opt.getAttribute("data-sdt") || "Chưa có";
+                document.getElementById("DiaChiKH").value = opt.getAttribute("data-diachi") || "Chưa có";
+            } else {
+                document.getElementById("SdtKH").value   = "";
+                document.getElementById("DiaChiKH").value = "";
+            }
         }
-    }
 
-    function addToOrder() {
-        const sp = $("#MaSP option:selected");
-        const sizeOpt = $("#Size option:selected");
-        const qty = parseInt($("#Qty").val());
+        function addToOrder() {
+            var selSP   = document.getElementById("MaSP");
+            var selSize = document.getElementById("Size");
+            var qty     = parseInt(document.getElementById("Qty").value);
+            var spOpt   = selSP.options[selSP.selectedIndex];
+            var sizeOpt = selSize.options[selSize.selectedIndex];
 
-        if (!sp.val()) return Swal.fire("Chú ý", "Vui lòng chọn sản phẩm!", "warning");
-        if (!sizeOpt.val()) return Swal.fire("Chú ý", "Vui lòng chọn Size!", "warning");
-        if (isNaN(qty) || qty <= 0) return Swal.fire("Chú ý", "Số lượng bán ra phải từ 1 trở lên!", "warning");
+            if (!spOpt || !spOpt.value)   { Swal.fire("Chú ý", "Vui lòng chọn sản phẩm!", "warning"); return; }
+            if (!sizeOpt || !sizeOpt.value){ Swal.fire("Chú ý", "Vui lòng chọn Size!", "warning"); return; }
+            if (isNaN(qty) || qty <= 0)    { Swal.fire("Chú ý", "Số lượng phải từ 1 trở lên!", "warning"); return; }
 
-        
-        const existing = orderItems.find(x => x.MaSanPham == sp.val() && x.MaSize == sizeOpt.val());
-        if (existing) {
-            existing.SoLuong += qty;
-        } else {
-            orderItems.push({
-                MaSanPham: parseInt(sp.val()),
-                TenSP: sp.data("name"),
-                DongSP: sp.data("dongsp"),
-                MauSac: sp.data("mau"),
-                Img: sp.data("img"),
-                MaSize: parseInt(sizeOpt.val()),
-                TenSize: sizeOpt.text(),         
-                SoLuong: qty,
-                GiaBan: parseFloat(sp.data("price")) || 0
+            var maSP   = parseInt(spOpt.value);
+            var maSize = parseInt(sizeOpt.value);
+            var existing = orderItems.find(function(x) { return x.MaSanPham === maSP && x.MaSize === maSize; });
+            if (existing) {
+                existing.SoLuong += qty;
+            } else {
+                var sizes = [];
+                try { sizes = JSON.parse(spOpt.getAttribute("data-sizes")); } catch(e) {}
+                orderItems.push({
+                    MaSanPham: maSP,
+                    TenSP:     spOpt.getAttribute("data-name"),
+                    MauSac:    spOpt.getAttribute("data-mau"),
+                    Img:       spOpt.getAttribute("data-img"),
+                    MaSize:    maSize,
+                    TenSize:   sizeOpt.text,
+                    SoLuong:   qty,
+                    GiaBan:    parseFloat(spOpt.getAttribute("data-price")) || 0
+                });
+            }
+            renderOrder();
+        }
+
+        function renderOrder() {
+            var h = "";
+            var tongTienHang = 0;
+            orderItems.forEach(function(it, i) {
+                var sum = it.SoLuong * it.GiaBan;
+                tongTienHang += sum;
+                h += '<tr>' +
+                    '<td class="text-center fw-bold">' + (i+1) + '</td>' +
+                    '<td class="text-center"><img src="' + it.Img + '" width="45" height="45" class="rounded shadow-sm" style="object-fit:cover" onerror="this.src=\'/images/default-shoe.png\'"></td>' +
+                    '<td class="fw-bold text-dark">' + it.TenSP + '</td>' +
+                    '<td class="text-center text-muted small">' + it.MauSac + '</td>' +
+                    '<td class="text-center fw-bold text-secondary">' + it.TenSize + '</td>' +
+                    '<td class="text-end fw-semibold">' + it.GiaBan.toLocaleString() + '₫</td>' +
+                    '<td class="text-center"><div class="d-flex align-items-center justify-content-center gap-1">' +
+                        '<button class="btn btn-xs btn-light border py-0 px-2" onclick="chinhSoLuongTruocTiep(' + i + ', -1)">-</button>' +
+                        '<span class="fw-bold px-1">' + it.SoLuong + '</span>' +
+                        '<button class="btn btn-xs btn-light border py-0 px-2" onclick="chinhSoLuongTruocTiep(' + i + ', 1)">+</button>' +
+                    '</div></td>' +
+                    '<td class="text-end fw-bold text-dark">' + sum.toLocaleString() + '₫</td>' +
+                    '<td class="text-center"><i class="mdi mdi-delete-forever text-danger fs-4" style="cursor:pointer" onclick="orderItems.splice(' + i + ',1);renderOrder()"></i></td>' +
+                    '</tr>';
+            });
+            if (orderItems.length === 0) {
+                h = '<tr><td colspan="9" class="text-center py-5 text-muted fst-italic">Danh sách trống - Hãy thêm sản phẩm ở thanh điều hướng trên hoặc từ bảng tra cứu</td></tr>';
+            }
+            document.querySelector("#orderTable tbody").innerHTML = h;
+            document.getElementById("lblTongTienHang").textContent = tongTienHang.toLocaleString() + "₫";
+        }
+
+        function chinhSoLuongTruocTiep(index, thayDoi) {
+            if (orderItems[index]) {
+                orderItems[index].SoLuong += thayDoi;
+                if (orderItems[index].SoLuong <= 0) orderItems.splice(index, 1);
+                renderOrder();
+            }
+        }
+
+        function saveOrder() {
+            var maKH = document.getElementById("MaKhachHang").value;
+            if (!maKH)                   { Swal.fire("Chú ý", "Vui lòng chọn một khách hàng!", "warning"); return; }
+            if (orderItems.length === 0) { Swal.fire("Chú ý", "Hóa đơn trống, vui lòng thêm sản phẩm!", "warning"); return; }
+
+            var data = {
+                MaKhachHang: parseInt(maKH),
+                MaPttt: parseInt(document.getElementById("MaPttt").value),
+                ChiTietPhieuMuas: orderItems.map(function(item) {
+                    return { MaSanPham: item.MaSanPham, MaSize: item.MaSize, SoLuong: item.SoLuong, DonGia: item.GiaBan };
+                })
+            };
+            fetch('/NhanVien/ThuNgan/TaoHoaDon', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+                if (d.success) {
+                    Swal.fire("Thành công", "Đã lưu hóa đơn và trừ kho thành công!", "success")
+                        .then(function() { location.href = '/NhanVien/ThuNgan/DanhSachHoaDon'; });
+                } else {
+                    Swal.fire("Lỗi", d.msg || "Không thể lưu hóa đơn!", "error");
+                }
             });
         }
-        renderOrder();
-    }
 
-    function renderOrder() {
-        let h = "";
-        let tongTienHang = 0;
-
-        orderItems.forEach((it, i) => {
-            let sum = it.SoLuong * it.GiaBan;
-            tongTienHang += sum;
-            h += `
-                <tr>
-                    <td class="text-center fw-bold">${i + 1}</td>
-                    <td class="text-center"><img src="${it.Img}" width="45" height="45" class="rounded shadow-sm" style="object-fit:cover" onerror="this.src='/images/default-shoe.png'"></td>
-                    <td class="fw-bold text-dark">${it.TenSP}</td>
-                    <td class="text-center text-muted small">${it.DongSP}</td>
-                    <td class="text-center text-muted small">${it.MauSac}</td>
-                    <td class="text-center fw-bold text-secondary">${it.TenSize}</td>
-                    <td class="text-end fw-semibold">${it.GiaBan.toLocaleString()}₫</td>
-                    <td class="text-center fw-bold">${it.SoLuong}</td>
-                    <td class="text-end fw-bold text-dark">${sum.toLocaleString()}₫</td>
-                    <td class="text-center">
-                        <i class="mdi mdi-delete-forever text-danger fs-4" style="cursor:pointer" onclick="orderItems.splice(${i},1);renderOrder()"></i>
-                    </td>
-                </tr>`;
-        });
-
-        if(orderItems.length === 0) {
-            h = '<tr><td colspan="10" class="text-center py-5 text-muted fst-italic">Danh sách trống - Hãy thêm sản phẩm ở thanh điều hướng trên</td></tr>';
-        }
-
-        $("#orderTable tbody").html(h);
-        $("#lblTongTienHang").text(tongTienHang.toLocaleString() + "₫");
-    }
-
-    function saveOrder() {
-        const maKH = $("#MaKhachHang").val();
-        if (!maKH) return Swal.fire("Chú ý", "Vui lòng chọn một khách hàng từ hệ thống!", "warning");
-        if (orderItems.length === 0) return Swal.fire("Chú ý", "Hóa đơn trống, vui lòng thêm sản phẩm!", "warning");
-
-        const data = {
-            MaKhachHang: parseInt(maKH),
-            MaPttt: parseInt($("#MaPttt").val()),
-            ChiTietPhieuMuas: orderItems.map(item => ({
-                MaSanPham: item.MaSanPham,
-                MaSize: item.MaSize,
-                SoLuong: item.SoLuong,
-                GiaBan: item.GiaBan
-            }))
-        };
-
-        fetch('/NhanVien/ThuNgan/TaoHoaDon', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        })
-        .then(r => r.json())
-        .then(d => {
-            if(d.success) {
-                Swal.fire("Thành công", "Đã lưu thông tin hóa đơn tạm tính!", "success").then(() => {
-                    location.href = '/NhanVien/ThuNgan/DanhSachHoaDon';
+        // Đọc sản phẩm pending từ localStorage sau khi jQuery và trang đã load xong
+        $(document).ready(function() {
+            renderOrder();
+            var pending = localStorage.getItem("pendingOrderItems");
+            if (pending) {
+                localStorage.removeItem("pendingOrderItems");
+                var pendingItems = JSON.parse(pending);
+                pendingItems.forEach(function(item) {
+                    themVaoHoaDonTaiQuay(item.MaSanPham, item.MaSize);
                 });
-            } else {
-                Swal.fire("Lỗi kho", d.msg || "Không thể thực hiện lưu hóa đơn!", "error");
             }
         });
-    }
-
-    $(document).ready(function() {
-        renderOrder();
-    });
-</script>
+    </script>
+}
 
 <style>
     .bg-gradient-primary-custom {

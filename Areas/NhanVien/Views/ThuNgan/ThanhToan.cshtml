@@ -42,24 +42,25 @@
                             var jsonData = Json.Serialize(new
                             {
                                 maHD = item.MaPhieuMua,
-                                ngay = item.NgayDat?.ToString("dd/MM/yyyy"),
+                                ngay = item.NgayDat?.ToString("dd/MM/yyyy") ?? "",
                                 tenKH = item.MaKhachHangNavigation?.TenKhachHang ?? "Khách vãng lai",
                                 sdt = item.MaKhachHangNavigation?.SoDienThoai ?? "Chưa có",
                                 diachi = item.MaKhachHangNavigation?.DiaChi ?? "Chưa có",
                                 tongChi = item.MaKhachHangNavigation?.TongChi ?? 0,
                                 pttt = item.MaPtttNavigation?.TenPttt ?? "Tiền mặt",
-                                chiTiet = item.ChiTietPhieuMuas.Select(ct => new
-                                {
-                                    tenSP = ct.MaSanPhamNavigation?.TenSanPham,
-                                    dongSP = ct.MaSanPhamNavigation?.MaDongSanPhamNavigation?.TenDongSanPham ?? "Chưa rõ",
-                                    loai = ct.MaSanPhamNavigation?.MaDongSanPhamNavigation?.MaLoaiNavigation?.TenLoai ?? "Chưa rõ",
-                                    mauSac = ct.MaSanPhamNavigation?.MaMauNavigation?.TenMau ?? "Chưa rõ",
-                                    size = ct.MaSizeNavigation?.TenSize ?? (ct.MaSize != null ? ct.MaSize.ToString() : "Chưa rõ"),
-                                    gia = ct.DonGia ?? ct.MaSanPhamNavigation?.MaDongSanPhamNavigation?.GiaBan ?? 0,
-                                    sl = ct.SoLuong ?? 0,
-                                    maDongSP = ct.MaSanPhamNavigation?.MaDongSanPham,
-                                    anhDaiDien = ct.MaSanPhamNavigation?.AnhDaiDien
-                                })
+                                chiTiet = item.ChiTietPhieuMuas != null
+                            ? item.ChiTietPhieuMuas.Select(ct => new
+                            {
+                                tenSP = ct.MaSanPhamNavigation?.TenSanPham ?? "Sản phẩm không tên",
+                                loai = ct.MaSanPhamNavigation?.MaDongSanPhamNavigation?.MaLoaiNavigation?.TenLoai ?? "Chưa rõ",
+                                mauSac = ct.MaSanPhamNavigation?.MaMauNavigation?.TenMau ?? "Chưa rõ",
+                                size = ct.MaSizeNavigation?.TenSize ?? (ct.MaSize != null ? ct.MaSize.ToString() : "Chưa rõ"),
+                                gia = ct.DonGia ?? ct.MaSanPhamNavigation?.MaDongSanPhamNavigation?.GiaBan ?? 0,
+                                sl = ct.SoLuong ?? 0,
+                                maDongSP = ct.MaSanPhamNavigation?.MaDongSanPham ?? 0,
+                                anhDaiDien = ct.MaSanPhamNavigation?.AnhDaiDien ?? ""
+                            })
+                            : Enumerable.Empty<object>()
                             });
 
                             <tr>
@@ -146,11 +147,10 @@
                             <tr>
                                 <th style="width: 5%">STT</th>
                                 <th style="width: 10%">Ảnh</th>
-                                <th style="width: 20%">Tên sản phẩm</th>
-                                <th style="width: 15%">Dòng sản phẩm</th>
-                                <th style="width: 10%">Màu sắc</th>
-                                <th style="width: 8%">Size</th>
-                                <th style="width: 10%">Đơn giá</th>
+                                <th style="width: 35%">Tên sản phẩm</th>
+                                <th style="width: 12%">Màu sắc</th>
+                                <th style="width: 10%">Size</th>
+                                <th style="width: 11%">Đơn giá</th>
                                 <th style="width: 5%">Số lượng</th>
                                 <th style="width: 12%">Thành tiền</th>
                             </tr>
@@ -159,19 +159,19 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="8" class="text-end fw-bold bg-white text-secondary py-2">Tổng tiền hàng:</td>
+                                <td colspan="7" class="text-end fw-bold bg-white text-secondary py-2">Tổng tiền hàng:</td>
                                 <td class="text-end fw-bold text-dark py-2 pe-3" id="lblModalTongTienHang">0₫</td>
                             </tr>
                             <tr>
-                                <td colspan="8" class="text-end fw-bold bg-white text-secondary py-2">Chiết khấu giảm giá hạng:</td>
+                                <td colspan="7" class="text-end fw-bold bg-white text-secondary py-2">Chiết khấu giảm giá hạng:</td>
                                 <td class="text-end fw-bold text-success py-2 pe-3" id="lblModalChietKhau">-0₫</td>
                             </tr>
                             <tr class="bg-light">
-                                <td colspan="8" class="text-end fw-bold text-dark py-3 fs-5">Tổng tiền thanh toán:</td>
+                                <td colspan="7" class="text-end fw-bold text-dark py-3 fs-5">Tổng tiền thanh toán:</td>
                                 <td class="text-end fw-bold text-danger py-3 fs-5 pe-3" id="lblModalTongThanhToan">0₫</td>
                             </tr>
                             <tr>
-                                <td colspan="8" class="text-end fw-bold bg-white text-primary py-2 align-middle">Tiền khách hàng đưa:</td>
+                                <td colspan="7" class="text-end fw-bold bg-white text-primary py-2 align-middle">Tiền khách hàng đưa:</td>
                                 <td class="py-1 pe-3 bg-white">
                                     <div class="input-group ms-auto" style="max-width: 200px;">
                                         <input type="number" id="txtModalKhachDua" class="form-control border-primary text-end fw-bold text-primary py-1" placeholder="0" oninput="calculateRefund()">
@@ -180,7 +180,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="8" class="text-end fw-bold bg-white text-secondary py-2">Tiền trả lại khách:</td>
+                                <td colspan="7" class="text-end fw-bold bg-white text-secondary py-2">Tiền trả lại khách:</td>
                                 <td class="text-end fw-bold text-dark py-2 pe-3 fs-5" id="lblModalTienThua">0₫</td>
                             </tr>
                         </tfoot>
@@ -301,7 +301,6 @@
                 let thanhTien = it.sl * it.gia;
                 tongTienHang += thanhTien;
 
-                // Tạo đường dẫn ảnh theo đúng cấu trúc từ giỏ hàng
                 let imageUrl = '/images/default-shoe.png';
                 if (it.maDongSP && it.anhDaiDien) {
                     imageUrl = `/img/${it.maDongSP}/Avatar/${it.anhDaiDien}`;
@@ -317,8 +316,10 @@
                                  style="object-fit: cover;"
                                  onerror="this.src='/images/default-shoe.png'">
                         </td>
-                        <td class="fw-bold text-dark">${escapeHtml(it.tenSP)}</td>
-                        <td class="text-center text-muted small">${escapeHtml(it.dongSP)}<br><small class="text-secondary">(${escapeHtml(it.loai)})</small></td>
+                        <td class="fw-bold text-dark">
+                            ${escapeHtml(it.tenSP)}
+                            <div class="text-secondary small mt-1 d-block fw-normal" style="font-size: 11px;">Loại: ${escapeHtml(it.loai)}</div>
+                        </td>
                         <td class="text-center"><span class="fw-medium">${escapeHtml(it.mauSac)}</span></td>
                         <td class="text-center fw-bold text-secondary">${escapeHtml(it.size)}</td>
                         <td class="text-end">${it.gia.toLocaleString()}₫</td>
@@ -340,7 +341,6 @@
             $("#lblModalChietKhau").text("-" + chietKhau.toLocaleString() + "₫");
             $("#lblModalTongThanhToan").text(currentOrderTotal.toLocaleString() + "₫");
 
-            // Xử lý nhập tiền theo phương thức thanh toán
             if (activePttt.includes("tiền mặt") || activePttt.includes("cod")) {
                 $("#txtModalKhachDua").val("").prop("disabled", false);
                 $("#lblModalTienThua").text("0₫").removeClass("text-success fw-bold").addClass("text-secondary");
@@ -367,7 +367,6 @@
         function submitPayment() {
             let khachDua = parseFloat($("#txtModalKhachDua").val()) || 0;
 
-            // Nếu là tiền mặt thì kiểm tra, còn không thì bỏ qua
             if ((activePttt.includes("tiền mặt") || activePttt.includes("cod")) && khachDua < currentOrderTotal) {
                 return Swal.fire("Thiếu tiền", "Số tiền khách đưa chưa đủ để hoàn tất thanh toán!", "warning");
             }
