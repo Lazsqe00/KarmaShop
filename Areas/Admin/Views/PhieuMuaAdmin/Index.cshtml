@@ -17,7 +17,9 @@
     .table th, .table td { text-align: center !important; vertical-align: middle !important; }
     .badge-status { padding: 6px 14px; border-radius: 20px; font-weight: 500; font-size: 0.85rem; }
     .badge-cho { background-color: #fff3cd; color: #856404; }
-    .badge-giao { background-color: #cce5ff; color: #004085; }
+    .badge-pick { background-color: #e1f0ff; color: #0b5ed7; }
+    .badge-danggiao { background-color: #ffe8cc; color: #b55d00; }
+    .badge-dagiao { background-color: #d1f2e0; color: #146c43; }
     .badge-tuchoi { background-color: #f8d7da; color: #721c24; }
     .badge-other { background-color: #e2e3e5; color: #383d41; }
 </style>
@@ -49,7 +51,9 @@
                             string badgeClass = pm.TinhTrang switch
                             {
                                 "Chờ xác nhận" => "badge-cho",
-                                "Đang giao hàng" => "badge-giao",
+                                "Chờ lấy hàng" => "badge-pick",
+                                "Đang giao hàng" => "badge-danggiao",
+                                "Đã giao" => "badge-dagiao",
                                 "Từ chối" => "badge-tuchoi",
                                 _ => "badge-other"
                             };
@@ -78,6 +82,32 @@
                                     @Html.AntiForgeryToken()
                                     <button type="submit" class="btn btn-danger btn-sm">
                                         <i class="fas fa-times"></i> Từ chối
+                                    </button>
+                                </form>
+                            }
+                            else if (pm.TinhTrang == "Chờ lấy hàng")
+                            {
+                                <form asp-area="Admin" asp-controller="PhieuMuaAdmin" asp-action="ChangeStatus"
+                                      method="post" class="d-inline"
+                                      onsubmit="return confirm('Xác nhận giao hàng đơn #@pm.MaPhieuMua?');">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="MaPhieuMua" value="@pm.MaPhieuMua" />
+                                    <input type="hidden" name="TinhTrangMoi" value="Đang giao hàng" />
+                                    <button type="submit" class="btn btn-warning btn-sm text-dark">
+                                        <i class="fas fa-shipping-fast"></i> Xác nhận giao hàng
+                                    </button>
+                                </form>
+                            }
+                            else if (pm.TinhTrang == "Đang giao hàng")
+                            {
+                                <form asp-area="Admin" asp-controller="PhieuMuaAdmin" asp-action="ChangeStatus"
+                                      method="post" class="d-inline"
+                                      onsubmit="return confirm('Xác nhận đã giao đơn #@pm.MaPhieuMua?');">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="MaPhieuMua" value="@pm.MaPhieuMua" />
+                                    <input type="hidden" name="TinhTrangMoi" value="Đã giao" />
+                                    <button type="submit" class="btn btn-success btn-sm">
+                                        <i class="fas fa-check-circle"></i> Xác nhận đã giao
                                     </button>
                                 </form>
                             }

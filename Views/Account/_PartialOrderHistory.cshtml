@@ -32,8 +32,9 @@
                                 </div>
                                 <div class="col-md-3">
                                     <span class="badge-status
-                                                @(item.TinhTrang == "Đã giao hàng" ? "status-hoanthanh" :
+                                                @(item.TinhTrang == "Đã giao" ? "status-hoanthanh" :
                                                                                     item.TinhTrang == "Đang giao hàng" ? "status-danggiao" :
+                                                                                    item.TinhTrang == "Chờ lấy hàng" ? "status-danggiao" :
                                                                                     item.TinhTrang == "Từ chối" ? "status-tuchoi" : "status-cho")">
                                 @item.TinhTrang
                             </span>

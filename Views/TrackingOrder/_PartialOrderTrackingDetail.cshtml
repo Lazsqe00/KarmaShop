@@ -20,8 +20,9 @@
 
             <div class="col-md-6 text-end">
                 <span class="badge-status
-                    @(Model.TinhTrang == "Đã giao hàng" ? "status-hoanthanh" :
+                    @(Model.TinhTrang == "Đã giao" ? "status-hoanthanh" :
                                             Model.TinhTrang == "Đang giao hàng" ? "status-danggiao" :
+                                            Model.TinhTrang == "Chờ lấy hàng" ? "status-danggiao" :
                                             Model.TinhTrang == "Từ chối" ? "status-tuchoi" :
                                             "status-cho")">
                     @Model.TinhTrang

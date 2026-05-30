@@ -37,6 +37,7 @@ namespace KarmaShop.Areas.Admin.Controllers
             {
                 string kw = tuKhoa.Trim().ToLower();
                 query = query.Where(s =>
+                    s.MaSanPham.ToString().Contains(kw) ||
                     (s.TenSanPham != null && s.TenSanPham.ToLower().Contains(kw)) ||
                     (s.MaDongSanPhamNavigation != null && s.MaDongSanPhamNavigation.TenDongSanPham != null &&
                      s.MaDongSanPhamNavigation.TenDongSanPham.ToLower().Contains(kw)) ||

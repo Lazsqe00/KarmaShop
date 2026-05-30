@@ -15,7 +15,7 @@
         <div class="input-group">
             <span class="input-group-text"><i class="fas fa-search"></i></span>
             <input type="text" name="tuKhoa" value="@ViewBag.TuKhoa" class="form-control"
-                   placeholder="Tìm theo tên, dòng SP, màu sắc..." />
+                   placeholder="Tìm theo mã SP, tên, dòng, màu sắc..." />
         </div>
         <button type="submit" class="btn btn-primary">Tìm</button>
         @if (!string.IsNullOrEmpty(ViewBag.TuKhoa as string))
@@ -49,6 +49,7 @@
         <thead class="table-dark">
             <tr>
                 <th>STT</th>
+                <th>Mã SP</th>
                 <th>Tên sản phẩm</th>
                 <th>Trạng thái</th>
                 <th>Dòng sản phẩm</th>
@@ -62,6 +63,7 @@
             {
                 <tr>
                     <td>@stt</td>
+                    <td><span class="badge bg-light text-dark">@sp.MaSanPham</span></td>
                     <td>@sp.TenSanPham</td>
                     <td>
                         @{

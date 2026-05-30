@@ -144,9 +144,8 @@ namespace KarmaShop.Controllers
                     ? _orderRepo.GetPhuongThucThanhToanById(model.MaPttt.Value)
                     : null;
 
-                model.TinhTrang = (pttt != null && pttt.TenPttt.Contains("Chuyển khoản", StringComparison.OrdinalIgnoreCase))
-                    ? "Chờ thanh toán"
-                    : "Chờ xác nhận";
+                // Trạng thái mặc định: Chờ xác nhận (loại bỏ Chờ thanh toán khỏi luồng)
+                model.TinhTrang = "Chờ xác nhận";
 
                 // Xử lý voucher
                 if (!string.IsNullOrEmpty(model.MaVoucher))
@@ -258,7 +257,7 @@ namespace KarmaShop.Controllers
                         {
                             Console.WriteLine($"Tìm thấy đơn hàng. Trạng thái hiện tại: '{donHang.TinhTrang}'");
 
-                            if (donHang.TinhTrang?.Trim() == "Chờ thanh toán")
+                            if (donHang.TinhTrang?.Trim() == "Chờ xác nhận")
                             {
                                 donHang.TinhTrang = "Chờ lấy hàng";
                                 await _db.SaveChangesAsync();
@@ -266,7 +265,7 @@ namespace KarmaShop.Controllers
                             }
                             else
                             {
-                                Console.WriteLine("⚠️ Đơn hàng không ở trạng thái Chờ thanh toán");
+                                Console.WriteLine("⚠️ Đơn hàng không ở trạng thái Chờ xác nhận");
                             }
                         }
                         else

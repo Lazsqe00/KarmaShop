@@ -28,9 +28,11 @@
             <div class="col-md-3">
                 <select name="status" class="form-select bg-light">
                     <option value="">-- Tất cả trạng thái --</option>
-                    <!option value="Đã thanh toán" @(Context.Request.Query["status"] == "Đã thanh toán" ? "selected" : "")>Đã thanh toán</!option>
-                    <!option value="Chờ thanh toán" @(Context.Request.Query["status"] == "Chờ thanh toán" ? "selected" : "")>Chờ thanh toán</!option>
-                    <!option value="Đã hủy" @(Context.Request.Query["status"] == "Đã hủy" ? "selected" : "")>Đã hủy</!option>
+                    <option value="Chờ xác nhận" @(Context.Request.Query["status"] == "Chờ xác nhận" ? "selected" : "")>Chờ xác nhận</option>
+                    <option value="Chờ lấy hàng" @(Context.Request.Query["status"] == "Chờ lấy hàng" ? "selected" : "")>Chờ lấy hàng</option>
+                    <option value="Đang giao hàng" @(Context.Request.Query["status"] == "Đang giao hàng" ? "selected" : "")>Đang giao hàng</option>
+                    <option value="Đã giao" @(Context.Request.Query["status"] == "Đã giao" ? "selected" : "")>Đã giao</option>
+                    <option value="Từ chối" @(Context.Request.Query["status"] == "Từ chối" ? "selected" : "")>Từ chối</option>
                 </select>
             </div>
 
@@ -66,7 +68,7 @@
         <div class="card border-0 shadow-sm p-3 bg-white card-hover-effect" style="border-radius: 12px; border-left: 5px solid #1bcfb4 !important;">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <small class="text-muted fw-bold">ĐÃ THANH TOÁN</small>
+                    <small class="text-muted fw-bold">ĐÃ GIAO</small>
                     <h2 class="fw-bold text-success mb-0 mt-1">@ViewBag.DaTT</h2>
                 </div>
                 <i class="mdi mdi-check-all text-success fs-1 opacity-25"></i>
@@ -77,7 +79,7 @@
         <div class="card border-0 shadow-sm p-3 bg-white card-hover-effect" style="border-radius: 12px; border-left: 5px solid #ffab00 !important;">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <small class="text-muted fw-bold">CHỜ THANH TOÁN</small>
+                    <small class="text-muted fw-bold">CHỜ XÁC NHẬN</small>
                     <h2 class="fw-bold text-warning mb-0 mt-1">@ViewBag.ChoTT</h2>
                 </div>
                 <i class="mdi mdi-clock-outline text-warning fs-1 opacity-25"></i>
@@ -88,7 +90,7 @@
         <div class="card border-0 shadow-sm p-3 bg-white card-hover-effect" style="border-radius: 12px; border-left: 5px solid #fe7c96 !important;">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <small class="text-muted fw-bold">ĐÃ HỦY</small>
+                    <small class="text-muted fw-bold">TỪ CHỐI</small>
                     <h2 class="fw-bold text-danger mb-0 mt-1">@ViewBag.DaHuy</h2>
                 </div>
                 <i class="mdi mdi-close-circle-outline text-danger fs-1 opacity-25"></i>
@@ -154,17 +156,26 @@
                                 </small>
                             </td>
                             <td class="text-center">
-                                @if (item.TinhTrang == "Đã thanh toán")
+                                @switch (item.TinhTrang)
                                 {
-                                    <span class="badge status-success">Đã thanh toán</span>
-                                }
-                                else if (item.TinhTrang == "Đã hủy")
-                                {
-                                    <span class="badge status-danger">Đã hủy</span>
-                                }
-                                else
-                                {
-                                    <span class="badge status-warning">Chờ thanh toán</span>
+                                    case "Chờ xác nhận":
+                                        <span class="badge status-warning">Chờ xác nhận</span>;
+                                        break;
+                                    case "Chờ lấy hàng":
+                                        <span class="badge bg-info text-dark">Chờ lấy hàng</span>;
+                                        break;
+                                    case "Đang giao hàng":
+                                        <span class="badge bg-warning text-dark">Đang giao hàng</span>;
+                                        break;
+                                    case "Đã giao":
+                                        <span class="badge status-success">Đã giao</span>;
+                                        break;
+                                    case "Từ chối":
+                                        <span class="badge status-danger">Từ chối</span>;
+                                        break;
+                                    default:
+                                        <span class="badge bg-secondary">@item.TinhTrang</span>;
+                                        break;
                                 }
                             </td>
                         </tr>

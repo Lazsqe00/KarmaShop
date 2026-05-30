@@ -190,7 +190,7 @@ public class ThuNganController : Controller
         try
         {
             hoadon.NgayDat = DateOnly.FromDateTime(DateTime.Now);
-            hoadon.TinhTrang = "Chờ thanh toán";
+            hoadon.TinhTrang = "Chờ xác nhận";
 
             decimal tongTienDonHang = 0;
 
@@ -261,9 +261,9 @@ public class ThuNganController : Controller
         var baseQuery = _context.PhieuMuas.AsQueryable();
 
         ViewBag.Tong = await baseQuery.CountAsync();
-        ViewBag.DaTT = await baseQuery.CountAsync(x => x.TinhTrang == "Đã thanh toán");
-        ViewBag.ChoTT = await baseQuery.CountAsync(x => x.TinhTrang == "Chờ thanh toán");
-        ViewBag.DaHuy = await baseQuery.CountAsync(x => x.TinhTrang == "Đã hủy");
+        ViewBag.DaTT = await baseQuery.CountAsync(x => x.TinhTrang == "Đã giao");
+        ViewBag.ChoTT = await baseQuery.CountAsync(x => x.TinhTrang == "Chờ xác nhận");
+        ViewBag.DaHuy = await baseQuery.CountAsync(x => x.TinhTrang == "Từ chối");
 
        
         var query = _context.PhieuMuas
@@ -378,47 +378,10 @@ public class ThuNganController : Controller
                 return Json(new { success = false, message = "Không tìm thấy hóa đơn này!" });
             }
 
-            if (trangThai == "Đã thanh toán")
+            // Áp dụng state machine mới (NV thu ngân tạm thời không dùng cập nhật khác)
+            if (trangThai == "Đã giao" || trangThai == "Từ chối")
             {
-                phieuMua.TinhTrang = "Đã thanh toán";
-
-                if (phieuMua.MaKhachHangNavigation != null)
-                {
-                    var khachHang = phieuMua.MaKhachHangNavigation;
-
-                    decimal tongTienHang = 0;
-                    foreach (var ct in phieuMua.ChiTietPhieuMuas)
-                    {
-                        decimal gia = (decimal)(ct.DonGia ?? ct.MaSanPhamNavigation?.MaDongSanPhamNavigation?.GiaBan ?? 0);
-                        int sl = ct.SoLuong ?? 0;
-                        tongTienHang += (gia * sl);
-                    }
-
-                    decimal tc = khachHang.TongChi ?? 0m;
-                    string hangHienTai = "Thành Viên";
-                    if (tc >= 8000000m) hangHienTai = "Kim Cương";
-                    else if (tc >= 5000000m) hangHienTai = "Bạch Kim";
-                    else if (tc >= 3000000m) hangHienTai = "Vàng";
-                    else if (tc >= 500000m) hangHienTai = "Bạc";
-
-
-                    decimal chietKhau = 0m;
-                    if (hangHienTai == "Vàng" && tongTienHang >= 350000m) chietKhau = tongTienHang * 0.05m;
-                    else if (hangHienTai == "Bạch Kim" && tongTienHang >= 550000m) chietKhau = tongTienHang * 0.10m;
-                    else if (hangHienTai == "Kim Cương" && tongTienHang >= 800000m) chietKhau = tongTienHang * 0.12m;
-
-                    decimal soTienThucTeThanhToan = tongTienHang - chietKhau;
-
-                    phieuMua.TongTien = soTienThucTeThanhToan;
-
-                    khachHang.TongChi = (khachHang.TongChi ?? 0m) + soTienThucTeThanhToan;
-
-                    _context.KhachHangs.Update(khachHang);
-                }
-            }
-            else if (trangThai == "Đã hủy")
-            {
-                phieuMua.TinhTrang = "Đã hủy";
+                phieuMua.TinhTrang = trangThai;
             }
             else
             {

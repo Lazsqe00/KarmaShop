@@ -9,6 +9,13 @@ namespace KarmaShop.Areas.Admin.Controllers
     {
         private readonly QuanLyBanGiayContext _db;
 
+        private static readonly Dictionary<string, string[]> AllowedTransitions = new()
+        {
+            { "Chờ xác nhận", new[] { "Chờ lấy hàng", "Từ chối" } },
+            { "Chờ lấy hàng", new[] { "Đang giao hàng" } },
+            { "Đang giao hàng", new[] { "Đã giao" } }
+        };
+
         public PhieuMuaAdminController(QuanLyBanGiayContext db)
         {
             _db = db;
@@ -67,11 +74,16 @@ namespace KarmaShop.Areas.Admin.Controllers
             var phieu = await _db.PhieuMuas.FindAsync(id);
             if (phieu != null)
             {
+                if (!CanTransition(phieu.TinhTrang, "Chờ lấy hàng"))
+                {
+                    TempData["SuccessMessage"] = $"Không thể duyệt. Trạng thái hiện tại: {phieu.TinhTrang ?? "(trống)"}";
+                    return RedirectToAction(nameof(Index));
+                }
                 int? maNhanVien = HttpContext.Session.GetInt32("MaNhanVien");
                 if (maNhanVien.HasValue)
                     phieu.MaNhanVien = maNhanVien.Value;
 
-                phieu.TinhTrang = "Đang giao hàng";
+                phieu.TinhTrang = "Chờ lấy hàng";
                 await _db.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Index));
@@ -87,6 +99,11 @@ namespace KarmaShop.Areas.Admin.Controllers
             var phieu = await _db.PhieuMuas.FindAsync(id);
             if (phieu != null)
             {
+                if (!CanTransition(phieu.TinhTrang, "Từ chối"))
+                {
+                    TempData["SuccessMessage"] = $"Không thể từ chối. Trạng thái hiện tại: {phieu.TinhTrang ?? "(trống)"}";
+                    return RedirectToAction(nameof(Index));
+                }
                 int? maNhanVien = HttpContext.Session.GetInt32("MaNhanVien");
                 if (maNhanVien.HasValue)
                     phieu.MaNhanVien = maNhanVien.Value;
@@ -109,8 +126,8 @@ namespace KarmaShop.Areas.Admin.Controllers
             if (phieu == null)
                 return Json(new { success = false, message = "Không tìm thấy đơn hàng!" });
 
-            if (TinhTrangMoi != "Đang giao hàng" && TinhTrangMoi != "Từ chối")
-                return Json(new { success = false, message = "Trạng thái không hợp lệ!" });
+            if (!CanTransition(phieu.TinhTrang, TinhTrangMoi))
+                return Json(new { success = false, message = "Chuyển trạng thái không hợp lệ!" });
 
             phieu.TinhTrang = TinhTrangMoi;
             if (!string.IsNullOrEmpty(GhiChu))
@@ -126,7 +143,33 @@ namespace KarmaShop.Areas.Admin.Controllers
             await _db.SaveChangesAsync();
 
             TempData["SuccessMessage"] = $"Đã cập nhật trạng thái đơn hàng #{MaPhieuMua} thành {TinhTrangMoi}!";
-            return Json(new { success = true, redirectUrl = Url.Action("Details", new { id = MaPhieuMua }) });
+            bool isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+            if (isAjax)
+            {
+                return Json(new { success = true, redirectUrl = Url.Action("Details", new { id = MaPhieuMua }) });
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool CanTransition(string? current, string target)
+        {
+            current = (current ?? "").Trim();
+            target = target.Trim();
+
+            if (current == target) return false;
+            if (current == "Đã giao" || current == "Từ chối") return false;
+
+            if (AllowedTransitions.TryGetValue(current, out var nexts))
+            {
+                return nexts.Contains(target);
+            }
+
+            // Trường hợp trạng thái trống (dữ liệu cũ) chỉ cho phép vào luồng chuẩn
+            if (string.IsNullOrEmpty(current) && target == "Chờ lấy hàng") return true;
+            if (string.IsNullOrEmpty(current) && target == "Từ chối") return true;
+
+            return false;
         }
     }
 }

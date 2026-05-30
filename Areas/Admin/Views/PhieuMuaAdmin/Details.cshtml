@@ -43,10 +43,12 @@
                             @{
                                 string tinhTrangBadge = Model.TinhTrang switch
                                 {
+                                    "Chờ xác nhận" => "warning text-dark",
+                                    "Chờ lấy hàng" => "info",
                                     "Đang giao hàng" => "primary",
+                                    "Đã giao" => "success",
                                     "Từ chối" => "danger",
-                                    "Đã giao hàng" => "success",
-                                    _ => "warning text-dark"
+                                    _ => "secondary"
                                 };
                             }
                             <span class="badge bg-@tinhTrangBadge">
@@ -177,7 +179,7 @@
                         <label class="form-label fw-bold">Trạng thái mới</label>
                         <select name="TinhTrangMoi" id="TinhTrangMoi" class="form-select" required>
                             <option value="">-- Chọn trạng thái --</option>
-                            <option value="Đang giao hàng">Đang giao hàng</option>
+                            <option value="Chờ lấy hàng">Chờ lấy hàng</option>
                             <option value="Từ chối">Từ chối</option>
                         </select>
                     </div>
