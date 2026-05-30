@@ -1,4 +1,4 @@
-﻿@model List<KarmaShop.Models.Sodiachi>
+@model List<KarmaShop.Models.Sodiachi>
 
 <div class="mb-4">
     <div class="d-flex justify-content-between align-items-center mb-2">       
@@ -21,10 +21,12 @@
         {
             <div class="mb-3 border p-3 rounded">
                 <div class="row">
-                    <div class="col-md-9">
+                    <div class="col-md-7">
                         @if (sdc.IsDefault == true)
                         {
-                            <span class="badge bg-success mb-2">Mặc định</span>
+                            <span class="badge-purple">
+                                 Mặc định
+                            </span>
                         }
                         <p class="mb-1"><strong>Tên người nhận: @sdc.Tennguoinhan</strong></p>
                         <p class="text-muted">Số điện thoại: @sdc.Sdtnguoinhan</p>
@@ -43,8 +45,15 @@
                         </p>
 
                     </div>
-                    <div class="col-md-3 d-flex justify-content-end align-items-center gap-3">
-                        <div class="primary-btn-small deleteButtonAddress" value="@sdc.Masodiachi">
+                    <div class="col-md-5 d-flex justify-content-end align-items-center gap-3">
+                        @if (sdc.IsDefault != true)
+                        {
+                            <button class="primary-btn-small setDefaultAddress"
+                                    data-id="@sdc.Masodiachi">
+                                Đặt mặc định
+                            </button>
+                        }
+                        <div class="ml-3 btn btn-outline-danger deleteButtonAddress rounded-pill" value="@sdc.Masodiachi">
                             Xóa
                         </div>
                     </div>
@@ -93,5 +102,48 @@
                 });
             }
         });
+
+            $(document).off('click', '.setDefaultAddress').on('click', '.setDefaultAddress', function () {
+
+        var maSoDiaChi = $(this).data('id');
+
+        $.ajax({
+            url: '/Account/SetDefaultAddress',
+            type: 'POST',
+            data: { id: maSoDiaChi },
+            success: function (response) {
+                if (response.success) {
+                    alert(response.message || "Đã đặt làm địa chỉ mặc định!");
+
+                    if (typeof loadAddressBook === "function") {
+                        loadAddressBook();
+                    } else {
+                        location.reload();
+                    }
+                } else {
+                    alert(response.message || "Không thể cập nhật.");
+                }
+            },
+            error: function () {
+                alert("Đã xảy ra lỗi hệ thống!");
+            }
+        });
+    });
     });
 </script>
+
+<style>
+    .badge-purple {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #fff;
+        background: linear-gradient(135deg, #7058FA, #8B7BFF);
+        border-radius: 999px;
+        box-shadow: 0 4px 10px rgba(112, 88, 250, 0.25);
+        margin-bottom: 20px;
+    }
+</style>
