@@ -135,6 +135,16 @@ namespace KarmaShop.Controllers
                 GiaHienThi = s.MaDongSanPhamNavigation?.GiaBan
             }).ToList();
 
+            // Sản phẩm cùng dòng (màu khác)
+            var relatedProducts = _context.SanPhams
+                .Include(s => s.MaMauNavigation)
+                .Include(s => s.MaDongSanPhamNavigation)
+                .Where(s => s.MaDongSanPham == madongsanpham && s.MaSanPham != masp)
+                .OrderBy(s => s.MaSanPham)
+                .ToList();
+
+            model.SanPhams = relatedProducts;
+
             return View(model);
         }
     }

@@ -49,8 +49,14 @@
                 <div class="col-md-10">
                     @if (!string.IsNullOrEmpty(Model.AnhDaiDien))
                     {
-                        <img src="~/img/@Model.MaDongSanPham/Avatar/@Model.AnhDaiDien"
-                             style="width:80px;height:80px;object-fit:cover;border-radius:6px;" class="mb-2 d-block" />
+                        <div class="d-flex align-items-center gap-3 mb-2">
+                            <img src="~/img/@Model.MaDongSanPham/Avatar/@Model.AnhDaiDien"
+                                 style="width:80px;height:80px;object-fit:cover;border-radius:6px;" />
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="RemoveAnhDaiDien" value="true" id="removeAvatar" />
+                                <label class="form-check-label text-danger" for="removeAvatar">Xóa ảnh đại diện</label>
+                            </div>
+                        </div>
                         <small class="text-muted">Chọn file mới để thay ảnh, hoặc bỏ trống để giữ nguyên.</small>
                     }
                     <input type="file" name="AnhDaiDienFile" accept="image/*" class="form-control mt-2" />
@@ -62,14 +68,20 @@
                 <div class="col-md-10">
                     @if (!string.IsNullOrEmpty(Model.AnhChiTiet))
                     {
-                        <div class="d-flex flex-wrap gap-2 mb-2">
+                        <div class="d-flex flex-wrap gap-3 mb-2">
                             @foreach (var anh in Model.AnhChiTiet.Split(','))
                             {
-                                <img src="~/img/@Model.MaDongSanPham/ChiTietAnh/@anh"
-                                     style="width:70px;height:70px;object-fit:cover;border-radius:4px;" />
+                                <div class="text-center" style="width:90px;">
+                                    <img src="~/img/@Model.MaDongSanPham/ChiTietAnh/@anh"
+                                         style="width:70px;height:70px;object-fit:cover;border-radius:4px;" class="d-block mx-auto" />
+                                    <div class="form-check mt-1">
+                                        <input class="form-check-input" type="checkbox" name="RemoveAnhChiTiet" value="@anh" id="rm_@anh">
+                                        <label class="form-check-label small text-danger" for="rm_@anh">Xóa</label>
+                                    </div>
+                                </div>
                             }
                         </div>
-                        <small class="text-muted">Chọn file mới để thay toàn bộ ảnh chi tiết, hoặc bỏ trống để giữ nguyên.</small>
+                        <small class="text-muted d-block">Chọn file mới để thêm ảnh; ảnh được chọn "Xóa" sẽ bị loại bỏ.</small>
                     }
                     <div id="anhChiTietContainer" class="mt-2">
                         <div class="anh-row mb-2 d-flex align-items-center">

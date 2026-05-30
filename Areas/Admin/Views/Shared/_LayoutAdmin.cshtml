@@ -95,7 +95,7 @@
                                 <span class="login-status online"></span>
                             </div>
                             <div class="nav-profile-text d-flex flex-column">
-                                <span class="font-weight-bold mb-2">@(Context.Session.GetString("Email") ?? "Admin")</span>
+                                <span class="font-weight-bold mb-2">@(Context.Session.GetString("EmailAdmin") ?? Context.Session.GetString("Email") ?? "Admin")</span>
                                 <span class="text-secondary text-small">
                                     @(Context.Session.GetString("LoaiTK") == "2" ? "Quản trị viên" : "Nhân viên")
                                 </span>

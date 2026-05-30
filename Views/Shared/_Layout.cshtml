@@ -101,7 +101,8 @@
                             </li>
                             <li class="nav-item submenu dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                    @if (Context.Session.GetString("Email") == null)
+                                    @{ var loaiTk = Context.Session.GetString("LoaiTK"); var isCustomerOrStaff = loaiTk == "0" || loaiTk == "1"; }
+                                    @if (!isCustomerOrStaff)
                                     {
                                         <span>Account</span>
                                     }
@@ -119,7 +120,7 @@
                                     }
                                 </a>
                                 <ul class="dropdown-menu">
-                                    @if (Context.Session.GetString("Email") == null)
+                                    @if (!isCustomerOrStaff)
                                     {
                                         <li class="nav-item"><a class="nav-link" href="@Url.Action("Login", "Account")">Login</a></li>
                                         <li class="nav-item"><a class="nav-link" href="@Url.Action("Register", "Account")">Register</a></li>

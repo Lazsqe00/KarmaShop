@@ -194,7 +194,9 @@ namespace KarmaShop.Areas.Admin.Controllers
         public async Task<IActionResult> Edit(int id, SanPham sanPham,
             IFormFile? AnhDaiDienFile,
             IEnumerable<IFormFile>? AnhChiTietFile,
-            List<SanPhamSize>? Sizes)
+            List<SanPhamSize>? Sizes,
+            bool? RemoveAnhDaiDien,
+            List<string>? RemoveAnhChiTiet)
         {
             if (!IsAdminOrStaff()) return RedirectToAction("Login", "TaiKhoanAdmin");
             if (id != sanPham.MaSanPham) return BadRequest();
@@ -208,24 +210,53 @@ namespace KarmaShop.Areas.Admin.Controllers
             existing.MaMau = sanPham.MaMau;
             existing.TrangThai = sanPham.TrangThai;
 
+            // ================== ẢNH ĐẠI DIỆN ==================
+            var avatarFolderBase = Path.Combine(_env.WebRootPath, "img",
+                existing.MaDongSanPham.ToString()!, "Avatar");
+
+            if (RemoveAnhDaiDien == true && !string.IsNullOrEmpty(existing.AnhDaiDien))
+            {
+                var oldAvatarPath = Path.Combine(avatarFolderBase, existing.AnhDaiDien);
+                if (System.IO.File.Exists(oldAvatarPath))
+                    System.IO.File.Delete(oldAvatarPath);
+                existing.AnhDaiDien = null;
+            }
+
             // Cập nhật ảnh đại diện nếu có file mới
             if (AnhDaiDienFile != null && AnhDaiDienFile.Length > 0)
             {
                 string ext = Path.GetExtension(AnhDaiDienFile.FileName).ToLower();
                 string newFileName = Guid.NewGuid() + ext;
-                string avatarFolder = Path.Combine(_env.WebRootPath, "img",
-                    existing.MaDongSanPham.ToString()!, "Avatar");
-                Directory.CreateDirectory(avatarFolder);
-                string path = Path.Combine(avatarFolder, newFileName);
+                Directory.CreateDirectory(avatarFolderBase);
+                string path = Path.Combine(avatarFolderBase, newFileName);
                 using (var stream = new FileStream(path, FileMode.Create))
                     await AnhDaiDienFile.CopyToAsync(stream);
                 existing.AnhDaiDien = newFileName;
             }
 
-            // Cập nhật ảnh chi tiết nếu có file mới
+            // ================== ẢNH CHI TIẾT ==================
+            var currentDetailImages = string.IsNullOrWhiteSpace(existing.AnhChiTiet)
+                ? new List<string>()
+                : existing.AnhChiTiet.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList();
+
+            // Xóa ảnh chi tiết được chọn
+            if (RemoveAnhChiTiet != null && RemoveAnhChiTiet.Any())
+            {
+                string chiTietFolderBase = Path.Combine(_env.WebRootPath, "img",
+                    existing.MaDongSanPham.ToString()!, "ChiTietAnh");
+
+                foreach (var img in RemoveAnhChiTiet)
+                {
+                    var path = Path.Combine(chiTietFolderBase, img);
+                    if (System.IO.File.Exists(path))
+                        System.IO.File.Delete(path);
+                    currentDetailImages.Remove(img);
+                }
+            }
+
+            // Thêm ảnh chi tiết mới (append)
             if (AnhChiTietFile != null && AnhChiTietFile.Any())
             {
-                var anhList = new List<string>();
                 string chiTietFolder = Path.Combine(_env.WebRootPath, "img",
                     existing.MaDongSanPham.ToString()!, "ChiTietAnh");
                 Directory.CreateDirectory(chiTietFolder);
@@ -239,11 +270,14 @@ namespace KarmaShop.Areas.Admin.Controllers
                         string path = Path.Combine(chiTietFolder, newFileName);
                         using var stream = new FileStream(path, FileMode.Create);
                         await file.CopyToAsync(stream);
-                        anhList.Add(newFileName);
+                        currentDetailImages.Add(newFileName);
                     }
                 }
-                existing.AnhChiTiet = string.Join(",", anhList);
             }
+
+            existing.AnhChiTiet = currentDetailImages.Any()
+                ? string.Join(",", currentDetailImages)
+                : null;
 
             // Cập nhật sizes: xóa cũ, thêm mới
             if (Sizes != null && Sizes.Any(s => s.MaSize > 0))

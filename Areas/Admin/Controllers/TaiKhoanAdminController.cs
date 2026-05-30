@@ -38,7 +38,7 @@ namespace KarmaShop.Areas.Admin.Controllers
             {
                 // Xóa session cũ (khách hàng) rồi set session admin
                 HttpContext.Session.Clear();
-                HttpContext.Session.SetString("Email", user.Email);
+                HttpContext.Session.SetString("EmailAdmin", user.Email);
                 HttpContext.Session.SetString("LoaiTK", user.LoaiTaiKhoan.ToString()!);
 
                 var nv = _db.NhanViens.FirstOrDefault(n => n.Email == user.Email);

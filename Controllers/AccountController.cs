@@ -97,6 +97,14 @@ namespace KarmaShop.Controllers
 
             if (user != null)
             {
+                // Chặn đăng nhập admin từ trang khách
+                if (user.LoaiTaiKhoan == 2)
+                {
+                    ModelState.AddModelError("", "Email hoặc mật khẩu không đúng");
+                    if (!string.IsNullOrEmpty(backToPage))
+                        ViewBag.backToPage = backToPage;
+                    return View(model);
+                }
 
                 if (user.LoaiTaiKhoan == 1)
                 {
