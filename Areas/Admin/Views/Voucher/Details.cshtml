@@ -36,8 +36,26 @@
                 <td>@Model.SoLuong</td>
             </tr>
             <tr>
+                <td class="fw-bold">Loại giảm giá:</td>
+                <td>@(string.IsNullOrEmpty(Model.LoaiGiamGia) ? "Phần trăm" : Model.LoaiGiamGia)</td>
+            </tr>
+            <tr>
                 <td class="fw-bold">Giảm tối đa:</td>
-                <td class="text-success fw-bold">@Model.GiamToiDa.ToString("0.##")%</td>
+                <td class="text-success fw-bold">
+                    @(
+                        (Model.LoaiGiamGia ?? "Phần trăm").Equals("Phần trăm", StringComparison.OrdinalIgnoreCase)
+                            ? $"{Model.GiamToiDa:0.##}%"
+                            : $"{Model.GiamToiDa:#,##0}₫"
+                    )
+                </td>
+            </tr>
+            <tr>
+                <td class="fw-bold">Đơn tối thiểu:</td>
+                <td>@Model.GiaTriToiThieu.ToString("#,##0")₫</td>
+            </tr>
+            <tr>
+                <td class="fw-bold">Hạng áp dụng:</td>
+                <td>@(string.IsNullOrEmpty(Model.HangApDung) ? "Tất cả" : Model.HangApDung)</td>
             </tr>
             <tr>
                 <td class="fw-bold">Ngày tạo:</td>

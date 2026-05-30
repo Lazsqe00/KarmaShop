@@ -34,10 +34,37 @@
             </div>
 
             <div class="mb-3">
-                <label asp-for="GiamToiDa" class="form-label fw-bold">Giảm tối đa (%)</label>
+                <label class="form-label fw-bold">Loại giảm giá</label>
+                <select asp-for="LoaiGiamGia" class="form-select">
+                    <option value="Phần trăm">Phần trăm</option>
+                    <option value="Tiền mặt">Tiền mặt</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="GiamToiDa" class="form-label fw-bold">Giảm tối đa</label>
                 <input asp-for="GiamToiDa" type="number" step="0.01" class="form-control"
-                       placeholder="VD: 10.00 (giảm 10%)" min="0" max="100" />
+                       placeholder="VD: 10 (Phần trăm) hoặc 50000 (Tiền mặt)" min="0" />
                 <span asp-validation-for="GiamToiDa" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="GiaTriToiThieu" class="form-label fw-bold">Giá trị đơn tối thiểu</label>
+                <input asp-for="GiaTriToiThieu" type="number" step="1000" class="form-control"
+                       placeholder="VD: 300000" min="0" />
+                <span asp-validation-for="GiaTriToiThieu" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="HangApDung" class="form-label fw-bold">Hạng áp dụng</label>
+                <select asp-for="HangApDung" class="form-select">
+                    <option value="Tất cả">Tất cả</option>
+                    <option value="Thường">Thường</option>
+                    <option value="Bạc">Bạc</option>
+                    <option value="Vàng">Vàng</option>
+                    <option value="Bạch Kim">Bạch Kim</option>
+                    <option value="Kim Cương">Kim Cương</option>
+                </select>
             </div>
 
             <div class="mb-3">

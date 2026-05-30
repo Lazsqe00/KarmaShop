@@ -46,11 +46,15 @@ namespace KarmaShop.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MaVoucher,SoLuong,GiamToiDa,NgayTao,NgayHetHan")] Voucher item)
+        public async Task<IActionResult> Create([Bind("MaVoucher,SoLuong,GiamToiDa,NgayTao,NgayHetHan,GiaTriToiThieu,LoaiGiamGia,HangApDung")] Voucher item)
         {
             if (!IsAdminOrStaff()) return RedirectToAction("Login", "TaiKhoanAdmin");
             if (ModelState.IsValid)
             {
+                item.NgayTao ??= DateOnly.FromDateTime(DateTime.Now);
+                item.LoaiGiamGia = string.IsNullOrWhiteSpace(item.LoaiGiamGia) ? "Phần trăm" : item.LoaiGiamGia.Trim();
+                item.HangApDung = string.IsNullOrWhiteSpace(item.HangApDung) ? "Tất cả" : item.HangApDung.Trim();
+
                 _db.Vouchers.Add(item);
                 await _db.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -69,12 +73,14 @@ namespace KarmaShop.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("MaVoucher,SoLuong,GiamToiDa,NgayTao,NgayHetHan")] Voucher item)
+        public async Task<IActionResult> Edit(string id, [Bind("MaVoucher,SoLuong,GiamToiDa,NgayTao,NgayHetHan,GiaTriToiThieu,LoaiGiamGia,HangApDung")] Voucher item)
         {
             if (!IsAdminOrStaff()) return RedirectToAction("Login", "TaiKhoanAdmin");
             if (id != item.MaVoucher) return BadRequest();
             if (ModelState.IsValid)
             {
+                item.LoaiGiamGia = string.IsNullOrWhiteSpace(item.LoaiGiamGia) ? "Phần trăm" : item.LoaiGiamGia.Trim();
+                item.HangApDung = string.IsNullOrWhiteSpace(item.HangApDung) ? "Tất cả" : item.HangApDung.Trim();
                 _db.Update(item);
                 await _db.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

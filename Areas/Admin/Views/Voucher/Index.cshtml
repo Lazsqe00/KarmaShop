@@ -17,7 +17,9 @@
                 <th class="text-center">STT</th>
                 <th>Mã Voucher</th>
                 <th class="text-center">Số lượng</th>
-                <th class="text-end">Giảm tối đa (%)</th>
+                <th class="text-end">Giảm tối đa</th>
+                <th class="text-end">Đơn tối thiểu</th>
+                <th class="text-center">Hạng áp dụng</th>
                 <th class="text-center">Ngày tạo</th>
                 <th class="text-center">Ngày hết hạn</th>
                 <th class="text-center">Trạng thái</th>
@@ -36,7 +38,16 @@
                     <td class="text-center">@stt</td>
                     <td><strong class="text-primary">@item.MaVoucher</strong></td>
                     <td class="text-center">@item.SoLuong</td>
-                    <td class="text-end">@item.GiamToiDa.ToString("0.##")%</td>
+                    <td class="text-end">
+                        @{
+                            var giamText = (item.LoaiGiamGia ?? "Phần trăm").Equals("Phần trăm", StringComparison.OrdinalIgnoreCase)
+                                ? $"{item.GiamToiDa:0.##}%"
+                                : $"{item.GiamToiDa:#,##0}₫";
+                        }
+                        @giamText
+                    </td>
+                    <td class="text-end">@item.GiaTriToiThieu.ToString("#,##0")₫</td>
+                    <td class="text-center">@(!string.IsNullOrEmpty(item.HangApDung) ? item.HangApDung : "Tất cả")</td>
                     <td class="text-center">@item.NgayTao?.ToString("dd/MM/yyyy")</td>
                     <td class="text-center">@(item.NgayHetHan?.ToString("dd/MM/yyyy") ?? "Không giới hạn")</td>
                     <td class="text-center">
