@@ -298,10 +298,51 @@ namespace KarmaShop.Controllers
             var email = HttpContext.Session.GetString("Email");
             if (string.IsNullOrEmpty(email))
                 return Json(new { success = false, message = "Chưa đăng nhập" });
-
+    
             bool success = userRepo.UpdateProfile(email, model);
-
+    
             return Json(new { success, message = success ? "Cập nhật thành công" : "Cập nhật thất bại" });
+        }
+            
+        [HttpPost]
+        public async Task<IActionResult> SetDefaultAddress(int id)
+        {
+            var email = HttpContext.Session.GetString("Email");
+            
+            if (string.IsNullOrEmpty(email))
+            {
+                return Json(new { success = false, message = "Chưa đăng nhập!" });
+            }
+            
+            var kh = db.KhachHangs.FirstOrDefault(k => k.Email == email);
+            
+            if (kh == null)
+            {
+                return Json(new { success = false, message = "Không tìm thấy khách hàng!" });
+            }
+            
+            int userId = kh.MaKhachHang;
+            
+            var oldDefault = db.Sodiachis
+                .Where(x => x.MaKhachHang == userId && x.IsDefault == true)
+                .ToList();
+            
+            foreach (var item in oldDefault)
+            {
+                item.IsDefault = false;
+            }
+            
+            var address = await db.Sodiachis
+                .FirstOrDefaultAsync(x => x.Masodiachi == id && x.MaKhachHang == userId);
+            
+            if (address == null)
+                return Json(new { success = false, message = "Không tìm thấy địa chỉ!" });
+            
+            address.IsDefault = true;
+            
+            await db.SaveChangesAsync();
+            
+            return Json(new { success = true });
         }
     }
 
