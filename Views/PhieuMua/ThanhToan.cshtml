@@ -6,6 +6,9 @@
     var cart = ViewBag.Cart as List<KarmaShop.Models.ChiTietPhieuMua>;
     var tongTamTinh = ViewBag.TongTien ?? 0;
     var defaultAddress = ViewBag.DefaultAddress as KarmaShop.Models.Sodiachi;
+
+    var phiVanChuyen = 30000;
+    var tongThanhToanBanDau = tongTamTinh + phiVanChuyen;
 }
 
 <section class="banner-area organic-breadcrumb">
@@ -32,15 +35,16 @@
                     @Html.AntiForgeryToken()
 
                     <input type="hidden" asp-for="MaKhachHang" />
-                    <input type="hidden" asp-for="TongTien" id="hiddenThanhTien" />
 
-                    <div class="row">                    
+                    <input type="hidden" asp-for="TongTien" id="hiddenThanhTien" value="@tongThanhToanBanDau" />
+
+                    <div class="row">
                         <div class="col-lg-7">
                             <h4>Thông tin nhận hàng</h4>
                             <hr />
 
                             @if (defaultAddress != null)
-                            {                              
+                            {
                                 <input type="hidden" asp-for="TenNguoiNhan" value="@defaultAddress.Tennguoinhan" />
                                 <input type="hidden" asp-for="SoDienThoaiNguoiNhan" value="@defaultAddress.Sdtnguoinhan" />
                                 <input type="hidden" asp-for="DiaChiGiaoHang" value="@defaultAddress.Diachi" />
@@ -62,7 +66,6 @@
                                     </div>
                                 </div>
 
-
                                 <div class="form-group">
                                     <label>Địa chỉ giao hàng</label>
                                     <textarea class="form-control" rows="3" readonly>@defaultAddress.Diachi, @defaultAddress.MaPhuongNavigation?.TenPhuong, @defaultAddress.MaQuanNavigation?.TenQuan, @defaultAddress.MaTinhNavigation?.TenTinh</textarea>
@@ -78,9 +81,10 @@
                             <div class="form-group">
                                 <label>Ghi chú đơn hàng</label>
                                 <textarea asp-for="GhiChu" class="form-control" rows="3" placeholder="Lưu ý cho người giao hàng..."></textarea>
-                            </div>                         
-                                                                                    
+                            </div>
+
                         </div>
+
                         <!-- ==================== TÓM TẮT ĐƠN HÀNG ==================== -->
                         <div class="col-lg-5">
                             <div class="order-summary">
@@ -108,7 +112,12 @@
                                 <hr />
                                 <div class="d-flex justify-content-between">
                                     <strong>Tạm tính</strong>
-                                    <strong id="tamTinhText">@tongTamTinh.ToString("#,##0")₫</strong>
+                                    <span id="tamTinhText">@tongTamTinh.ToString("#,##0")₫</span>
+                                </div>
+
+                                <div class="d-flex justify-content-between mt-2">
+                                    <strong>Phí vận chuyển</strong>
+                                    <span>@phiVanChuyen.ToString("#,##0")₫</span>
                                 </div>
 
                                 <div class="d-flex justify-content-between mt-2" id="giamGiaRow" style="display: none;">
@@ -118,7 +127,7 @@
 
                                 <div class="d-flex justify-content-between mt-3 total-price">
                                     <strong>Tổng thanh toán</strong>
-                                    <strong id="thanhTienDisplay">@tongTamTinh.ToString("#,##0")₫</strong>
+                                    <strong id="thanhTienDisplay">@tongThanhToanBanDau.ToString("#,##0")₫</strong>
                                 </div>
                             </div>
 
@@ -152,6 +161,7 @@
                                     }
                                 }
                             </div>
+
                             <!-- Voucher -->
                             <div class="form-group mt-4">
                                 <label>Mã giảm giá</label>
@@ -161,13 +171,12 @@
                                            class="form-control" placeholder="Nhập mã voucher" autocomplete="off" />
                                     <button type="button" class="btn btn-outline-primary" id="btnApDung">Áp dụng</button>
                                 </div>
-         
+
                                 <button type="button" class="btn btn-link text-primary mt-2 p-0" id="btnSuggestVoucher">
                                     <i class="fas fa-gift"></i> Xem voucher gợi ý cho bạn
                                 </button>
 
                                 <div id="voucherSuggestions" class="voucher-suggestions mt-3" style="display: none;">
-                                  
                                 </div>
 
                                 <div id="voucherMsg" class="mt-2"></div>
@@ -177,8 +186,6 @@
                                 Thanh Toán
                             </button>
                         </div>
-
-
                     </div>
                 </form>
             </div>
@@ -188,14 +195,19 @@
 
 @section Scripts {
     <script>
+        const phiShip = 30000;
+        const tamTinhGoc = @tongTamTinh;
+
         function toggleBankInfo(radio) {
             const bankInfo = document.getElementById('bankTransferInfo');
             const tenPTTT = radio.nextElementSibling ? radio.nextElementSibling.textContent.trim() : '';
 
-            if (tenPTTT.includes("Chuyển khoản") || tenPTTT.includes("Ngân hàng")) {
-                bankInfo.style.display = 'block';
-            } else {
-                bankInfo.style.display = 'none';
+            if (bankInfo) {
+                if (tenPTTT.includes("Chuyển khoản") || tenPTTT.includes("Ngân hàng")) {
+                    bankInfo.style.display = 'block';
+                } else {
+                    bankInfo.style.display = 'none';
+                }
             }
         }
 
@@ -205,9 +217,9 @@
                 toggleBankInfo(checkedRadio);
             }
         };
+
         document.getElementById('btnApDung').addEventListener('click', function () {
             const voucherCode = document.getElementById('MaVoucher').value.trim();
-            const tamTinh = @tongTamTinh;
 
             if (!voucherCode) {
                 showVoucherMessage("Vui lòng nhập mã voucher", "danger");
@@ -217,13 +229,19 @@
             $.ajax({
                 url: '/PhieuMua/KiemTraVoucher',
                 type: 'POST',
-                data: { maVoucher: voucherCode, tongTamTinh: tamTinh },
+
+                data: { maVoucher: voucherCode, tongTamTinh: tamTinhGoc },
                 success: function (response) {
                     if (response.success) {
+
+                        let tongThanhToanMoi = (tamTinhGoc - response.giamGia) + phiShip;
+                        if(tongThanhToanMoi < 0) tongThanhToanMoi = 0;
+
                         document.getElementById('giamGiaRow').style.display = 'flex';
                         document.getElementById('giamGiaText').textContent = '-' + response.giamGia.toLocaleString('vi-VN') + '₫';
-                        document.getElementById('thanhTienDisplay').textContent = response.thanhTienMoi.toLocaleString('vi-VN') + '₫';
-                        document.getElementById('hiddenThanhTien').value = response.thanhTienMoi;
+                        document.getElementById('thanhTienDisplay').textContent = tongThanhToanMoi.toLocaleString('vi-VN') + '₫';
+                        document.getElementById('hiddenThanhTien').value = tongThanhToanMoi;
+
                         showVoucherMessage(response.message, "success");
                     } else {
                         showVoucherMessage(response.message, "danger");
@@ -239,9 +257,10 @@
         }
 
         function resetVoucherDisplay() {
+            const defaultTotal = tamTinhGoc + phiShip;
             document.getElementById('giamGiaRow').style.display = 'none';
-            document.getElementById('thanhTienDisplay').textContent = '@tongTamTinh.ToString("#,##0")₫';
-            document.getElementById('hiddenThanhTien').value = '@tongTamTinh';
+            document.getElementById('thanhTienDisplay').textContent = defaultTotal.toLocaleString('vi-VN') + '₫';
+            document.getElementById('hiddenThanhTien').value = defaultTotal;
         }
 
         $('#btnSuggestVoucher').click(function () {
@@ -258,7 +277,8 @@
             $.ajax({
                 url: '/PhieuMua/GoiYVoucher',
                 type: 'GET',
-                data: { tongTien: $('#hiddenThanhTien').val() || @tongTamTinh },
+
+                data: { tongTien: tamTinhGoc },
                 success: function (response) {
                     if (response.success && response.vouchers && response.vouchers.length > 0) {
                         let html = '<h6 class="mb-2"><i class="fas fa-gift"></i> Voucher phù hợp với bạn:</h6>';
@@ -270,12 +290,8 @@
                                             <strong>${v.maVoucher}</strong>
                                             <span class="text-success">${v.giamGiaText}</span>
                                         </div>
-
                                         <small class="text-muted">${v.dieuKien || ''}</small><br>
-
-                                        ${v.hanSuDung
-                                            ? `<small class="text-danger">HSD: ${v.hanSuDung}</small>`
-                                            : ''}
+                                        ${v.hanSuDung ? `<small class="text-danger">HSD: ${v.hanSuDung}</small>` : ''}
                                     </div>`;
                         });
 

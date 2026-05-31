@@ -13,7 +13,7 @@
     else
     {
         <div class="row">
-            @foreach (var item in Model)
+            @foreach (var item in Model.OrderByDescending(p => p.MaPhieuMua))
             {
                 <div class="col-12 mb-3">
                     <div class="card order-card shadow-sm">
@@ -24,7 +24,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <small class="text-muted">Ngày đặt:</small><br>
-                                    <strong>@item.NgayDat?.ToString("dd/MM/yyyy")</strong>   <!-- ĐÃ SỬA -->
+                                    <strong>@item.NgayDat?.ToString("dd/MM/yyyy")</strong>
                                 </div>
                                 <div class="col-md-2">
                                     <small class="text-muted">Tổng tiền:</small><br>
@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <span class="badge-status
-                                                @(item.TinhTrang == "Đã giao" ? "status-hoanthanh" :
+                                                @(item.TinhTrang == "Đã giao" || item.TinhTrang == "Đã giao hàng" ? "status-hoanthanh" :
                                                                                     item.TinhTrang == "Đang giao hàng" ? "status-danggiao" :
                                                                                     item.TinhTrang == "Chờ lấy hàng" ? "status-danggiao" :
                                                                                     item.TinhTrang == "Từ chối" ? "status-tuchoi" : "status-cho")">
@@ -40,8 +40,7 @@
                             </span>
                         </div>
                         <div class="col-md-2 text-end">
-                            <button class="btn btn-sm btn-outline-purple view-detail"
-                                    data-id="@item.MaPhieuMua">
+                            <button class="btn btn-sm btn-outline-purple view-detail" data-id="@item.MaPhieuMua">
                                 Xem chi tiết
                             </button>
                         </div>

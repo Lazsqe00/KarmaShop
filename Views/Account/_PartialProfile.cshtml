@@ -40,3 +40,129 @@
         </div>
     </div>
 </div>
+
+<div class="membership-tier-section mt-5">
+    <h4 class="mb-3 text-uppercase fw-bold text-dark" style="font-size: 1.2rem; letter-spacing: 0.5px;">
+        <i class="fas fa-gem text-primary me-2"></i> Chương Trình Khách Hàng Thân Thiết
+    </h4>
+
+    @{
+        decimal tongChi = Model.TongChi ?? 0;
+        string currentTier = "Thường";
+        string tierBadgeClass = "bg-secondary text-white";
+        string nextTierInfo = "";
+
+        if (tongChi >= 20000000)
+        {
+            currentTier = "Kim Cương";
+            tierBadgeClass = "bg-danger text-white";
+            nextTierInfo = "Bạn đã đạt cấp độ thành viên cao nhất!";
+        }
+        else if (tongChi >= 15000000)
+        {
+            currentTier = "Bạch Kim";
+            tierBadgeClass = "text-white";
+            nextTierInfo = $"Còn thiếu {(20000000 - tongChi):#,##0}đ để lên hạng Kim Cương";
+        }
+        else if (tongChi >= 10000000)
+        {
+            currentTier = "Vàng";
+            tierBadgeClass = "bg-warning text-dark";
+            nextTierInfo = $"Còn thiếu {(15000000 - tongChi):#,##0}đ để lên hạng Bạch Kim";
+        }
+        else if (tongChi >= 5000000)
+        {
+            currentTier = "Bạc";
+            tierBadgeClass = "bg-info text-white";
+            nextTierInfo = $"Còn thiếu {(10000000 - tongChi):#,##0}đ để lên hạng Vàng";
+        }
+        else
+        {
+            nextTierInfo = $"Còn thiếu {(5000000 - tongChi):#,##0}đ để lên hạng Bạc";
+        }
+    }
+
+    <div class="card p-3 mb-4 bg-light border-0 shadow-sm rounded">
+        <div class="row align-items-center">
+            <div class="col-md-6 mb-2 mb-md-0">
+                <div class="text-muted small">Tổng tích lũy chi tiêu</div>
+                <div class="fw-bold text-danger fs-4">@tongChi.ToString("#,##0")đ</div>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <span class="text-muted small d-block mb-1">Hạng thành viên hiện tại</span>
+                <span class="badge @tierBadgeClass px-3 py-2 fs-6 rounded-pill shadow-sm"
+                      style="@(currentTier == "Bạch Kim" ? "background-color: #6f42c1;" : "")">
+                    Hạng @currentTier
+                </span>
+                <small class="text-secondary d-block mt-1 font-italic">(@nextTierInfo)</small>
+            </div>
+        </div>
+    </div>
+
+    <h5 class="mb-3 text-secondary fw-bold" style="font-size: 16px;">Chi tiết đặc quyền và mốc thăng hạng:</h5>
+    <div class="table-responsive">
+        <table class="table table-bordered align-middle">
+            <thead class="table-light text-center">
+                <tr>
+                    <th style="width: 20%;">Hạng</th>
+                    <th style="width: 25%;">Mốc tích lũy</th>
+                    <th style="width: 55%;">Quyền lợi đặc biệt</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="@(currentTier == "Thường" ? "table-success border border-success fw-bold" : "")">
+                    <td class="text-center">
+                        <span class="text-dark px-2 py-1" style="font-size : 16px">Thường</span>
+                    </td>
+                    <td class="text-center">Dưới 5.000.000₫</td>
+                    <td><i class="fas fa-check text-success me-1"></i> Voucher miễn phí vận chuyển.</td>
+                </tr>
+
+                <tr class="@(currentTier == "Bạc" ? "table-success border border-success fw-bold" : "")">
+                    <td class="text-center">
+                        <span class="text-dark px-2 py-1" style="font-size : 16px">Bạc</span>
+                    </td>
+                    <td class="text-center">Từ 5.000.000₫</td>
+                    <td>
+                        <i class="fas fa-check text-success me-1"></i> Bao gồm ưu đãi của hạng Thường.<br>
+                        <i class="fas fa-check text-success me-1"></i> Mã giảm giá độc quyền vào các dịp lễ lớn.
+                    </td>
+                </tr>
+
+                <tr class="@(currentTier == "Vàng" ? "table-success border border-success fw-bold" : "")">
+                    <td class="text-center">
+                        <span class="text-dark px-2 py-1" style="font-size : 16px">Vàng</span>
+                    </td>
+                    <td class="text-center">Từ 10.000.000₫</td>
+                    <td>
+                        <i class="fas fa-check text-success me-1"></i> Bao gồm ưu đãi của hạng Bạc.<br>
+                        <i class="fas fa-check text-success me-1"></i> Giảm giá trực tiếp <strong>5%</strong> đối với đơn từ 350.000₫.
+                    </td>
+                </tr>
+
+                <tr class="@(currentTier == "Bạch Kim" ? "table-success border border-success fw-bold" : "")">
+                    <td class="text-center">
+                        <span class="text-dark px-2 py-1" style="font-size : 16px">Bạch Kim</span>
+                    </td>
+                    <td class="text-center">Từ 15.000.000₫</td>
+                    <td>
+                        <i class="fas fa-check text-success me-1"></i> Bao gồm ưu đãi của hạng Vàng.<br>
+                        <i class="fas fa-check text-success me-1"></i> Giảm giá <strong>10%</strong> đối với đơn từ 550.000₫.
+                    </td>
+                </tr>
+
+                <tr class="@(currentTier == "Kim Cương" ? "table-success border border-success fw-bold" : "")">
+                    <td class="text-center">
+                        <span class="text-dark px-2 py-1" style="font-size : 16px">Kim Cương</span>
+                    </td>
+                    <td class="text-center">Từ 20.000.000₫</td>
+                    <td>
+                        <i class="fas fa-check text-success me-1"></i> Bao gồm ưu đãi của hạng Bạch Kim.<br>
+                        <i class="fas fa-check text-success me-1"></i> Giảm giá <strong>12%</strong> đối với đơn từ 800.000₫.<br>
+                        <i class="fas fa-check text-success me-1"></i> Voucher giảm giá <strong>20%</strong> giá trị sản phẩm trong dịp sinh nhật của khách hàng.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
