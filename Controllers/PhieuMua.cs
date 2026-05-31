@@ -198,7 +198,6 @@ namespace KarmaShop.Controllers
 
             ViewBag.MaDonHang = donHang.MaPhieuMua;
             ViewBag.TongTien = donHang.TongTien;
-
             return View(donHang);
         }
 

@@ -3,7 +3,6 @@
 @{
     Layout = "_ThuNganLayout";
 
-    
     decimal tongTienHang = 0;
     decimal chietKhau = 0;
     decimal tongThanhToan = 0;
@@ -12,7 +11,6 @@
 
     if (Model != null)
     {
-   
         foreach (var ct in Model.ChiTietPhieuMuas)
         {
             decimal gia = (decimal)(ct.DonGia ?? 0);
@@ -20,10 +18,8 @@
             tongTienHang += (gia * sl);
         }
 
-        
         if (Model.TinhTrang == "Đã thanh toán")
         {
-           
             if (Model.MaKhachHangNavigation != null)
             {
                 decimal tc = Model.MaKhachHangNavigation.TongChi ?? 0m;
@@ -40,13 +36,11 @@
 
             tongThanhToan = tongTienHang - chietKhau;
 
-            
             tienKhachDua = tongThanhToan;
             tienThua = 0;
         }
         else
         {
-            
             chietKhau = 0;
             tongThanhToan = 0;
             tienKhachDua = 0;
@@ -105,13 +99,12 @@
                 <thead class="text-center fw-bold" style="background-color: #f0f0f0;">
                     <tr>
                         <th style="width: 40px;">STT</th>
-                        <th style="width: 25%;">Tên sản phẩm</th>
-                        <th style="width: 20%;">Đồng sản phẩm</th>
-                        <th style="width: 10%;">Màu sắc</th>
-                        <th style="width: 8%;">Size</th>
-                        <th style="width: 12%;">Đơn giá</th>
-                        <th style="width: 8%;">Số lượng</th>
-                        <th style="width: 12%;">Thành tiền</th>
+                        <th style="width: 40%;">Tên sản phẩm</th>
+                        <th style="width: 12%;">Màu sắc</th>
+                        <th style="width: 10%;">Size</th>
+                        <th style="width: 13%;">Đơn giá</th>
+                        <th style="width: 10%;">Số lượng</th>
+                        <th style="width: 15%;">Thành tiền</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -123,7 +116,6 @@
                         <tr>
                             <td class="text-center">@(i++)</td>
                             <td class="ps-2">@ct.MaSanPhamNavigation?.TenSanPham</td>
-                            <td class="text-center">@(ct.MaSanPhamNavigation?.MaDongSanPhamNavigation?.TenDongSanPham ?? "Chưa rõ")</td>
                             <td class="text-center">@(ct.MaSanPhamNavigation?.MaMauNavigation?.TenMau ?? "Chưa rõ")</td>
                             <td class="text-center">@(ct.MaSizeNavigation?.TenSize ?? (ct.MaSize != null ? ct.MaSize.ToString() : "Chưa rõ"))</td>
                             <td class="text-end pe-2">@string.Format("{0:N0}", ct.DonGia ?? 0)</td>
@@ -204,41 +196,54 @@
             color: white;
         }
 
-        @@media print {
-            .sidebar-wrapper, .navbar-custom, .no-print, .footer-custom, .page-header {
-                display: none !important;
-            }
-
-            .main-panel-custom {
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-
-            .content-wrapper-custom {
-                padding: 0 !important;
-            }
-
-            .card {
-                box-shadow: none !important;
-                border: none !important;
-                padding: 0 !important;
-            }
-
-            #invoice-print {
-                border: none !important;
-                box-shadow: none !important;
-                width: 100% !important;
-                max-width: 100% !important;
-                padding: 0 !important;
-            }
-
-            body {
-                background-color: #fff !important;
-            }
-        }
 
         #invoice-print table th, #invoice-print table td {
             border: 1px solid #333 !important;
+        }
+
+
+        @@media print {
+            @@page {
+                size: A4 portrait;
+                margin: 0mm !important;
+            }
+            html, body {
+                background-color: #fff !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 210mm !important;
+                height: 297mm !important;
+                visibility: hidden !important;
+            }
+            #invoice-print {
+                visibility: visible !important;
+                display: block !important;
+                position: absolute !important;
+                top: 15mm !important;
+                left: 50% !important;
+                transform: translateX(-50%) scale(0.92);
+                transform-origin: top center;
+                width: 100% !important;
+                max-width: 180mm !important;
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+                #invoice-print * {
+                    visibility: visible !important;
+                    color: #000 !important;
+                }
+
+                #invoice-print table th, #invoice-print table td {
+                    border: 1px solid #000 !important;
+                }
+
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
         }
     </style>
 }

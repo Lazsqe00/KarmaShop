@@ -146,14 +146,22 @@ else
 @section Scripts {
     <script>
         function showProductDetail(id) {
-            console.log("Đang gọi chi tiết cho ID: " + id);
-            $.get('/NhanVien/ThuNgan/ChiTietSanPham/' + id, function (data) {
-                $('#modalBodyContent').html(data);
-                $('#productDetailModal').modal('show');
-            }).fail(function (xhr) {
-                console.error(xhr.responseText);
-                alert("Lỗi: Không tìm thấy hệ thống chi tiết hoặc dữ liệu!");
-            });
-        }
+             console.log("Đang gọi chi tiết cho ID: " + id);
+             $.get('/NhanVien/ThuNgan/ChiTietSanPham/' + id, function (data) {
+                 $('#modalBodyContent').html(data);
+
+
+                 if (typeof themVaoHoaDonTaiQuay === "function") {
+                     window.themVaoHoaDonTaiQuay = themVaoHoaDonTaiQuay;
+                 } else if (window.parent && typeof window.parent.themVaoHoaDonTaiQuay === "function") {
+                     window.themVaoHoaDonTaiQuay = window.parent.themVaoHoaDonTaiQuay;
+                 }
+
+                 $('#productDetailModal').modal('show');
+             }).fail(function (xhr) {
+                 console.error(xhr.responseText);
+                 alert("Lỗi: Không tìm thấy hệ thống chi tiết hoặc dữ liệu!");
+             });
+         }
     </script>
 }
