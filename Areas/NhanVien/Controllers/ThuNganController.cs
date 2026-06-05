@@ -230,7 +230,7 @@ public class ThuNganController : Controller
         try
         {
             hoadon.NgayDat = DateOnly.FromDateTime(DateTime.Now);
-            hoadon.TinhTrang = "Chờ xác nhận";
+            hoadon.TinhTrang = "Chờ thanh toán";
 
             decimal tongTienDonHang = 0;
 
@@ -301,18 +301,19 @@ public class ThuNganController : Controller
         var baseQuery = _context.PhieuMuas.AsQueryable();
 
         ViewBag.Tong = await baseQuery.CountAsync();
-        ViewBag.DaTT = await baseQuery.CountAsync(x => x.TinhTrang == "Đã giao");
-        ViewBag.ChoTT = await baseQuery.CountAsync(x => x.TinhTrang == "Chờ xác nhận");
+        ViewBag.DaTT = await baseQuery.CountAsync(x => x.TinhTrang == "Đã thanh toán");
+        ViewBag.ChoTT = await baseQuery.CountAsync(x => x.TinhTrang == "Chờ thanh toán");
         ViewBag.DaHuy = await baseQuery.CountAsync(x => x.TinhTrang == "Từ chối");
 
-       
-        var query = _context.PhieuMuas
-            .Include(p => p.MaKhachHangNavigation)
-            .Include(p => p.MaPtttNavigation)
-            .Include(p => p.ChiTietPhieuMuas)
-            .AsQueryable();
 
-        
+        var query = _context.PhieuMuas
+    .Where(p => p.TinhTrang == "Chờ thanh toán" || p.TinhTrang == "Đã thanh toán" || p.TinhTrang == "Hủy")
+    .Include(p => p.MaKhachHangNavigation)
+    .Include(p => p.MaPtttNavigation)
+    .Include(p => p.ChiTietPhieuMuas)
+    .AsQueryable();
+
+
         if (!string.IsNullOrEmpty(search))
         {
             search = search.Trim();
@@ -421,7 +422,7 @@ public class ThuNganController : Controller
             }
 
             // Áp dụng state machine mới (NV thu ngân tạm thời không dùng cập nhật khác)
-            if (trangThai == "Đã giao" || trangThai == "Từ chối")
+            if (trangThai == "Đã thanh toán" || trangThai == "Từ chối")
             {
                 phieuMua.TinhTrang = trangThai;
             }

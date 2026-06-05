@@ -28,11 +28,9 @@
             <div class="col-md-3">
                 <select name="status" class="form-select bg-light">
                     <option value="">-- Tất cả trạng thái --</option>
-                    <option value="Chờ xác nhận" @(Context.Request.Query["status"] == "Chờ xác nhận" ? "selected" : "")>Chờ xác nhận</option>
-                    <option value="Chờ lấy hàng" @(Context.Request.Query["status"] == "Chờ lấy hàng" ? "selected" : "")>Chờ lấy hàng</option>
-                    <option value="Đang giao hàng" @(Context.Request.Query["status"] == "Đang giao hàng" ? "selected" : "")>Đang giao hàng</option>
-                    <option value="Đã giao" @(Context.Request.Query["status"] == "Đã giao" ? "selected" : "")>Đã giao</option>
-                    <option value="Từ chối" @(Context.Request.Query["status"] == "Từ chối" ? "selected" : "")>Từ chối</option>
+                    <option value="Chờ thanh toán" @(Context.Request.Query["status"] == "Chờ thanh toán" ? "selected" : "")>Chờ thanh toán</option>
+                    <option value="Đã thanh toán" @(Context.Request.Query["status"] == "Đã thanh toán" ? "selected" : "")>Đã thanh toán</option>
+                    <option value="Hủy" @(Context.Request.Query["status"] == "Hủy" ? "selected" : "")>Hủy</option>
                 </select>
             </div>
 
@@ -68,7 +66,7 @@
         <div class="card border-0 shadow-sm p-3 bg-white card-hover-effect" style="border-radius: 12px; border-left: 5px solid #1bcfb4 !important;">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <small class="text-muted fw-bold">ĐÃ GIAO</small>
+                    <small class="text-muted fw-bold">ĐÃ THANH TOÁN</small>
                     <h2 class="fw-bold text-success mb-0 mt-1">@ViewBag.DaTT</h2>
                 </div>
                 <i class="mdi mdi-check-all text-success fs-1 opacity-25"></i>
@@ -79,7 +77,7 @@
         <div class="card border-0 shadow-sm p-3 bg-white card-hover-effect" style="border-radius: 12px; border-left: 5px solid #ffab00 !important;">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <small class="text-muted fw-bold">CHỜ XÁC NHẬN</small>
+                    <small class="text-muted fw-bold">CHỜ THANH TOÁN</small>
                     <h2 class="fw-bold text-warning mb-0 mt-1">@ViewBag.ChoTT</h2>
                 </div>
                 <i class="mdi mdi-clock-outline text-warning fs-1 opacity-25"></i>
@@ -158,23 +156,17 @@
                             <td class="text-center">
                                 @switch (item.TinhTrang)
                                 {
-                                    case "Chờ xác nhận":
-                                        <span class="badge status-warning">Chờ xác nhận</span>;
+                                    case "Chờ thanh toán":
+                                        <span class="badge bg-warning text-dark">Chờ thanh toán</span>
                                         break;
-                                    case "Chờ lấy hàng":
-                                        <span class="badge bg-info text-dark">Chờ lấy hàng</span>;
+                                    case "Đã thanh toán":
+                                        <span class="badge bg-success">Đã thanh toán</span>
                                         break;
-                                    case "Đang giao hàng":
-                                        <span class="badge bg-warning text-dark">Đang giao hàng</span>;
-                                        break;
-                                    case "Đã giao":
-                                        <span class="badge status-success">Đã giao</span>;
-                                        break;
-                                    case "Từ chối":
-                                        <span class="badge status-danger">Từ chối</span>;
+                                    case "Hủy":
+                                        <span class="badge bg-danger">Đã hủy</span>
                                         break;
                                     default:
-                                        <span class="badge bg-secondary">@item.TinhTrang</span>;
+                                        <span class="badge bg-secondary">@item.TinhTrang</span>
                                         break;
                                 }
                             </td>
